@@ -1,1 +1,90 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Assistente IA Grátis</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
+    <style>
+        :root { --main: #6366f1; --bg: #f8fafc; }
+        body { font-family: sans-serif; background: var(--bg); padding: 15px; display: flex; flex-direction: column; align-items: center; }
+        .card { background: white; padding: 20px; border-radius: 12px; width: 100%; max-width: 480px; box-shadow: 0 4px 12px rgba(0,0,0,0.1); }
+        textarea { width: 100%; height: 120px; border: 1px solid #ddd; border-radius: 8px; padding: 10px; margin: 10px 0; }
+        .btn { width: 100%; padding: 12px; margin-top: 8px; border-radius: 8px; border: none; font-weight: bold; cursor: pointer; color: white; background: var(--main); }
+        .status { font-size: 12px; color: #64748b; margin-top: 8px; text-align: center; }
+        #pdf-preview { width: 210mm; background: white; padding: 40px; margin-top: 20px; box-shadow: 0 0 10px rgba(0,0,0,0.1); min-height: 297mm; display: none; }
+    </style>
+</head>
+<body>
+
+    <div class="card">
+        <h2 style="color:var(--main); text-align:center; margin-top:0;">IA Gratuita Ilimitada</h2>
+        <input type="text" id="docTitle" placeholder="Título do Documento" style="width:100%; padding:10px; border-radius:8px; border:1px solid #ddd;">
+        <textarea id="textContent" placeholder="Cole seu texto ou transcrição aqui..."></textarea>
+        
+        <button class="btn" id="btnIA" onclick="callFreeIA()">✨ Melhorar Texto (Grátis)</button>
+        <div id="statusMsg" class="status">Pronto para processar.</div>
+        
+        <button class="btn" style="background:#1e293b; margin-top:15px;" onclick="downloadPDF()">📥 Baixar em PDF</button>
+    </div>
+
+    <div id="pdf-preview">
+        <h1 id="pdfHeader"></h1>
+        <hr>
+        <p id="pdfBody" style="white-space: pre-line; line-height: 1.6;"></p>
+    </div>
+
+    <script>
+        async function callFreeIA() {
+            const status = document.getElementById('statusMsg');
+            const field = document.getElementById('textContent');
+            const btn = document.getElementById('btnIA');
+
+            if(!field.value) return alert("Digite algo primeiro!");
+
+            try {
+                btn.disabled = true;
+                status.innerText = "⏳ IA Gratuita processando... (pode demorar 10s)";
+
+                // Usando o modelo Llama-3 da Hugging Face (Grátis)
+                const response = await fetch("https://api-inference.huggingface.co/models/meta-llama/Meta-Llama-3-8B-Instruct", {
+                    headers: { "Content-Type": "application/json" },
+                    method: "POST",
+                    body: JSON.stringify({
+                        inputs: `Reescreva o seguinte texto em português de forma profissional e organizada: ${field.value}`,
+                        parameters: { max_new_tokens: 500, return_full_text: false }
+                    }),
+                });
+
+                const result = await response.json();
+                
+                // A Hugging Face retorna um array. Vamos pegar o texto gerado.
+                if(result[0] && result[0].generated_text) {
+                    field.value = result[0].generated_text.trim();
+                    status.innerText = "✅ Texto melhorado!";
+                } else {
+                    throw new Error("A IA está ocupada. Tente em instantes.");
+                }
+
+            } catch (err) {
+                status.innerText = "❌ Erro: " + err.message;
+                console.error(err);
+            } finally {
+                btn.disabled = false;
+            }
+        }
+
+        function downloadPDF() {
+            const preview = document.getElementById('pdf-preview');
+            document.getElementById('pdfHeader').innerText = document.getElementById('docTitle').value.toUpperCase() || "DOCUMENTO";
+            document.getElementById('pdfBody').innerText = document.getElementById('textContent').value;
+            
+            preview.style.display = 'block';
+            html2pdf().from(preview).save('Documento_Grátis.pdf').then(() => {
+                preview.style.display = 'none';
+            });
+        }
+    </script>
+</body>
+</html>
 
