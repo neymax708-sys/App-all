@@ -3,84 +3,89 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Elite AI Workspace v5</title>
+    <title>Elite AI Workspace v6</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
     <style>
         :root { --primary: #4f46e5; --bg: #0f172a; --card: #1e293b; --text: #f1f5f9; }
-        * { box-sizing: border-box; }
-        body { font-family: 'Inter', sans-serif; background: var(--bg); color: var(--text); margin: 0; padding: 10px; display: flex; justify-content: center; min-height: 100vh; }
-        
-        .app-shell { width: 100%; max-width: 500px; display: flex; flex-direction: column; gap: 15px; }
-        
-        /* Sistema de Abas */
-        .tabs { display: flex; background: var(--card); border-radius: 12px; padding: 5px; margin-bottom: 5px; }
-        .tab-btn { flex: 1; padding: 10px; border: none; background: none; color: #94a3b8; font-weight: 700; cursor: pointer; border-radius: 8px; transition: 0.3s; }
-        .tab-btn.active { background: var(--primary); color: white; }
+        * { box-sizing: border-box; transition: all 0.3s ease; }
+        body { font-family: 'Inter', sans-serif; background: var(--bg); color: var(--text); margin: 0; padding: 0; overflow-x: hidden; }
 
-        .card { background: var(--card); border-radius: 20px; padding: 20px; border: 1px solid rgba(255,255,255,0.1); }
+        /* HEADER FIXO */
+        header { background: var(--card); padding: 15px; text-align: center; border-bottom: 1px solid rgba(255,255,255,0.1); position: sticky; top: 0; z-index: 100; }
+        header h1 { font-size: 20px; margin: 0; background: linear-gradient(to right, #818cf8, #c084fc); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+
+        .content-wrapper { padding: 20px; max-width: 500px; margin: 0 auto; }
+
+        /* EDITOR */
+        .editor-card { background: var(--card); border-radius: 24px; padding: 25px; box-shadow: 0 20px 40px rgba(0,0,0,0.4); }
+        label { display: block; font-size: 10px; font-weight: 800; color: #6366f1; text-transform: uppercase; margin-bottom: 8px; letter-spacing: 1px; }
+        input, textarea { width: 100%; background: rgba(15,23,42,0.6); border: 1px solid #334155; border-radius: 15px; color: white; padding: 15px; font-size: 16px; margin-bottom: 20px; }
+        textarea { height: 200px; resize: none; }
         
-        /* Tela de Edição */
-        #editor-view { display: flex; flex-direction: column; }
-        input, textarea { width: 100%; background: #0f172a; border: 1px solid #334155; border-radius: 12px; color: white; padding: 15px; font-size: 16px; margin-bottom: 15px; }
-        textarea { height: 250px; resize: none; }
-
-        /* Tela de Visualização (O "Próprio App" abrindo o doc) */
-        #preview-view { display: none; }
-        .document-paper { background: white; color: #1f2937; padding: 30px; border-radius: 4px; min-height: 400px; box-shadow: 0 10px 25px rgba(0,0,0,0.5); overflow-y: auto; }
-        .document-paper h2 { border-bottom: 2px solid var(--primary); padding-bottom: 10px; color: var(--primary); margin-top: 0; }
-        .document-paper p { line-height: 1.6; white-space: pre-line; }
-
-        /* Botões */
-        .btn-main { width: 100%; background: var(--primary); color: white; border: none; padding: 16px; border-radius: 12px; font-weight: 700; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 10px; margin-bottom: 10px; }
-        .mic-btn { background: #334155; color: white; width: 50px; height: 50px; border-radius: 50%; border: none; margin: -70px 10px 20px auto; cursor: pointer; display: flex; align-items: center; justify-content: center; position: relative; z-index: 10; }
+        .mic-container { position: relative; height: 0; overflow: visible; }
+        .mic-btn { position: absolute; right: 10px; bottom: 40px; width: 45px; height: 45px; border-radius: 50%; border: none; background: #334155; color: white; cursor: pointer; display: flex; align-items: center; justify-content: center; box-shadow: 0 4px 12px rgba(0,0,0,0.3); }
         .mic-active { background: #ef4444; animation: pulse 1.5s infinite; }
 
-        .grid-export { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 10px; margin-top: 15px; }
-        .export-item { background: rgba(255,255,255,0.05); border-radius: 12px; padding: 10px; text-align: center; cursor: pointer; font-size: 11px; }
-        .export-item i { display: block; font-size: 20px; margin-bottom: 5px; }
+        .action-btn { width: 100%; background: var(--primary); color: white; border: none; padding: 18px; border-radius: 15px; font-weight: 700; cursor: pointer; font-size: 16px; margin-bottom: 10px; }
 
-        @keyframes pulse { 0% { transform: scale(1); } 50% { transform: scale(1.1); } 100% { transform: scale(1); } }
+        /* VISUALIZADOR INTERNO (O PRÓPRIO APP) */
+        #doc-viewer { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: #e2e8f0; z-index: 200; display: none; overflow-y: auto; padding: 20px; }
+        .viewer-tools { max-width: 800px; margin: 0 auto 15px; display: flex; gap: 10px; justify-content: space-between; }
+        .tool-btn { background: white; color: #1e293b; border: none; padding: 10px 15px; border-radius: 10px; font-weight: 600; cursor: pointer; display: flex; align-items: center; gap: 8px; font-size: 13px; box-shadow: 0 2px 5px rgba(0,0,0,0.1); }
+        .tool-btn.close { background: #ef4444; color: white; }
+
+        .a4-page { background: white; width: 100%; max-width: 800px; min-height: 1000px; margin: 0 auto; padding: 60px; box-shadow: 0 15px 40px rgba(0,0,0,0.2); border-radius: 2px; color: #1e293b; }
+        .a4-page h2 { border-bottom: 3px solid #4f46e5; padding-bottom: 15px; margin-top: 0; font-family: 'Georgia', serif; }
+        .a4-page p { font-family: 'Georgia', serif; line-height: 1.8; font-size: 18px; white-space: pre-line; }
+
+        @keyframes pulse { 0% { box-shadow: 0 0 0 0 rgba(239, 68, 68, 0.7); } 70% { box-shadow: 0 0 0 15px rgba(239, 68, 68, 0); } 100% { box-shadow: 0 0 0 0 rgba(239, 68, 68, 0); } }
     </style>
 </head>
 <body>
 
-    <div class="app-shell">
-        <div class="tabs">
-            <button class="tab-btn active" onclick="switchTab('edit')">EDITAR</button>
-            <button class="tab-btn" onclick="switchTab('preview')">VER DOCUMENTO</button>
-        </div>
+    <header>
+        <h1>Elite AI Workspace</h1>
+    </header>
 
-        <div id="editor-view">
-            <div class="card">
-                <label style="font-size: 11px; color: #94a3b8; font-weight: 700;">TÍTULO</label>
-                <input type="text" id="docTitle" placeholder="Ex: Contrato de Serviço">
-                
-                <label style="font-size: 11px; color: #94a3b8; font-weight: 700;">TEXTO</label>
-                <textarea id="textContent" placeholder="Sua ideia aqui..."></textarea>
-                
+    <div class="content-wrapper" id="main-app">
+        <div class="editor-card">
+            <label>Título Executivo</label>
+            <input type="text" id="docTitle" placeholder="Digite o título...">
+            
+            <label>Desenvolvimento</label>
+            <textarea id="textContent" placeholder="Sua ideia ou rascunho..."></textarea>
+            
+            <div class="mic-container">
                 <button class="mic-btn" id="micBtn" onclick="toggleMic()">
                     <i class="fas fa-microphone" id="micIcon"></i>
                 </button>
+            </div>
 
-                <button class="btn-main" onclick="processAI()">
-                    <i class="fas fa-wand-magic-sparkles"></i> Refinar com IA
-                </button>
-                <div id="status" style="text-align: center; font-size: 12px; color: #10b981;">Pronto</div>
+            <button class="action-btn" onclick="processAI()">
+                <i class="fas fa-wand-magic-sparkles"></i> Melhorar com Inteligência
+            </button>
+            <button class="action-btn" style="background: #10b981;" onclick="openViewer()">
+                <i class="fas fa-eye"></i> Abrir Documento no App
+            </button>
+            <div id="status" style="text-align: center; color: #6366f1; font-weight: 600; margin-top: 10px;">Status: Online</div>
+        </div>
+    </div>
+
+    <div id="doc-viewer">
+        <div class="viewer-tools">
+            <button class="tool-btn close" onclick="closeViewer()">
+                <i class="fas fa-arrow-left"></i> Voltar
+            </button>
+            <div style="display: flex; gap: 8px;">
+                <button class="tool-btn" onclick="download('pdf')"><i class="fas fa-file-pdf"></i> PDF</button>
+                <button class="tool-btn" onclick="download('doc')"><i class="fas fa-file-word"></i> Word</button>
             </div>
         </div>
 
-        <div id="preview-view">
-            <div class="document-paper" id="paper">
-                <h2 id="viewTitle">Título do Documento</h2>
-                <p id="viewBody">O conteúdo aparecerá aqui...</p>
-            </div>
-
-            <div class="grid-export">
-                <div class="export-item" onclick="download('pdf')"><i class="fas fa-file-pdf" style="color:#f87171"></i>PDF</div>
-                <div class="export-item" onclick="download('doc')"><i class="fas fa-file-word" style="color:#60a5fa"></i>WORD</div>
-                <div class="export-item" onclick="download('xls')"><i class="fas fa-file-excel" style="color:#34d399"></i>EXCEL</div>
-            </div>
+        <div class="a4-page" id="printable">
+            <h2 id="viewTitle">Título do Documento</h2>
+            <p id="viewBody">O conteúdo será renderizado aqui...</p>
         </div>
     </div>
 
@@ -89,28 +94,16 @@
         recognition.lang = 'pt-BR';
         let listening = false;
 
-        function switchTab(type) {
-            const edit = document.getElementById('editor-view');
-            const preview = document.getElementById('preview-view');
-            const btns = document.querySelectorAll('.tab-btn');
-
-            if(type === 'edit') {
-                edit.style.display = 'block';
-                preview.style.display = 'none';
-                btns[0].classList.add('active');
-                btns[1].classList.remove('active');
-            } else {
-                edit.style.display = 'none';
-                preview.style.display = 'block';
-                btns[1].classList.add('active');
-                btns[0].classList.remove('active');
-                updatePreview();
-            }
+        function openViewer() {
+            document.getElementById('viewTitle').innerText = document.getElementById('docTitle').value || "Documento Sem Título";
+            document.getElementById('viewBody').innerText = document.getElementById('textContent').value || "Sem conteúdo para exibir.";
+            document.getElementById('doc-viewer').style.display = 'block';
+            document.body.style.overflow = 'hidden'; // Trava o scroll do fundo
         }
 
-        function updatePreview() {
-            document.getElementById('viewTitle').innerText = document.getElementById('docTitle').value || "Documento Sem Título";
-            document.getElementById('viewBody').innerText = document.getElementById('textContent').value || "Nenhum conteúdo gerado.";
+        function closeViewer() {
+            document.getElementById('doc-viewer').style.display = 'none';
+            document.body.style.overflow = 'auto';
         }
 
         function toggleMic() {
@@ -139,33 +132,22 @@
             const status = document.getElementById('status');
             if(!text.value) return;
 
-            status.innerText = "⏳ IA Trabalhando...";
+            status.innerText = "⏳ IA Gerando Documento Profissional...";
             try {
-                const res = await fetch(`https://text.pollinations.ai/${encodeURIComponent("Transforme em um texto profissional e elegante em português: " + text.value)}`);
+                const res = await fetch(`https://text.pollinations.ai/${encodeURIComponent("Transforme o texto a seguir em um documento profissional, formatado, elegante e executivo em português: " + text.value)}`);
                 text.value = await res.text();
-                status.innerText = "✅ Refinado!";
-                updatePreview();
-            } catch (e) { status.innerText = "❌ Erro de conexão."; }
+                status.innerText = "✅ Documento Criado com Sucesso!";
+            } catch (e) { status.innerText = "❌ Erro ao conectar com IA."; }
         }
 
         function download(type) {
-            const title = document.getElementById('docTitle').value || "Elite_Doc";
-            const content = document.getElementById('textContent').value;
-
+            const title = document.getElementById('docTitle').value || "Documento_IA";
             if(type === 'pdf') {
-                html2pdf().from(document.getElementById('paper')).save(`${title}.pdf`);
+                html2pdf().from(document.getElementById('printable')).save(`${title}.pdf`);
             } else if(type === 'doc') {
-                const blob = new Blob(['\ufeff', document.getElementById('paper').innerHTML], { type: 'application/msword' });
-                const link = document.createElement('a');
-                link.href = URL.createObjectURL(blob);
-                link.download = `${title}.doc`;
-                link.click();
-            } else if(type === 'xls') {
-                const csv = "data:text/csv;charset=utf-8,\ufeff" + content.split('\n').map(l => `"${l}"`).join("\n");
-                const link = document.createElement('a');
-                link.href = encodeURI(csv);
-                link.download = `${title}.csv`;
-                link.click();
+                const blob = new Blob(['\ufeff', document.getElementById('printable').innerHTML], { type: 'application/msword' });
+                const url = URL.createObjectURL(blob);
+                const a = document.createElement('a'); a.href = url; a.download = `${title}.doc`; a.click();
             }
         }
     </script>
