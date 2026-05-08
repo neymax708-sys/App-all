@@ -14,105 +14,131 @@
         :root { --primary: #4f46e5; --bg: #070b14; --card: #111827; }
         body { font-family: 'Inter', sans-serif; background: var(--bg); color: #f9fafb; margin: 0; display: flex; align-items: center; justify-content: center; min-height: 100vh; }
         
-        #app-content { display: none; width: 100%; max-width: 600px; padding: 20px; }
-        .editor-container { background: var(--card); padding: 30px; border-radius: 30px; border: 1px solid rgba(255,255,255,0.1); }
+        #app-content { display: none; width: 100%; max-width: 500px; padding: 20px; animation: fadeIn 0.5s; }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+
+        .editor-container { background: var(--card); padding: 25px; border-radius: 30px; border: 1px solid rgba(255,255,255,0.05); }
         
-        /* Seletor de Formato */
-        .format-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; margin-bottom: 20px; }
-        .format-card { 
-            background: #1e293b; padding: 15px; border-radius: 15px; text-align: center; 
+        /* SELETOR DE OBJETIVO */
+        .goal-selector { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; margin-bottom: 20px; }
+        .goal-card { 
+            background: rgba(255,255,255,0.03); padding: 15px 5px; border-radius: 15px; text-align: center; 
             cursor: pointer; border: 2px solid transparent; transition: 0.3s;
         }
-        .format-card.active { border-color: var(--primary); background: rgba(79, 70, 229, 0.1); }
-        .format-card i { display: block; font-size: 20px; margin-bottom: 5px; }
-        .format-card span { font-size: 10px; font-weight: 700; text-transform: uppercase; }
+        .goal-card.active { border-color: var(--primary); background: rgba(79, 70, 229, 0.1); }
+        .goal-card i { font-size: 22px; margin-bottom: 8px; display: block; }
+        .goal-card span { font-size: 10px; font-weight: 800; text-transform: uppercase; }
 
         input, textarea { width: 100%; background: #0d1117; border: 1px solid #30363d; border-radius: 15px; color: white; padding: 15px; margin-bottom: 15px; outline: none; }
-        .btn-main { width: 100%; background: var(--primary); border: none; padding: 20px; border-radius: 18px; color: white; font-weight: 800; cursor: pointer; }
-        .loading { display: none; text-align: center; margin: 10px; color: var(--primary); font-size: 12px; }
+        textarea { height: 250px; font-size: 16px; line-height: 1.5; }
+
+        .btn-refine { width: 100%; background: var(--primary); border: none; padding: 20px; border-radius: 20px; color: white; font-weight: 800; cursor: pointer; font-size: 16px; margin-bottom: 10px; }
+        .loading { display: none; text-align: center; color: var(--primary); margin: 15px 0; font-weight: 700; font-size: 13px; }
     </style>
 </head>
 <body>
 
-    <div id="login-gate">...</div>
+    <div id="login-gate">
+        <div style="background:var(--card); padding:50px; border-radius:40px; text-align:center; border:1px solid rgba(255,255,255,0.1)">
+            <i class="fas fa-crown" style="font-size:40px; color:var(--primary); margin-bottom:20px"></i>
+            <h1>Elite Docs AI</h1>
+            <div id="g_id_onload" data-client_id="593110663863-u9956693jafabtisfm0jnbgsufjd8n1f.apps.googleusercontent.com" data-callback="onSuccess"></div>
+            <div class="g_id_signin" data-type="standard" data-shape="pill" data-theme="filled_blue"></div>
+        </div>
+    </div>
 
     <div id="app-content">
         <div class="editor-container">
-            <h2 style="margin-top:0">Criar Novo Documento</h2>
-            
-            <div class="format-grid">
-                <div class="format-card active" onclick="setFormat('PDF', this)">
-                    <i class="fas fa-file-pdf" style="color:#ef4444"></i><span>PDF</span>
+            <div style="display:flex; align-items:center; gap:10px; margin-bottom:20px">
+                <img id="uPic" src="" style="width:35px; border-radius:50%; border:2px solid var(--primary)">
+                <span id="uName" style="font-weight:900; font-size:14px"></span>
+            </div>
+
+            <p style="font-size:11px; color:var(--primary); font-weight:800; text-transform:uppercase; margin-bottom:10px">Selecione o Objetivo:</p>
+            <div class="goal-selector">
+                <div class="goal-card active" onclick="setGoal('PDF', this)">
+                    <i class="fas fa-file-pdf" style="color:#ff4d4d"></i><span>PDF Elite</span>
                 </div>
-                <div class="format-card" onclick="setFormat('DOCS', this)">
-                    <i class="fas fa-file-word" style="color:#3b82f6"></i><span>Word/Docs</span>
+                <div class="goal-card" onclick="setGoal('DOCS', this)">
+                    <i class="fas fa-file-word" style="color:#4d94ff"></i><span>Google Docs</span>
                 </div>
-                <div class="format-card" onclick="setFormat('XLS', this)">
-                    <i class="fas fa-file-excel" style="color:#10b981"></i><span>Excel</span>
+                <div class="goal-card" onclick="setGoal('XLS', this)">
+                    <i class="fas fa-file-excel" style="color:#2ecc71"></i><span>Excel/XLS</span>
                 </div>
             </div>
 
-            <input type="text" id="docTitle" placeholder="Nome do arquivo final...">
-            <textarea id="docBody" placeholder="Escreva o conteúdo ou rascunho aqui..." style="height:200px"></textarea>
+            <input type="text" id="docTitle" placeholder="Título do Documento...">
+            <textarea id="docBody" placeholder="Escreva aqui o que deseja que a IA transforme..."></textarea>
             
-            <div id="loader" class="loading"><i class="fas fa-sync fa-spin"></i> Inteligência Elite Refinando...</div>
-            
-            <button class="btn-main" onclick="processarEExportar()">
-                GERAR E BAIXAR AGORA
+            <div id="loader" class="loading">
+                <i class="fas fa-spinner fa-spin"></i> REFINANDO E GERANDO ARQUIVO...
+            </div>
+
+            <button class="btn-refine" id="mainBtn" onclick="gerarObjetivo()">
+                REFINAR E BAIXAR AGORA
             </button>
         </div>
     </div>
 
     <script>
-        let selectedFormat = 'PDF';
+        let currentGoal = 'PDF';
 
-        function setFormat(fmt, el) {
-            selectedFormat = fmt;
-            document.querySelectorAll('.format-card').forEach(c => c.classList.remove('active'));
+        function onSuccess(response) {
+            const user = JSON.parse(atob(response.credential.split('.')[1]));
+            document.getElementById('login-gate').style.display = 'none';
+            document.getElementById('app-content').style.display = 'block';
+            document.getElementById('uPic').src = user.picture;
+            document.getElementById('uName').innerText = user.name.toUpperCase();
+        }
+
+        function setGoal(goal, el) {
+            currentGoal = goal;
+            document.querySelectorAll('.goal-card').forEach(c => c.classList.remove('active'));
             el.classList.add('active');
         }
 
-        async function processarEExportar() {
+        async function gerarObjetivo() {
             const title = document.getElementById('docTitle').value || "Elite_Document";
             const body = document.getElementById('docBody');
             const loader = document.getElementById('loader');
+            const btn = document.getElementById('mainBtn');
             
-            if(!body.value) return alert("Escreva algo primeiro!");
+            if(!body.value) return alert("Por favor, escreva algo!");
 
+            btn.style.display = "none";
             loader.style.display = "block";
             
             try {
-                // REFINADA NA IA: Agora ela entende o formato
-                const prompt = `Atue como um assistente executivo. Transforme o texto abaixo em um conteúdo profissional adequado para um arquivo ${selectedFormat}: ${body.value}`;
+                // REFINAMENTO DA IA COM FOCO NO FORMATO
+                const prompt = `Aja como um redator sênior. Transforme este conteúdo num documento profissional de alta qualidade, pronto para ser um arquivo ${currentGoal}: ${body.value}`;
                 const res = await fetch(`https://text.pollinations.ai/${encodeURIComponent(prompt)}`);
                 const refinedText = await res.text();
                 body.value = refinedText;
 
-                // LOGICA DE EXPORTAÇÃO POR TIPO
-                if(selectedFormat === 'PDF') {
+                // DOWNLOAD AUTOMÁTICO BASEADO NO OBJETIVO
+                if(currentGoal === 'PDF') {
                     const temp = document.createElement('div');
-                    temp.innerHTML = `<div style="padding:40px"><h1>${title}</h1><p style="white-space:pre-line">${refinedText}</p></div>`;
+                    temp.innerHTML = `<div style="padding:50px; color:#1a1a1a"><h1>${title}</h1><p style="white-space:pre-line; font-size:14px">${refinedText}</p></div>`;
                     await html2pdf().from(temp).save(`${title}.pdf`);
                 } 
-                else if(selectedFormat === 'DOCS') {
-                    const blob = new Blob(['\ufeff', `<h1>${title}</h1><p>${refinedText}</p>`], { type: 'application/msword' });
+                else if(currentGoal === 'DOCS') {
+                    const content = `<html><body><h1>${title}</h1><p>${refinedText.replace(/\n/g, '<br>')}</p></body></html>`;
+                    const blob = new Blob(['\ufeff', content], { type: 'application/msword' });
                     const url = URL.createObjectURL(blob);
-                    const link = document.createElement('a');
-                    link.href = url;
-                    link.download = `${title}.doc`;
-                    link.click();
+                    const a = document.createElement('a'); a.href = url; a.download = `${title}.doc`; a.click();
                 }
-                else if(selectedFormat === 'XLS') {
-                    const ws = XLSX.utils.aoa_to_sheet([[title], [refinedText]]);
+                else if(currentGoal === 'XLS') {
+                    const rows = refinedText.split('\n').map(line => [line]);
+                    const ws = XLSX.utils.aoa_to_sheet([[title], ...rows]);
                     const wb = XLSX.utils.book_new();
-                    XLSX.utils.book_append_sheet(wb, ws, "EliteData");
+                    XLSX.utils.book_append_sheet(wb, ws, "Dados");
                     XLSX.writeFile(wb, `${title}.xlsx`);
                 }
-
             } catch (e) {
                 alert("Erro ao processar. Tente novamente.");
             } finally {
                 loader.style.display = "none";
+                btn.style.display = "block";
             }
         }
     </script>
