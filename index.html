@@ -1,8 +1,8 @@
 <!DOCTYPE html>
 <html lang="pt-br">
 <head>
-<meta charset="UTF-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 
 <title>Elite Docs AI</title>
 
@@ -10,9 +10,9 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
 
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"/>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Poppins:wght@500;600;700;800&display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Poppins:wght@500;600;700;800&display=swap" rel="stylesheet">
 
 <style>
 
@@ -243,8 +243,7 @@ width:40%;
 }
 
 .form-area textarea,
-.form-area input,
-.form-area select{
+.form-area input{
 width:100%;
 background:rgba(0,0,0,.2);
 border:1px solid var(--border);
@@ -263,8 +262,7 @@ resize:none;
 }
 
 .form-area textarea:focus,
-.form-area input:focus,
-.form-area select:focus{
+.form-area input:focus{
 border-color:var(--indigo);
 box-shadow:0 0 0 4px rgba(91,75,255,.12);
 }
@@ -281,7 +279,6 @@ padding:18px;
 border-radius:18px;
 background:rgba(255,255,255,.03);
 border:1px solid var(--border);
-cursor:pointer;
 transition:.3s;
 }
 
@@ -330,7 +327,6 @@ box-shadow:0 0 40px rgba(91,75,255,.35);
 
 .btn:hover{
 transform:translateY(-4px) scale(1.01);
-filter:brightness(1.1);
 }
 
 #processing{
@@ -567,8 +563,9 @@ Faça login para desbloquear os recursos premium da inteligência artificial.
 </p>
 
 <div id="g_id_onload"
-data-client_id="SEU_CLIENT_ID_AQUI"
-data-callback="onLogin">
+data-client_id="593110663863-u9956693jafabtisfm0jnbgsufjd8n1f.apps.googleusercontent.com"
+data-callback="onLogin"
+data-auto_prompt="false">
 </div>
 
 <div class="g_id_signin"
@@ -594,9 +591,17 @@ data-size="large">
 <span style="color:#8b7cff;">IA</span> Gerador Elite
 </h2>
 
+<div style="display:flex;align-items:center;gap:10px;">
+
 <img id="uPic"
 src=""
 style="width:40px;height:40px;border-radius:50%;border:2px solid #5b4bff;object-fit:cover;"/>
+
+<button onclick="logoutElite()" style="background:none;border:none;color:#94a3b8;cursor:pointer;">
+Sair
+</button>
+
+</div>
 
 </div>
 
@@ -783,14 +788,47 @@ EXCEL
 
 <script>
 
-function onLogin(res){
+window.onload = () => {
+
+const savedUser = localStorage.getItem("eliteUser");
+
+if(savedUser){
+
+const user = JSON.parse(savedUser);
 
 document.getElementById('login-gate').style.display='none';
+
 document.getElementById('app-content').style.display='block';
+
+document.getElementById('uPic').src=user.picture;
+
+}
+
+}
+
+function onLogin(res){
 
 const data = JSON.parse(atob(res.credential.split('.')[1]));
 
+localStorage.setItem("eliteUser", JSON.stringify({
+name:data.name,
+email:data.email,
+picture:data.picture
+}));
+
+document.getElementById('login-gate').style.display='none';
+
+document.getElementById('app-content').style.display='block';
+
 document.getElementById('uPic').src=data.picture;
+
+}
+
+function logoutElite(){
+
+localStorage.removeItem("eliteUser");
+
+location.reload();
 
 }
 
