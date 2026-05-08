@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <html lang="pt-br">
 <head>
+
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
@@ -20,7 +21,7 @@
 --indigo:#5b4bff;
 --royal:#4338ca;
 --bg:#05050a;
---glass:rgba(17,20,40,.55);
+--glass:rgba(18,20,40,.58);
 --border:rgba(255,255,255,.08);
 --text:#f8fafc;
 }
@@ -46,8 +47,8 @@ overflow-x:hidden;
 body::before{
 content:'';
 position:fixed;
-width:450px;
-height:450px;
+width:500px;
+height:500px;
 background:rgba(91,75,255,.18);
 filter:blur(120px);
 top:-200px;
@@ -56,34 +57,34 @@ z-index:-1;
 }
 
 .app{
-max-width:1000px;
+max-width:1050px;
 margin:auto;
 }
 
 .hero{
 text-align:center;
-margin-bottom:35px;
+margin-bottom:40px;
 }
 
 .logo{
 width:120px;
 height:120px;
 margin:auto;
-border-radius:32px;
+border-radius:35px;
 background:linear-gradient(135deg,#5b4bff,#4338ca);
 display:flex;
 align-items:center;
 justify-content:center;
-font-size:52px;
+font-size:55px;
 box-shadow:0 0 60px rgba(91,75,255,.45);
 margin-bottom:25px;
 }
 
 .hero h1{
 font-family:'Poppins';
-font-size:50px;
-line-height:1.1;
+font-size:52px;
 margin-bottom:15px;
+line-height:1.1;
 }
 
 .gradient{
@@ -93,7 +94,7 @@ background:linear-gradient(90deg,#fff,#9b8cff);
 }
 
 .hero p{
-max-width:720px;
+max-width:700px;
 margin:auto;
 line-height:1.8;
 color:#94a3b8;
@@ -114,7 +115,7 @@ margin:40px auto;
 text-align:center;
 }
 
-.login-mini{
+.login-logo{
 width:90px;
 height:90px;
 margin:auto;
@@ -144,6 +145,19 @@ transform:translateY(0);
 }
 }
 
+.topbar{
+display:flex;
+justify-content:space-between;
+align-items:center;
+margin-bottom:25px;
+}
+
+.topbar-right{
+display:flex;
+align-items:center;
+gap:12px;
+}
+
 input,textarea{
 width:100%;
 padding:18px;
@@ -161,26 +175,43 @@ min-height:180px;
 resize:none;
 }
 
-button{
-border:none;
-cursor:pointer;
-}
-
 .btn{
 width:100%;
 padding:18px;
+border:none;
 border-radius:18px;
 background:linear-gradient(135deg,#5b4bff,#4338ca);
 color:white;
 font-family:'Poppins';
 font-weight:600;
 font-size:15px;
+cursor:pointer;
 transition:.3s;
 box-shadow:0 0 40px rgba(91,75,255,.35);
 }
 
 .btn:hover{
 transform:translateY(-3px);
+}
+
+#processing{
+display:none;
+margin-top:25px;
+}
+
+.step{
+padding:16px;
+border-radius:18px;
+margin-bottom:12px;
+background:rgba(255,255,255,.03);
+border:1px solid var(--border);
+opacity:.4;
+transition:.3s;
+}
+
+.step.active{
+opacity:1;
+transform:translateX(5px);
 }
 
 .stats{
@@ -218,16 +249,17 @@ margin-top:20px;
 }
 
 .content h3{
-margin-bottom:14px;
-font-size:14px;
+margin-bottom:15px;
 font-family:'Poppins';
-color:#9b8cff;
+font-size:14px;
 text-transform:uppercase;
+color:#9b8cff;
 }
 
 .content p{
 line-height:1.8;
 color:#d1d5db;
+white-space:pre-line;
 }
 
 .tags{
@@ -264,32 +296,17 @@ gap:10px;
 font-family:'Poppins';
 font-weight:600;
 cursor:pointer;
-}
-
-#processing{
-display:none;
-margin-top:25px;
-}
-
-.step{
-padding:16px;
-border-radius:18px;
-margin-bottom:12px;
-background:rgba(255,255,255,.03);
-border:1px solid var(--border);
-opacity:.4;
 transition:.3s;
 }
 
-.step.active{
-opacity:1;
-transform:translateX(5px);
+.export:hover{
+transform:translateY(-3px);
 }
 
-@media(max-width:800px){
+@media(max-width:850px){
 
 .hero h1{
-font-size:35px;
+font-size:36px;
 }
 
 .stats{
@@ -300,9 +317,15 @@ grid-template-columns:repeat(2,1fr);
 grid-template-columns:1fr;
 }
 
+.topbar{
+flex-direction:column;
+gap:15px;
+}
+
 }
 
 </style>
+
 </head>
 
 <body>
@@ -320,14 +343,14 @@ Elite <span class="gradient">Docs AI</span>
 </h1>
 
 <p>
-Crie currículos ATS premium, documentos profissionais e perfis corporativos usando inteligência artificial.
+Crie currículos ATS profissionais, documentos corporativos e perfis premium com inteligência artificial.
 </p>
 
 </div>
 
 <div id="login-gate" class="glass">
 
-<div class="login-mini">
+<div class="login-logo">
 <i class="fas fa-bolt"></i>
 </div>
 
@@ -341,7 +364,8 @@ Faça login para continuar.
 
 <div id="g_id_onload"
 data-client_id="593110663863-u9956693jafabtisfm0jnbgsufjd8n1f.apps.googleusercontent.com"
-data-callback="onLogin">
+data-callback="handleCredentialResponse"
+data-auto_prompt="false">
 </div>
 
 <div class="g_id_signin"
@@ -357,20 +381,31 @@ data-size="large">
 
 <div class="glass">
 
-<div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:20px;">
+<div class="topbar">
 
 <h2 style="font-family:Poppins;">
 IA Gerador Elite
 </h2>
 
-<div style="display:flex;align-items:center;gap:10px;">
+<div class="topbar-right">
 
 <img id="uPic"
 src=""
-style="width:42px;height:42px;border-radius:50%;border:2px solid #5b4bff;object-fit:cover;">
+style="
+width:45px;
+height:45px;
+border-radius:50%;
+border:2px solid #5b4bff;
+object-fit:cover;
+">
 
 <button onclick="logoutElite()"
-style="background:none;color:#94a3b8;">
+style="
+background:none;
+border:none;
+color:#94a3b8;
+cursor:pointer;
+">
 Sair
 </button>
 
@@ -378,13 +413,14 @@ Sair
 
 </div>
 
-<input type="text"
+<input
+type="text"
 id="docTitle"
 placeholder="Nome do candidato">
 
 <textarea
 id="rawInput"
-placeholder="Ex: João Silva, desenvolvedor front-end com experiência em React, TypeScript e UI moderna..."></textarea>
+placeholder="Ex: João Silva, desenvolvedor front-end com 5 anos de experiência em React, TypeScript, UI moderna, liderança de equipe e projetos web..."></textarea>
 
 <button class="btn" onclick="iniciarIA()">
 <i class="fas fa-wand-magic-sparkles"></i>
@@ -394,23 +430,19 @@ Gerar Currículo Premium
 <div id="processing">
 
 <div class="step" id="s1">
-<i class="fas fa-check-circle"></i>
-Analisando perfil...
+✅ Analisando perfil profissional...
 </div>
 
 <div class="step" id="s2">
-<i class="fas fa-check-circle"></i>
-Otimizando ATS...
+✅ Otimizando para ATS...
 </div>
 
 <div class="step" id="s3">
-<i class="fas fa-check-circle"></i>
-Gerando currículo...
+✅ Criando currículo premium...
 </div>
 
 <div class="step" id="s4">
-<i class="fas fa-check-circle"></i>
-Finalizando design...
+✅ Finalizando documento...
 </div>
 
 </div>
@@ -425,27 +457,29 @@ Finalizando design...
 
 <script>
 
-window.onload = () => {
+window.onload = function(){
 
-const savedUser = localStorage.getItem("eliteUser");
+const user = localStorage.getItem("eliteUser");
 
-if(savedUser){
+if(user){
 
-const user = JSON.parse(savedUser);
+const data = JSON.parse(user);
 
-document.getElementById('login-gate').style.display='none';
+document.getElementById("login-gate").style.display = "none";
 
-document.getElementById('app-content').style.display='block';
+document.getElementById("app-content").style.display = "block";
 
-document.getElementById('uPic').src=user.picture;
-
-}
+document.getElementById("uPic").src = data.picture;
 
 }
 
-function onLogin(res){
+}
 
-const data = JSON.parse(atob(res.credential.split('.')[1]));
+function handleCredentialResponse(response){
+
+const data = JSON.parse(
+atob(response.credential.split('.')[1])
+);
 
 localStorage.setItem("eliteUser", JSON.stringify({
 name:data.name,
@@ -453,11 +487,11 @@ email:data.email,
 picture:data.picture
 }));
 
-document.getElementById('login-gate').style.display='none';
+document.getElementById("login-gate").style.display = "none";
 
-document.getElementById('app-content').style.display='block';
+document.getElementById("app-content").style.display = "block";
 
-document.getElementById('uPic').src=data.picture;
+document.getElementById("uPic").src = data.picture;
 
 }
 
@@ -483,25 +517,25 @@ document.getElementById('processing').style.display='block';
 [1,2,3,4].forEach((i,index)=>{
 setTimeout(()=>{
 document.getElementById('s'+i).classList.add('active');
-},index*900);
+},index*800);
 });
 
 try{
 
 const prompt = `
-Você é especialista premium em RH.
+Você é um especialista em RH e ATS.
 
-Crie um currículo profissional ATS.
+Crie um currículo profissional moderno.
 
 RETORNE EXATAMENTE:
 
 [NOME]
 |||
-[RESUMO]
+[RESUMO PROFISSIONAL]
 |||
-[EXPERIÊNCIA]
+[EXPERIÊNCIA PROFISSIONAL]
 |||
-[FORMAÇÃO]
+[FORMAÇÃO ACADÊMICA]
 |||
 [HABILIDADES separadas por vírgula]
 
@@ -510,18 +544,26 @@ ${input}
 `;
 
 const res = await fetch(
-`https://text.pollinations.ai/${encodeURIComponent(prompt)}`
+'https://text.pollinations.ai/' + encodeURIComponent(prompt)
 );
 
 const text = await res.text();
 
 const partes = text.split("|||");
 
-const nome = partes[0] || "Profissional";
-const resumo = partes[1] || "";
-const experiencia = partes[2] || "";
-const formacao = partes[3] || "";
-const habilidades = partes[4] || "";
+const nome = (partes[0] || "Profissional").replace(/\[|\]/g,'');
+const resumo = (partes[1] || "").replace(/\[|\]/g,'');
+const experiencia = (partes[2] || "").replace(/\[|\]/g,'');
+const formacao = (partes[3] || "").replace(/\[|\]/g,'');
+const habilidades = (partes[4] || "").replace(/\[|\]/g,'');
+
+window.curriculoData = {
+nome,
+resumo,
+experiencia,
+formacao,
+habilidades
+};
 
 document.getElementById('dashboard').innerHTML = `
 
@@ -550,35 +592,23 @@ document.getElementById('dashboard').innerHTML = `
 </div>
 
 <div class="content">
-
 <h3>Nome Profissional</h3>
-
-<p>${nome.replace(/\\[|\\]/g,'')}</p>
-
+<p>${nome}</p>
 </div>
 
 <div class="content">
-
 <h3>Resumo Executivo</h3>
-
-<p>${resumo.replace(/\\[|\\]/g,'')}</p>
-
+<p>${resumo}</p>
 </div>
 
 <div class="content">
-
-<h3>Experiência</h3>
-
-<p>${experiencia.replace(/\\[|\\]/g,'')}</p>
-
+<h3>Experiência Profissional</h3>
+<p>${experiencia}</p>
 </div>
 
 <div class="content">
-
-<h3>Formação</h3>
-
-<p>${formacao.replace(/\\[|\\]/g,'')}</p>
-
+<h3>Formação Acadêmica</h3>
+<p>${formacao}</p>
 </div>
 
 <div class="content">
@@ -587,7 +617,7 @@ document.getElementById('dashboard').innerHTML = `
 
 <div class="tags">
 
-${habilidades.replace(/\\[|\\]/g,'').split(',').map(skill=>`
+${habilidades.split(',').map(skill => `
 <div class="tag">${skill.trim()}</div>
 `).join('')}
 
@@ -597,17 +627,17 @@ ${habilidades.replace(/\\[|\\]/g,'').split(',').map(skill=>`
 
 <div class="export-grid">
 
-<div class="export" onclick="exportar('pdf')">
+<div class="export" onclick="exportarPDF()">
 <i class="fas fa-file-pdf" style="color:#ef4444;"></i>
 PDF
 </div>
 
-<div class="export" onclick="exportar('doc')">
+<div class="export" onclick="exportarDOC()">
 <i class="fas fa-file-word" style="color:#3b82f6;"></i>
 WORD
 </div>
 
-<div class="export" onclick="exportar('xls')">
+<div class="export" onclick="exportarXLS()">
 <i class="fas fa-file-excel" style="color:#10b981;"></i>
 EXCEL
 </div>
@@ -616,17 +646,9 @@ EXCEL
 
 `;
 
-window.curriculoData = {
-nome,
-resumo,
-experiencia,
-formacao,
-habilidades
-};
-
 setTimeout(()=>{
 document.getElementById('processing').style.display='none';
-},4200);
+},3500);
 
 }catch(e){
 
@@ -636,19 +658,9 @@ alert('Erro ao gerar currículo.');
 
 }
 
-function exportar(tipo){
+function exportarPDF(){
 
-const titulo =
-document.getElementById('docTitle').value || 'Elite_Curriculo';
-
-const data = window.curriculoData;
-
-if(!data){
-alert('Nenhum currículo gerado.');
-return;
-}
-
-if(tipo==='pdf'){
+const d = window.curriculoData;
 
 const element = document.createElement('div');
 
@@ -656,19 +668,104 @@ element.innerHTML = `
 <div style="padding:40px;font-family:Arial;color:#111827;">
 
 <h1 style="color:#5b4bff;">
-${data.nome}
+${d.nome}
 </h1>
 
 <hr>
 
-<h2>Resumo</h2>
-<p>${data.resumo}</p>
+<h2>Resumo Profissional</h2>
+<p>${d.resumo}</p>
 
 <h2>Experiência</h2>
-<p>${data.experiencia}</p>
+<p>${d.experiencia}</p>
 
 <h2>Formação</h2>
-<p>${data.formacao}</p>
+<p>${d.formacao}</p>
 
 <h2>Competências</h2>
-<p>${data
+<p>${d.habilidades}</p>
+
+</div>
+`;
+
+html2pdf().from(element).save();
+
+}
+
+function exportarDOC(){
+
+const d = window.curriculoData;
+
+const blob = new Blob([
+`
+<h1>${d.nome}</h1>
+
+<h2>Resumo Profissional</h2>
+<p>${d.resumo}</p>
+
+<h2>Experiência</h2>
+<p>${d.experiencia}</p>
+
+<h2>Formação</h2>
+<p>${d.formacao}</p>
+
+<h2>Competências</h2>
+<p>${d.habilidades}</p>
+`
+],{
+type:'application/msword'
+});
+
+const a = document.createElement('a');
+
+a.href = URL.createObjectURL(blob);
+
+a.download = 'curriculo.doc';
+
+a.click();
+
+}
+
+function exportarXLS(){
+
+const d = window.curriculoData;
+
+const ws = XLSX.utils.aoa_to_sheet([
+
+["Nome"],
+[d.nome],
+
+[],
+
+["Resumo"],
+[d.resumo],
+
+[],
+
+["Experiência"],
+[d.experiencia],
+
+[],
+
+["Formação"],
+[d.formacao],
+
+[],
+
+["Competências"],
+[d.habilidades]
+
+]);
+
+const wb = XLSX.utils.book_new();
+
+XLSX.utils.book_append_sheet(wb, ws, "Curriculo");
+
+XLSX.writeFile(wb, "curriculo.xlsx");
+
+}
+
+</script>
+
+</body>
+</html>
