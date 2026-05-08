@@ -3,163 +3,143 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Elite AI Workspace v7</title>
+    <title>Elite Docs AI</title>
     
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
+    <script src="https://accounts.google.com/gsi/client" async defer></script>
     
     <style>
         :root { --primary: #4f46e5; --bg: #0f172a; --card: #1e293b; --text: #f1f5f9; }
         * { box-sizing: border-box; transition: 0.3s ease; }
         body { font-family: 'Inter', sans-serif; background: var(--bg); color: var(--text); margin: 0; padding: 0; }
 
-        header { background: var(--card); padding: 15px; text-align: center; border-bottom: 1px solid rgba(255,255,255,0.1); position: sticky; top:0; z-index:100; }
-        header h1 { font-size: 22px; margin: 0; background: linear-gradient(to right, #818cf8, #c084fc); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+        header { background: var(--card); padding: 20px; text-align: center; border-bottom: 1px solid rgba(255,255,255,0.1); }
+        header h1 { font-size: 26px; margin: 0; letter-spacing: -1px; background: linear-gradient(to right, #818cf8, #c084fc); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
 
-        .container { max-width: 500px; margin: 0 auto; padding: 20px; }
-        .card { background: var(--card); border-radius: 24px; padding: 25px; border: 1px solid rgba(255,255,255,0.05); }
+        .container { max-width: 550px; margin: 0 auto; padding: 20px; }
+        .card { background: var(--card); border-radius: 28px; padding: 30px; box-shadow: 0 25px 50px -12px rgba(0,0,0,0.5); border: 1px solid rgba(255,255,255,0.05); }
 
-        label { display: block; font-size: 11px; font-weight: 800; color: #6366f1; text-transform: uppercase; margin-bottom: 8px; }
-        input, textarea { width: 100%; background: rgba(15,23,42,0.6); border: 1px solid #334155; border-radius: 15px; color: white; padding: 15px; font-size: 16px; margin-bottom: 20px; }
-        textarea { height: 220px; resize: none; }
+        /* Login Button Style */
+        .google-auth { display: flex; flex-direction: column; align-items: center; gap: 10px; margin-bottom: 25px; padding: 15px; background: rgba(255,255,255,0.03); border-radius: 18px; }
+        #user-info { display: none; align-items: center; gap: 10px; font-size: 13px; color: #818cf8; font-weight: 600; }
+        #user-info img { width: 30px; height: 30px; border-radius: 50%; border: 2px solid var(--primary); }
 
-        .mic-btn { width: 50px; height: 50px; border-radius: 50%; border: none; background: #334155; color: white; cursor: pointer; display: flex; align-items: center; justify-content: center; margin: -75px 10px 25px auto; position: relative; z-index: 10; }
-        .mic-active { background: #ef4444; box-shadow: 0 0 20px rgba(239, 68, 68, 0.5); }
+        label { display: block; font-size: 10px; font-weight: 800; color: #6366f1; text-transform: uppercase; margin-bottom: 8px; letter-spacing: 1.5px; }
+        input, textarea { width: 100%; background: rgba(15,23,42,0.8); border: 1px solid #334155; border-radius: 18px; color: white; padding: 18px; font-size: 16px; margin-bottom: 20px; outline: none; }
+        input:focus, textarea:focus { border-color: var(--primary); }
+        textarea { height: 200px; resize: none; }
 
-        .btn-action { width: 100%; border: none; padding: 18px; border-radius: 16px; font-weight: 700; cursor: pointer; font-size: 16px; margin-bottom: 12px; display: flex; align-items: center; justify-content: center; gap: 10px; }
-        .btn-ai { background: var(--primary); color: white; }
+        .btn-action { width: 100%; border: none; padding: 20px; border-radius: 20px; font-weight: 700; cursor: pointer; font-size: 16px; margin-bottom: 12px; display: flex; align-items: center; justify-content: center; gap: 12px; }
+        .btn-ai { background: var(--primary); color: white; box-shadow: 0 10px 15px -3px rgba(79, 70, 229, 0.4); }
         .btn-view { background: #10b981; color: white; }
 
-        /* VISUALIZADOR INTERNO (WORKSPACE) */
-        #workspace { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: #f1f5f9; z-index: 200; display: none; overflow-y: auto; }
-        .toolbar { background: #1e293b; padding: 15px; display: flex; justify-content: space-between; position: sticky; top: 0; }
-        .tool-btn { background: rgba(255,255,255,0.1); color: white; border: none; padding: 10px 15px; border-radius: 10px; cursor: pointer; font-size: 12px; display: flex; align-items: center; gap: 6px; }
-        
-        .paper { background: white; width: 90%; max-width: 800px; min-height: 1100px; margin: 30px auto; padding: 60px; box-shadow: 0 10px 40px rgba(0,0,0,0.1); color: #1e293b; }
-        .paper h2 { color: #4f46e5; border-bottom: 2px solid #e2e8f0; padding-bottom: 20px; font-family: 'Times New Roman', serif; }
-        .paper p { font-family: 'Times New Roman', serif; font-size: 18px; line-height: 1.8; white-space: pre-line; }
+        /* Workspace & Paper */
+        #workspace { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: #e2e8f0; z-index: 200; display: none; overflow-y: auto; }
+        .toolbar { background: #1e293b; padding: 15px 25px; display: flex; justify-content: space-between; position: sticky; top: 0; align-items: center; }
+        .paper { background: white; width: 90%; max-width: 800px; min-height: 1000px; margin: 40px auto; padding: 80px; box-shadow: 0 20px 60px rgba(0,0,0,0.15); color: #1e293b; border-radius: 4px; }
+        .paper h2 { color: #1e293b; border-bottom: 3px solid var(--primary); padding-bottom: 20px; font-family: 'Georgia', serif; font-size: 32px; }
+        .paper p { font-family: 'Georgia', serif; font-size: 19px; line-height: 1.9; white-space: pre-line; text-align: justify; }
 
-        #status { text-align: center; font-size: 12px; color: #818cf8; font-weight: 600; }
+        .status-badge { text-align: center; font-size: 12px; color: #94a3b8; }
     </style>
 </head>
 <body>
 
-    <header><h1>Elite AI Workspace</h1></header>
+    <header><h1>Elite Docs AI</h1></header>
 
-    <div class="container" id="main-ui">
+    <div class="container">
         <div class="card">
-            <label>Título do Projeto</label>
-            <input type="text" id="docTitle" placeholder="Ex: Relatório Financeiro">
-            
-            <label>Conteúdo / Dados</label>
-            <textarea id="textContent" placeholder="Fale ou digite aqui os dados ou o texto..."></textarea>
-            
-            <button class="mic-btn" id="micBtn" onclick="handleMic()">
-                <i class="fas fa-microphone" id="micIcon"></i>
-            </button>
+            <div class="google-auth">
+                <div id="g_id_onload"
+                     data-client_id="SUA_CLIENT_ID_AQUI.apps.googleusercontent.com"
+                     data-callback="handleAuthResponse"
+                     data-auto_prompt="false">
+                </div>
+                <div class="g_id_signin" data-type="standard"></div>
+                
+                <div id="user-info">
+                    <img id="user-pic" src="" alt="">
+                    <span id="user-name">Conectado</span>
+                </div>
+            </div>
 
-            <button class="btn-action btn-ai" onclick="runAI()">
-                <i class="fas fa-wand-magic-sparkles"></i> Refinar com IA
+            <label>Título do Documento</label>
+            <input type="text" id="docTitle" placeholder="Ex: Contrato de Prestação de Serviço">
+            
+            <label>Conteúdo Principal</label>
+            <textarea id="textContent" placeholder="Digite, cole ou fale seu rascunho..."></textarea>
+
+            <button class="btn-action btn-ai" onclick="refinarIA()">
+                <i class="fas fa-magic"></i> Inteligência Elite
             </button>
             
-            <button class="btn-action btn-view" onclick="showWorkspace()">
-                <i class="fas fa-file-invoice"></i> Visualizar Documento
+            <button class="btn-action btn-view" onclick="abrirNoApp()">
+                <i class="fas fa-expand"></i> Abrir no Workspace
             </button>
-            <p id="status">Sistema Pronto</p>
+            
+            <p class="status-badge" id="status">Pronto para criar</p>
         </div>
     </div>
 
     <div id="workspace">
         <div class="toolbar">
-            <button class="tool-btn" style="background:#ef4444" onclick="hideWorkspace()"><i class="fas fa-times"></i> Fechar</button>
-            <div style="display:flex; gap:8px;">
-                <button class="tool-btn" onclick="exportDoc('pdf')"><i class="fas fa-file-pdf"></i> PDF</button>
-                <button class="tool-btn" onclick="exportDoc('xlsx')"><i class="fas fa-file-excel"></i> EXCEL</button>
-                <button class="tool-btn" onclick="exportDoc('doc')"><i class="fas fa-file-word"></i> DOC</button>
+            <button onclick="fecharWorkspace()" style="background:#ef4444; color:white; border:none; padding:10px 15px; border-radius:10px; cursor:pointer;"><i class="fas fa-times"></i> Voltar</button>
+            <div style="display:flex; gap:10px;">
+                <button onclick="exportar('pdf')" style="background:white; border:none; padding:10px 15px; border-radius:10px; cursor:pointer;"><i class="fas fa-file-pdf"></i> PDF</button>
+                <button onclick="exportar('xlsx')" style="background:white; border:none; padding:10px 15px; border-radius:10px; cursor:pointer;"><i class="fas fa-file-excel"></i> Excel</button>
             </div>
         </div>
-
-        <div class="paper" id="paper-area">
+        <div class="paper" id="printable">
             <h2 id="viewTitle"></h2>
             <p id="viewBody"></p>
         </div>
     </div>
 
     <script>
-        // Config de Voz
-        const recognition = new (window.SpeechRecognition || window.webkitSpeechRecognition)();
-        recognition.lang = 'pt-BR';
-        let isMicOn = false;
-
-        function handleMic() {
-            const btn = document.getElementById('micBtn');
-            const icon = document.getElementById('micIcon');
-            if(!isMicOn) {
-                recognition.start();
-                btn.classList.add('mic-active');
-                icon.className = "fas fa-stop";
-            } else {
-                recognition.stop();
-                btn.classList.remove('mic-active');
-                icon.className = "fas fa-microphone";
-            }
-            isMicOn = !isMicOn;
+        // Função de Autenticação Google
+        function handleAuthResponse(response) {
+            const payload = JSON.parse(atob(response.credential.split('.')[1]));
+            document.querySelector('.g_id_signin').style.display = 'none';
+            document.getElementById('user-info').style.display = 'flex';
+            document.getElementById('user-pic').src = payload.picture;
+            document.getElementById('user-name').innerText = payload.given_name;
+            document.getElementById('status').innerText = "Conectado como " + payload.email;
         }
 
-        recognition.onresult = (e) => {
-            document.getElementById('textContent').value += " " + e.results[0][0].transcript;
-            handleMic();
-        };
+        async function refinarIA() {
+            const text = document.getElementById('textContent');
+            const status = document.getElementById('status');
+            if(!text.value) return;
 
-        // Workspace
-        function showWorkspace() {
+            status.innerText = "✨ Elite AI formatando documento...";
+            try {
+                const res = await fetch(`https://text.pollinations.ai/${encodeURIComponent("Formate o texto abaixo como um documento profissional oficial e executivo em português: " + text.value)}`);
+                text.value = await res.text();
+                status.innerText = "✅ Documento Pronto!";
+            } catch (e) { status.innerText = "⚠️ Erro na conexão."; }
+        }
+
+        function abrirNoApp() {
             document.getElementById('viewTitle').innerText = document.getElementById('docTitle').value || "Documento Elite";
-            document.getElementById('viewBody').innerText = document.getElementById('textContent').value || "Sem conteúdo.";
+            document.getElementById('viewBody').innerText = document.getElementById('textContent').value;
             document.getElementById('workspace').style.display = 'block';
         }
 
-        function hideWorkspace() { document.getElementById('workspace').style.display = 'none'; }
+        function fecharWorkspace() { document.getElementById('workspace').style.display = 'none'; }
 
-        // IA
-        async function runAI() {
-            const field = document.getElementById('textContent');
-            const status = document.getElementById('status');
-            if(!field.value) return;
-
-            status.innerText = "⏳ IA Estruturando Arquivos...";
-            const prompt = "Reorganize o conteúdo a seguir de forma extremamente profissional. Se parecerem dados de tabela, separe por vírgulas. Se for texto, use linguagem corporativa sênior: " + field.value;
-            
-            try {
-                const res = await fetch(`https://text.pollinations.ai/${encodeURIComponent(prompt)}`);
-                field.value = await res.text();
-                status.innerText = "✅ Conteúdo Otimizado!";
-            } catch (e) { status.innerText = "❌ Erro na IA."; }
-        }
-
-        // EXPORTAÇÃO PROFISSIONAL
-        function exportDoc(type) {
-            const title = document.getElementById('docTitle').value || "Doc_Elite";
-            const content = document.getElementById('textContent').value;
-
+        function exportar(type) {
+            const title = document.getElementById('docTitle').value || "Documento_Elite";
             if(type === 'pdf') {
-                const element = document.getElementById('paper-area');
-                html2pdf().set({ margin: 1, filename: title+'.pdf', image: { type: 'jpeg', quality: 0.98 }, html2canvas: { scale: 2 }, jsPDF: { unit: 'in', format: 'letter', orientation: 'portrait' } }).from(element).save();
-            } 
-            else if(type === 'xlsx') {
-                // Transforma texto em Planilha Real (XLSX)
-                const rows = content.split('\n').map(line => line.split(/[,;|]/).map(item => item.trim()));
+                html2pdf().from(document.getElementById('printable')).set({ filename: title+'.pdf' }).save();
+            } else if(type === 'xlsx') {
+                const content = document.getElementById('textContent').value;
+                const rows = content.split('\n').map(line => [line]);
                 const wb = XLSX.utils.book_new();
                 const ws = XLSX.utils.aoa_to_sheet(rows);
-                XLSX.utils.book_append_sheet(wb, ws, "Dados Elite");
+                XLSX.utils.book_append_sheet(wb, ws, "Dados");
                 XLSX.writeFile(wb, `${title}.xlsx`);
-            }
-            else if(type === 'doc') {
-                const blob = new Blob(['\ufeff', document.getElementById('paper-area').innerHTML], { type: 'application/msword' });
-                const link = document.createElement('a');
-                link.href = URL.createObjectURL(blob);
-                link.download = `${title}.doc`;
-                link.click();
             }
         }
     </script>
