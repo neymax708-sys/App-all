@@ -1,13 +1,18 @@
 <!DOCTYPE html>
 <html lang="pt-br">
 <head>
+
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
 <title>Elite Docs AI</title>
 
 <link rel="preconnect" href="https://fonts.googleapis.com">
+
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
 <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
 
 <style>
@@ -23,6 +28,7 @@ font-family:'Inter',sans-serif;
 background:#03030a;
 color:white;
 overflow-x:hidden;
+padding:12px;
 background-image:
 radial-gradient(circle at top, rgba(91,75,255,.25), transparent 35%),
 radial-gradient(circle at bottom, rgba(0,140,255,.12), transparent 30%);
@@ -33,240 +39,358 @@ display:none;
 }
 
 .container{
-max-width:1200px;
+width:100%;
+max-width:100%;
 margin:auto;
-padding:20px;
 }
 
 .hero{
 text-align:center;
-padding:30px 20px;
+padding:20px 10px;
 }
 
-.hero img{
-width:240px;
+.logo{
+width:220px;
 max-width:90%;
-margin-bottom:20px;
+margin-bottom:15px;
+filter:drop-shadow(0 0 20px rgba(91,75,255,.5));
 }
 
 .hero h1{
-font-size:60px;
+font-size:34px;
 font-weight:800;
-margin-bottom:15px;
+margin-bottom:10px;
+line-height:1.2;
 }
 
 .hero p{
-font-size:22px;
+font-size:15px;
 color:#9ca3af;
-line-height:1.7;
+line-height:1.6;
 }
 
 .grid{
 display:grid;
-grid-template-columns:repeat(auto-fit,minmax(260px,1fr));
-gap:25px;
-margin-top:50px;
+grid-template-columns:1fr;
+gap:18px;
+margin-top:30px;
 }
 
 .card{
 background:rgba(255,255,255,.04);
 border:1px solid rgba(255,255,255,.08);
-padding:35px;
-border-radius:35px;
+padding:22px;
+border-radius:28px;
 backdrop-filter:blur(20px);
 transition:.3s;
 cursor:pointer;
+width:100%;
 }
 
 .card:hover{
-transform:translateY(-8px) scale(1.02);
+transform:translateY(-4px);
 border-color:#5b4bff;
-box-shadow:0 0 30px rgba(91,75,255,.35);
 }
 
 .card i{
-font-size:48px;
-margin-bottom:20px;
+font-size:38px;
+margin-bottom:15px;
 }
 
 .card h2{
-font-size:32px;
-margin-bottom:15px;
+font-size:24px;
+margin-bottom:10px;
+line-height:1.2;
 }
 
 .card p{
 color:#9ca3af;
-line-height:1.7;
-font-size:18px;
+line-height:1.6;
+font-size:14px;
 }
 
 .screen{
-margin-top:30px;
+margin-top:20px;
 background:rgba(255,255,255,.04);
 border:1px solid rgba(255,255,255,.08);
-padding:30px;
-border-radius:35px;
+padding:18px;
+border-radius:28px;
 backdrop-filter:blur(20px);
+width:100%;
+overflow:hidden;
 }
 
 .back-btn{
 background:#5b4bff;
 color:white;
 border:none;
-padding:15px 25px;
-border-radius:16px;
-margin-bottom:25px;
+padding:14px 20px;
+border-radius:14px;
+margin-bottom:20px;
 cursor:pointer;
-font-size:16px;
+font-size:15px;
+width:100%;
 }
 
 .input,
 .textarea{
 width:100%;
-padding:18px;
-border-radius:18px;
+padding:16px;
+border-radius:16px;
 border:1px solid rgba(255,255,255,.08);
 background:rgba(255,255,255,.03);
 color:white;
-margin-bottom:18px;
-font-size:16px;
+margin-bottom:16px;
+font-size:15px;
+outline:none;
 }
 
 .textarea{
-min-height:180px;
+min-height:160px;
 resize:none;
 }
 
 .generate-btn{
 width:100%;
-padding:18px;
+padding:16px;
 border:none;
-border-radius:18px;
+border-radius:16px;
 background:linear-gradient(135deg,#5b4bff,#4338ca);
 color:white;
-font-size:18px;
+font-size:16px;
 font-weight:700;
 cursor:pointer;
 transition:.3s;
 }
 
 .generate-btn:hover{
-transform:translateY(-4px);
+transform:scale(1.01);
 }
 
 .preview{
-margin-top:30px;
+margin-top:20px;
+width:100%;
+overflow:hidden;
 }
 
 .export-btn{
-margin-top:20px;
-padding:18px;
-border-radius:18px;
+margin-top:18px;
+padding:16px;
+border-radius:16px;
 background:#5b4bff;
 text-align:center;
 cursor:pointer;
 font-weight:700;
+font-size:15px;
+width:100%;
 }
 
-@media(max-width:700px){
+#curriculoPDF{
+width:100%;
+overflow:hidden;
+border-radius:20px;
+background:white;
+}
+
+@media(min-width:768px){
+
+.container{
+max-width:1200px;
+}
+
+.grid{
+grid-template-columns:repeat(2,1fr);
+}
+
 .hero h1{
-font-size:42px;
+font-size:58px;
 }
 
 .hero p{
+font-size:22px;
+}
+
+.card{
+padding:35px;
+}
+
+.card h2{
+font-size:32px;
+}
+
+.card p{
 font-size:18px;
 }
+
+.screen{
+padding:30px;
+}
+
 }
 
 </style>
+
 </head>
+
 <body>
 
 <div class="container">
 
+<!-- HOME -->
+
 <div id="homeScreen">
 
 <div class="hero">
-<img src="logo.png">
+
+<!-- COLOQUE SUA LOGO COM ESSE NOME -->
+<img src="logo.png" class="logo">
+
 <h1>Elite Docs AI</h1>
-<p>Currículos ATS, PDFs, LinkedIn e cartas profissionais com IA.</p>
+
+<p>
+Currículos ATS, PDFs, LinkedIn e cartas profissionais com IA.
+</p>
+
 </div>
 
 <div class="grid">
 
 <div class="card" onclick="abrirTela('curriculoScreen')">
+
 <i class="fas fa-user-tie" style="color:#5b4bff"></i>
+
 <h2>Currículo ATS</h2>
-<p>Crie currículos profissionais modernos.</p>
+
+<p>
+Crie currículos profissionais modernos.
+</p>
+
 </div>
 
 <div class="card" onclick="abrirTela('pdfScreen')">
+
 <i class="fas fa-file-pdf" style="color:#ef4444"></i>
+
 <h2>Documento PDF</h2>
-<p>Monte documentos profissionais rapidamente.</p>
+
+<p>
+Monte documentos profissionais rapidamente.
+</p>
+
 </div>
 
 <div class="card" onclick="abrirTela('linkedinScreen')">
+
 <i class="fab fa-linkedin" style="color:#0a66c2"></i>
+
 <h2>Perfil LinkedIn</h2>
-<p>Perfis otimizados para recrutadores.</p>
+
+<p>
+Perfis otimizados para recrutadores.
+</p>
+
 </div>
 
 <div class="card" onclick="abrirTela('cartaScreen')">
+
 <i class="fas fa-envelope" style="color:#10b981"></i>
+
 <h2>Carta Profissional</h2>
-<p>Cartas elegantes e profissionais.</p>
-</div>
+
+<p>
+Cartas elegantes e profissionais.
+</p>
 
 </div>
 
 </div>
+
+</div>
+
+<!-- CURRICULO -->
 
 <div id="curriculoScreen" class="screen hidden">
-<button class="back-btn" onclick="voltar()">← Voltar</button>
+
+<button class="back-btn" onclick="voltar()">
+← Voltar
+</button>
 
 <input class="input" id="nome" placeholder="Nome completo">
+
 <input class="input" id="cargo" placeholder="Cargo profissional">
+
 <input class="input" id="telefone" placeholder="Telefone">
+
 <input class="input" id="email" placeholder="Email">
+
 <input class="input" id="cidade" placeholder="Cidade">
+
 <input class="input" type="file" id="foto">
+
 <textarea class="textarea" id="textoCurriculo" placeholder="Experiências, habilidades e formação..."></textarea>
 
-<button class="generate-btn" onclick="gerarCurriculo()">Gerar Currículo</button>
+<button class="generate-btn" onclick="gerarCurriculo()">
+Gerar Currículo
+</button>
 
 <div id="previewCurriculo" class="preview"></div>
+
 </div>
+
+<!-- PDF -->
 
 <div id="pdfScreen" class="screen hidden">
-<button class="back-btn" onclick="voltar()">← Voltar</button>
+
+<button class="back-btn" onclick="voltar()">
+← Voltar
+</button>
 
 <input class="input" id="tituloPDF" placeholder="Título">
+
 <textarea class="textarea" id="textoPDF" placeholder="Digite o conteúdo..."></textarea>
 
-<button class="generate-btn" onclick="gerarPDF()">Gerar Documento</button>
+<button class="generate-btn" onclick="gerarPDF()">
+Gerar PDF
+</button>
 
 <div id="previewPDF"></div>
+
 </div>
 
+<!-- LINKEDIN -->
+
 <div id="linkedinScreen" class="screen hidden">
-<button class="back-btn" onclick="voltar()">← Voltar</button>
+
+<button class="back-btn" onclick="voltar()">
+← Voltar
+</button>
 
 <textarea class="textarea" id="textoLinkedin" placeholder="Digite suas informações profissionais..."></textarea>
 
-<button class="generate-btn" onclick="gerarLinkedin()">Gerar Perfil</button>
+<button class="generate-btn" onclick="gerarLinkedin()">
+Gerar Perfil
+</button>
 
 <div id="previewLinkedin"></div>
+
 </div>
 
+<!-- CARTA -->
+
 <div id="cartaScreen" class="screen hidden">
-<button class="back-btn" onclick="voltar()">← Voltar</button>
+
+<button class="back-btn" onclick="voltar()">
+← Voltar
+</button>
 
 <textarea class="textarea" id="textoCarta" placeholder="Digite o objetivo da carta..."></textarea>
 
-<button class="generate-btn" onclick="gerarCarta()">Gerar Carta</button>
+<button class="generate-btn" onclick="gerarCarta()">
+Gerar Carta
+</button>
 
 <div id="previewCarta"></div>
+
 </div>
 
 </div>
@@ -283,7 +407,10 @@ telas.forEach(t=>t.classList.add('hidden'));
 
 document.getElementById(id).classList.remove('hidden');
 
-window.scrollTo({top:0,behavior:'smooth'});
+window.scrollTo({
+top:0,
+behavior:'smooth'
+});
 
 }
 
@@ -295,17 +422,25 @@ telas.forEach(t=>t.classList.add('hidden'));
 
 document.getElementById('homeScreen').classList.remove('hidden');
 
-window.scrollTo({top:0,behavior:'smooth'});
+window.scrollTo({
+top:0,
+behavior:'smooth'
+});
 
 }
 
 async function gerarCurriculo(){
 
 const nome=document.getElementById('nome').value;
+
 const cargo=document.getElementById('cargo').value;
+
 const telefone=document.getElementById('telefone').value;
+
 const email=document.getElementById('email').value;
+
 const cidade=document.getElementById('cidade').value;
+
 const texto=document.getElementById('textoCurriculo').value;
 
 let foto='https://cdn-icons-png.flaticon.com/512/847/847969.png';
@@ -317,48 +452,125 @@ foto=URL.createObjectURL(arquivo);
 }
 
 const html=`
-<div id="curriculoPDF" style="background:white;color:#111;border-radius:25px;overflow:hidden;font-family:Arial;">
-<div style="display:flex;flex-wrap:wrap;">
 
-<div style="width:280px;background:#005fcc;color:white;padding:30px;">
+<div id="curriculoPDF">
 
-<img src="${foto}" style="width:140px;height:140px;border-radius:25px;object-fit:cover;border:4px solid white;margin-bottom:25px;">
+<div style="
+display:flex;
+flex-wrap:wrap;
+">
 
-<h2 style="font-size:28px;margin-bottom:25px;">${nome}</h2>
+<div style="
+width:100%;
+max-width:260px;
+background:#005fcc;
+color:white;
+padding:25px;
+">
 
-<h3>CONTATO</h3>
-<p>📞 ${telefone}</p>
-<p>✉️ ${email}</p>
-<p>📍 ${cidade}</p>
+<img src="${foto}" style="
+width:120px;
+height:120px;
+border-radius:20px;
+object-fit:cover;
+border:4px solid white;
+margin-bottom:20px;
+">
+
+<h2 style="
+font-size:24px;
+margin-bottom:20px;
+word-break:break-word;
+">
+${nome}
+</h2>
+
+<h3 style="margin-bottom:10px;">CONTATO</h3>
+
+<p style="margin-bottom:8px;">
+📞 ${telefone}
+</p>
+
+<p style="
+margin-bottom:8px;
+word-break:break-word;
+">
+✉️ ${email}
+</p>
+
+<p>
+📍 ${cidade}
+</p>
 
 <br>
 
-<h3>HABILIDADES</h3>
+<h3 style="margin-bottom:10px;">
+HABILIDADES
+</h3>
+
 <p>• Comunicação</p>
 <p>• Liderança</p>
 <p>• Trabalho em equipe</p>
 
 </div>
 
-<div style="flex:1;padding:40px;min-width:300px;">
+<div style="
+flex:1;
+padding:25px;
+min-width:250px;
+background:white;
+">
 
-<h1 style="font-size:50px;color:#005fcc;">${nome}</h1>
-<p style="font-size:24px;color:#555;margin-bottom:25px;">${cargo}</p>
+<h1 style="
+font-size:36px;
+color:#005fcc;
+margin-bottom:10px;
+word-break:break-word;
+">
+${nome}
+</h1>
 
-<h2 style="color:#005fcc;margin-bottom:15px;">RESUMO PROFISSIONAL</h2>
-<p style="line-height:1.8;color:#444;">${texto}</p>
+<p style="
+font-size:20px;
+color:#444;
+margin-bottom:25px;
+">
+${cargo}
+</p>
+
+<h2 style="
+color:#005fcc;
+margin-bottom:15px;
+font-size:22px;
+">
+RESUMO PROFISSIONAL
+</h2>
+
+<p style="
+line-height:1.8;
+color:#222;
+font-size:15px;
+white-space:pre-line;
+word-break:break-word;
+">
+${texto}
+</p>
 
 </div>
 
 </div>
+
 </div>
 
 <div class="export-btn" onclick="baixarCurriculo()">
-<i class="fas fa-file-pdf"></i>
-Baixar Currículo PDF
-</div>
-`;
 
+<i class="fas fa-file-pdf"></i>
+
+Baixar Currículo PDF
+
+</div>
+
+`;
 
 document.getElementById('previewCurriculo').innerHTML=html;
 
@@ -369,11 +581,13 @@ function baixarCurriculo(){
 const el=document.getElementById('curriculoPDF');
 
 html2pdf().set({
+
 margin:0,
 filename:'curriculo.pdf',
 image:{type:'jpeg',quality:1},
 html2canvas:{scale:2},
 jsPDF:{unit:'mm',format:'a4',orientation:'portrait'}
+
 }).from(el).save();
 
 }
@@ -381,24 +595,32 @@ jsPDF:{unit:'mm',format:'a4',orientation:'portrait'}
 function gerarPDF(){
 
 const titulo=document.getElementById('tituloPDF').value;
+
 const texto=document.getElementById('textoPDF').value;
 
-const html=`
-<div id="pdfArea" style="background:white;color:#111;padding:40px;border-radius:25px;">
+document.getElementById('previewPDF').innerHTML=`
+
+<div style="
+background:white;
+color:#111;
+padding:25px;
+border-radius:20px;
+">
+
 <h1>${titulo}</h1>
-<p style="margin-top:20px;line-height:1.8;white-space:pre-line;">${texto}</p>
+
+<p style="
+margin-top:20px;
+line-height:1.8;
+white-space:pre-line;
+">
+${texto}
+</p>
+
 </div>
 
-<div class="export-btn" onclick="baixarPDF()">Baixar PDF</div>
 `;
 
-document.getElementById('previewPDF').innerHTML=html;
-
-}
-
-function baixarPDF(){
-const el=document.getElementById('pdfArea');
-html2pdf().from(el).save('documento.pdf');
 }
 
 function gerarLinkedin(){
@@ -406,10 +628,28 @@ function gerarLinkedin(){
 const texto=document.getElementById('textoLinkedin').value;
 
 document.getElementById('previewLinkedin').innerHTML=`
-<div class="screen">
-<h2>Perfil LinkedIn</h2>
-<p style="line-height:1.8;white-space:pre-line;">${texto}</p>
+
+<div style="
+background:white;
+color:#111;
+padding:25px;
+border-radius:20px;
+">
+
+<h2>
+Perfil LinkedIn
+</h2>
+
+<p style="
+margin-top:20px;
+line-height:1.8;
+white-space:pre-line;
+">
+${texto}
+</p>
+
 </div>
+
 `;
 
 }
@@ -419,10 +659,28 @@ function gerarCarta(){
 const texto=document.getElementById('textoCarta').value;
 
 document.getElementById('previewCarta').innerHTML=`
-<div class="screen">
-<h2>Carta Profissional</h2>
-<p style="line-height:1.8;white-space:pre-line;">${texto}</p>
+
+<div style="
+background:white;
+color:#111;
+padding:25px;
+border-radius:20px;
+">
+
+<h2>
+Carta Profissional
+</h2>
+
+<p style="
+margin-top:20px;
+line-height:1.8;
+white-space:pre-line;
+">
+${texto}
+</p>
+
 </div>
+
 `;
 
 }
