@@ -12,138 +12,117 @@
     
     <style>
         :root { --primary: #4f46e5; --bg: #0f172a; --card: #1e293b; --text: #f1f5f9; }
-        body { font-family: 'Inter', sans-serif; background: var(--bg); color: var(--text); margin: 0; overflow-x: hidden; }
+        body { font-family: 'Inter', sans-serif; background: var(--bg); color: var(--text); margin: 0; display: flex; align-items: center; justify-content: center; min-height: 100vh; }
 
-        /* TELA DE LOGIN (SÓ APARECE NO INÍCIO) */
-        #login-screen { 
-            display: flex; flex-direction: column; align-items: center; justify-content: center; 
-            height: 100vh; text-align: center; padding: 20px;
-        }
-        .login-box { background: var(--card); padding: 40px; border-radius: 30px; box-shadow: 0 25px 50px rgba(0,0,0,0.5); max-width: 400px; width: 100%; }
-        .logo-icon { font-size: 50px; color: var(--primary); margin-bottom: 20px; }
+        /* TELA DE LOGIN ESTILIZADA */
+        #auth-container { text-align: center; width: 100%; max-width: 400px; padding: 20px; }
+        .login-card { background: var(--card); padding: 45px; border-radius: 35px; box-shadow: 0 30px 60px rgba(0,0,0,0.6); border: 1px solid rgba(255,255,255,0.1); }
+        .logo-box { background: var(--primary); width: 70px; height: 70px; border-radius: 20px; display: flex; align-items: center; justify-content: center; margin: 0 auto 25px; font-size: 32px; box-shadow: 0 10px 20px rgba(79, 70, 229, 0.3); }
 
-        /* APP PRINCIPAL (ESCONDIDO ATÉ LOGAR) */
-        #main-app { display: none; padding: 20px; max-width: 550px; margin: 0 auto; }
-        
-        header { padding: 20px; text-align: center; }
-        header h1 { font-size: 24px; background: linear-gradient(to right, #818cf8, #c084fc); -webkit-background-clip: text; -webkit-text-fill-color: transparent; margin: 0; }
+        /* APP (ESCONDIDO POR PADRÃO) */
+        #main-content { display: none; width: 100%; max-width: 600px; padding: 20px; animation: fadeIn 0.8s ease; }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
 
-        .card { background: var(--card); border-radius: 24px; padding: 25px; border: 1px solid rgba(255,255,255,0.05); }
-        label { display: block; font-size: 10px; font-weight: 800; color: #6366f1; text-transform: uppercase; margin-bottom: 8px; }
-        input, textarea { width: 100%; background: rgba(15,23,42,0.8); border: 1px solid #334155; border-radius: 15px; color: white; padding: 15px; font-size: 16px; margin-bottom: 15px; outline: none; }
-        
-        .user-pill { display: flex; align-items: center; gap: 10px; background: rgba(255,255,255,0.05); padding: 5px 15px; border-radius: 50px; margin-bottom: 20px; font-size: 12px; }
-        .user-pill img { width: 25px; height: 25px; border-radius: 50%; }
+        .editor-container { background: var(--card); border-radius: 30px; padding: 30px; }
+        .user-header { display: flex; align-items: center; gap: 12px; margin-bottom: 25px; background: rgba(255,255,255,0.05); padding: 10px 20px; border-radius: 50px; width: fit-content; }
+        .user-header img { width: 30px; height: 30px; border-radius: 50%; }
 
-        .btn { width: 100%; padding: 18px; border-radius: 15px; border: none; font-weight: 700; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 10px; margin-bottom: 10px; font-size: 16px; }
-        .btn-ai { background: var(--primary); color: white; }
-        .btn-view { background: #10b981; color: white; }
+        textarea { width: 100%; background: #0f172a; border: 1px solid #334155; border-radius: 20px; color: white; padding: 20px; font-size: 16px; min-height: 250px; margin-top: 15px; }
+        .btn-elite { width: 100%; background: var(--primary); color: white; border: none; padding: 20px; border-radius: 20px; font-weight: 800; cursor: pointer; margin-top: 15px; display: flex; align-items: center; justify-content: center; gap: 10px; font-size: 17px; }
 
         /* WORKSPACE */
-        #workspace { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: #f1f5f9; z-index: 1000; display: none; overflow-y: auto; }
-        .toolbar { background: #1e293b; padding: 15px; display: flex; justify-content: space-between; color: white; }
-        .paper { background: white; width: 90%; max-width: 800px; margin: 30px auto; padding: 60px; color: #1e293b; box-shadow: 0 10px 30px rgba(0,0,0,0.1); }
+        #workspace-view { position: fixed; top:0; left:0; width:100%; height:100%; background: #f8fafc; z-index: 9999; display:none; overflow-y: auto; }
+        .paper-sheet { background: white; width: 90%; max-width: 800px; margin: 40px auto; padding: 60px; box-shadow: 0 0 50px rgba(0,0,0,0.1); color: #1e293b; min-height: 1000px; }
     </style>
 </head>
 <body>
 
-    <div id="login-screen">
-        <div class="login-box">
-            <i class="fas fa-file-shield logo-icon"></i>
-            <h2 style="margin-bottom: 10px;">Elite Docs AI</h2>
-            <p style="color: #94a3b8; margin-bottom: 30px; font-size: 14px;">Transforme suas ideias em documentos profissionais com IA.</p>
+    <div id="auth-container">
+        <div class="login-card">
+            <div class="logo-box"><i class="fas fa-crown"></i></div>
+            <h1 style="margin: 0; font-size: 28px; letter-spacing: -1px;">Elite Docs AI</h1>
+            <p style="color: #94a3b8; font-size: 14px; margin: 15px 0 35px;">Acesse sua conta para começar a criar documentos profissionais.</p>
             
             <div id="g_id_onload"
-                 data-client_id="COLE_AQUI_SEU_CLIENT_ID_DO_GOOGLE_CLOUD"
-                 data-callback="onSignIn"
+                 data-client_id="COLE_AQUI_SEU_CLIENT_ID_REAL.apps.googleusercontent.com"
+                 data-callback="handleCredentialResponse"
                  data-auto_prompt="false">
             </div>
-            <div class="g_id_signin" data-type="standard" data-shape="pill" data-theme="filled_blue"></div>
-            
-            <p style="font-size: 11px; margin-top: 20px; color: #6366f1;">Acesse com sua conta Google para começar</p>
+            <div class="g_id_signin" data-type="standard" data-shape="pill" data-theme="filled_blue" data-text="signin_with" data-size="large" data-logo_alignment="left"></div>
         </div>
     </div>
 
-    <div id="main-app">
-        <header><h1>Elite Docs AI</h1></header>
-        
-        <div id="userInfo" class="user-pill">
-            <img id="uPic" src="" alt="">
-            <span id="uName"></span>
+    <div id="main-content">
+        <div class="user-header">
+            <img id="uAvatar" src="" alt="">
+            <span id="uDisplayName" style="font-size: 14px; font-weight: 600;"></span>
         </div>
 
-        <div class="card">
-            <label>Título Executivo</label>
-            <input type="text" id="docTitle" placeholder="Ex: Projeto de Vendas 2026">
+        <div class="editor-container">
+            <h2 style="margin-top: 0;">Novo Documento</h2>
+            <input type="text" id="doc_title" placeholder="Título do arquivo..." style="width:100%; padding:15px; border-radius:15px; background:#0f172a; border:1px solid #334155; color:white;">
+            <textarea id="doc_text" placeholder="Descreva sua ideia ou cole um rascunho aqui..."></textarea>
             
-            <label>Conteúdo para IA</label>
-            <textarea id="textContent" placeholder="Escreva os pontos principais..."></textarea>
-
-            <button class="btn btn-ai" onclick="processarComIA()">
-                <i class="fas fa-wand-magic-sparkles"></i> Gerar Documento Elite
+            <button class="btn-elite" onclick="processAI()">
+                <i class="fas fa-wand-magic-sparkles"></i> Refinar com Inteligência
             </button>
-            <button class="btn btn-view" onclick="verWorkspace()">
-                <i class="fas fa-eye"></i> Visualizar e Exportar
+            <button class="btn-elite" style="background:#10b981" onclick="openDoc()">
+                <i class="fas fa-file-invoice"></i> Gerar Documento Final
             </button>
         </div>
     </div>
 
-    <div id="workspace">
-        <div class="toolbar">
-            <button onclick="fecharWorkspace()" style="background:none; color:white; border:none; cursor:pointer;"><i class="fas fa-chevron-left"></i> Voltar</button>
-            <div style="display:flex; gap:10px;">
-                <button onclick="baixar('pdf')" style="padding:8px 12px; border-radius:8px; border:none; cursor:pointer;"><i class="fas fa-file-pdf"></i> PDF</button>
-                <button onclick="baixar('xlsx')" style="padding:8px 12px; border-radius:8px; border:none; cursor:pointer;"><i class="fas fa-file-excel"></i> XLSX</button>
-            </div>
+    <div id="workspace-view">
+        <div style="background:#1e293b; padding:15px; display:flex; justify-content: space-between;">
+            <button onclick="closeDoc()" style="background:rgba(255,255,255,0.1); color:white; border:none; padding:10px 20px; border-radius:10px; cursor:pointer;">Voltar</button>
+            <button onclick="savePDF()" style="background:#4f46e5; color:white; border:none; padding:10px 20px; border-radius:10px; cursor:pointer;">Baixar PDF Profissional</button>
         </div>
-        <div class="paper" id="paper">
-            <h2 id="wTitle" style="border-bottom: 2px solid #4f46e5; padding-bottom: 15px;"></h2>
-            <p id="wBody" style="white-space: pre-line; line-height: 1.8;"></p>
+        <div class="paper-sheet" id="print-area">
+            <h1 id="view_title" style="border-bottom: 2px solid #4f46e5; padding-bottom: 10px;"></h1>
+            <div id="view_body" style="white-space: pre-line; line-height: 1.8; font-family: 'Georgia', serif; font-size: 18px;"></div>
         </div>
     </div>
 
     <script>
-        // Lógica de Login
-        function onSignIn(response) {
-            const data = JSON.parse(atob(response.credential.split('.')[1]));
+        // Sistema de Login
+        function handleCredentialResponse(response) {
+            const user = JSON.parse(atob(response.credential.split('.')[1]));
             
             // Troca de Telas
-            document.getElementById('login-screen').style.display = 'none';
-            document.getElementById('main-app').style.display = 'block';
+            document.getElementById('auth-container').style.display = 'none';
+            document.getElementById('main-content').style.display = 'block';
+            document.body.style.alignItems = 'flex-start'; // Ajusta scroll do app
+
+            // Carrega Dados do Usuário
+            document.getElementById('uAvatar').src = user.picture;
+            document.getElementById('uDisplayName').innerText = user.name;
+        }
+
+        async function processAI() {
+            const text = document.getElementById('doc_text');
+            if(!text.value) return;
+            const btn = event.target;
+            btn.innerHTML = "<i class='fas fa-spinner fa-spin'></i> Criando...";
             
-            // Info do Usuário
-            document.getElementById('uPic').src = data.picture;
-            document.getElementById('uName').innerText = data.name;
-        }
-
-        async function processarComIA() {
-            const area = document.getElementById('textContent');
-            if(!area.value) return;
-            area.placeholder = "IA trabalhando...";
             try {
-                const res = await fetch(`https://text.pollinations.ai/${encodeURIComponent("Crie um documento profissional, formal e bem estruturado em português com este conteúdo: " + area.value)}`);
-                area.value = await res.text();
-            } catch (e) { alert("Erro ao conectar com IA"); }
-        }
-
-        function verWorkspace() {
-            document.getElementById('wTitle').innerText = document.getElementById('docTitle').value || "Documento Sem Título";
-            document.getElementById('wBody').innerText = document.getElementById('textContent').value;
-            document.getElementById('workspace').style.display = 'block';
-        }
-
-        function fecharWorkspace() { document.getElementById('workspace').style.display = 'none'; }
-
-        function baixar(tipo) {
-            const nome = document.getElementById('docTitle').value || "Elite_Doc";
-            if(tipo === 'pdf') {
-                html2pdf().from(document.getElementById('paper')).save(nome + ".pdf");
-            } else {
-                const ws = XLSX.utils.aoa_to_sheet([[document.getElementById('textContent').value]]);
-                const wb = XLSX.utils.book_new();
-                XLSX.utils.book_append_sheet(wb, ws, "Dados");
-                XLSX.writeFile(wb, nome + ".xlsx");
+                const res = await fetch(`https://text.pollinations.ai/${encodeURIComponent("Transforme o texto abaixo em um documento formal e executivo impecável: " + text.value)}`);
+                text.value = await res.text();
+            } finally {
+                btn.innerHTML = "<i class='fas fa-wand-magic-sparkles'></i> Refinar com Inteligência";
             }
+        }
+
+        function openDoc() {
+            document.getElementById('view_title').innerText = document.getElementById('doc_title').value || "Documento Elite";
+            document.getElementById('view_body').innerText = document.getElementById('doc_text').value;
+            document.getElementById('workspace-view').style.display = 'block';
+        }
+
+        function closeDoc() { document.getElementById('workspace-view').style.display = 'none'; }
+
+        function savePDF() {
+            const opt = { margin: 1, filename: 'Documento_Elite.pdf', html2canvas: { scale: 2 }, jsPDF: { unit: 'in', format: 'letter', orientation: 'portrait' } };
+            html2pdf().set(opt).from(document.getElementById('print-area')).save();
         }
     </script>
 </body>
