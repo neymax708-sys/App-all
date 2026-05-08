@@ -43,7 +43,7 @@ overflow-x:hidden;
 }
 
 .app{
-max-width:1100px;
+max-width:1200px;
 margin:auto;
 }
 
@@ -211,13 +211,19 @@ justify-content:center;
 gap:10px;
 font-family:'Poppins';
 cursor:pointer;
+transition:.3s;
+}
+
+.export:hover{
+background:rgba(91,75,255,.12);
+border:1px solid #5b4bff;
 }
 
 .hidden{
 display:none;
 }
 
-@media(max-width:800px){
+@media(max-width:900px){
 
 .grid{
 grid-template-columns:1fr;
@@ -288,18 +294,32 @@ data-shape="pill">
 <div class="grid">
 
 <div class="card" onclick="abrirFormulario('curriculo')">
-
 <i class="fas fa-user-tie" style="color:#5b4bff;"></i>
-
 <h2>Currículo ATS</h2>
+<p>Currículo premium profissional com IA.</p>
+</div>
 
-<p>
-Currículo premium com IA.
-</p>
+<div class="card" onclick="abrirFormulario('pdf')">
+<i class="fas fa-file-pdf" style="color:#ef4444;"></i>
+<h2>Documento PDF</h2>
+<p>Crie PDFs profissionais automaticamente.</p>
+</div>
 
+<div class="card" onclick="abrirFormulario('linkedin')">
+<i class="fab fa-linkedin" style="color:#0a66c2;"></i>
+<h2>Perfil LinkedIn</h2>
+<p>Perfil otimizado para recrutadores.</p>
+</div>
+
+<div class="card" onclick="abrirFormulario('carta')">
+<i class="fas fa-envelope" style="color:#10b981;"></i>
+<h2>Carta Profissional</h2>
+<p>Cartas modernas e profissionais.</p>
 </div>
 
 </div>
+
+<!-- CURRICULO -->
 
 <div id="form-curriculo" class="hidden">
 
@@ -333,6 +353,68 @@ Analisar Currículo
 
 </div>
 
+<!-- PDF -->
+
+<div id="form-pdf" class="hidden">
+
+<div class="content">
+
+<h3>Documento PDF</h3>
+
+<input type="text" id="tituloPDF" placeholder="Título">
+
+<textarea id="textoPDF" placeholder="Digite o conteúdo..."></textarea>
+
+<button class="btn" onclick="previewPDF()">
+Analisar Documento
+</button>
+
+<div id="previewPDF"></div>
+
+</div>
+
+</div>
+
+<!-- LINKEDIN -->
+
+<div id="form-linkedin" class="hidden">
+
+<div class="content">
+
+<h3>Perfil LinkedIn</h3>
+
+<textarea id="textoLinkedin" placeholder="Digite suas informações profissionais..."></textarea>
+
+<button class="btn" onclick="previewLinkedin()">
+Analisar Perfil
+</button>
+
+<div id="previewLinkedin"></div>
+
+</div>
+
+</div>
+
+<!-- CARTA -->
+
+<div id="form-carta" class="hidden">
+
+<div class="content">
+
+<h3>Carta Profissional</h3>
+
+<textarea id="textoCarta" placeholder="Digite o objetivo da carta..."></textarea>
+
+<button class="btn" onclick="previewCarta()">
+Analisar Carta
+</button>
+
+<div id="previewCarta"></div>
+
+</div>
+
+</div>
+
 </div>
 
 </div>
@@ -348,7 +430,6 @@ const user = localStorage.getItem("eliteUser");
 if(user){
 
 document.getElementById("login-gate").style.display="none";
-
 document.getElementById("app-content").style.display="block";
 
 }
@@ -362,14 +443,24 @@ const data = JSON.parse(atob(response.credential.split('.')[1]));
 localStorage.setItem("eliteUser", JSON.stringify(data));
 
 document.getElementById("login-gate").style.display="none";
-
 document.getElementById("app-content").style.display="block";
+
+}
+
+function esconderTodos(){
+
+document.getElementById("form-curriculo").classList.add("hidden");
+document.getElementById("form-pdf").classList.add("hidden");
+document.getElementById("form-linkedin").classList.add("hidden");
+document.getElementById("form-carta").classList.add("hidden");
 
 }
 
 function abrirFormulario(tipo){
 
-document.getElementById("form-curriculo").classList.remove("hidden");
+esconderTodos();
+
+document.getElementById("form-"+tipo).classList.remove("hidden");
 
 }
 
@@ -394,6 +485,13 @@ Texto:
 ${texto}
 `;
 
+let resumo = '';
+let experiencia = '';
+let formacao = '';
+let habilidades = '';
+
+try{
+
 const res = await fetch(
 'https://text.pollinations.ai/' + encodeURIComponent(prompt)
 );
@@ -402,10 +500,19 @@ const data = await res.text();
 
 const partes = data.split("|||");
 
-const resumo = partes[0] || '';
-const experiencia = partes[1] || '';
-const formacao = partes[2] || '';
-const habilidades = partes[3] || '';
+resumo = partes[0] || '';
+experiencia = partes[1] || '';
+formacao = partes[2] || '';
+habilidades = partes[3] || '';
+
+}catch(e){
+
+resumo = texto;
+experiencia = texto;
+formacao = texto;
+habilidades = "Comunicação, Liderança, Trabalho em equipe";
+
+}
 
 const foto = document.getElementById("foto").files[0];
 
@@ -500,10 +607,7 @@ HABILIDADES
 </h3>
 
 ${habilidades.split(',').map(skill=>`
-<p style="
-margin-bottom:10px;
-font-size:14px;
-">
+<p style="margin-bottom:10px;font-size:14px;">
 • ${skill.trim()}
 </p>
 `).join('')}
@@ -627,7 +731,134 @@ jsPDF:{ unit:'mm', format:'a4', orientation:'portrait' }
 
 }
 
+function previewPDF(){
+
+const titulo = document.getElementById("tituloPDF").value;
+const texto = document.getElementById("textoPDF").value;
+
+document.getElementById("previewPDF").innerHTML = `
+
+<div class="content">
+
+<h3>${titulo}</h3>
+
+<p style="line-height:1.8;white-space:pre-line;">
+${texto}
+</p>
+
+<div class="export" onclick="baixarPDF()">
+
+<i class="fas fa-file-pdf" style="color:#ef4444;"></i>
+
+Baixar PDF
+
+</div>
+
+</div>
+
+`;
+
+}
+
+function baixarPDF(){
+
+const el = document.getElementById("previewPDF");
+
+html2pdf().from(el).save("documento.pdf");
+
+}
+
+function previewLinkedin(){
+
+const texto = document.getElementById("textoLinkedin").value;
+
+document.getElementById("previewLinkedin").innerHTML = `
+
+<div class="content">
+
+<h3>Perfil LinkedIn</h3>
+
+<p style="line-height:1.8;white-space:pre-line;">
+${texto}
+</p>
+
+<div class="export" onclick="baixarLinkedin()">
+
+<i class="fab fa-linkedin"></i>
+
+Baixar Perfil
+
+</div>
+
+</div>
+
+`;
+
+}
+
+function baixarLinkedin(){
+
+const blob = new Blob(
+[document.getElementById("previewLinkedin").innerText],
+{type:'text/plain'}
+);
+
+const a = document.createElement('a');
+
+a.href = URL.createObjectURL(blob);
+
+a.download = 'linkedin.txt';
+
+a.click();
+
+}
+
+function previewCarta(){
+
+const texto = document.getElementById("textoCarta").value;
+
+document.getElementById("previewCarta").innerHTML = `
+
+<div class="content">
+
+<h3>Carta Profissional</h3>
+
+<p style="line-height:1.8;white-space:pre-line;">
+${texto}
+</p>
+
+<div class="export" onclick="baixarCarta()">
+
+<i class="fas fa-file-word"></i>
+
+Baixar Carta
+
+</div>
+
+</div>
+
+`;
+
+}
+
+function baixarCarta(){
+
+const blob = new Blob(
+[document.getElementById("previewCarta").innerText],
+{type:'text/plain'}
+);
+
+const a = document.createElement('a');
+
+a.href = URL.createObjectURL(blob);
+
+a.download = 'carta-profissional.txt';
+
+a.click();
+
+}
+
 </script>
 
 </body>
-</html>
+</html>a
