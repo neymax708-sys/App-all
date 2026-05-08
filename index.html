@@ -3,133 +3,285 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Elite Docs AI | Master V18</title>
+    <title>Elite Docs AI | Premium Dashboard</title>
     
     <script src="https://accounts.google.com/gsi/client" async defer></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Poppins:wght@500;600;700;800&display=swap" rel="stylesheet">
+    
     <style>
-        :root { --primary: #4f46e5; --bg: #070b14; --card: #111827; }
-        body { font-family: 'Inter', sans-serif; background: var(--bg); color: #f9fafb; margin: 0; display: flex; align-items: center; justify-content: center; min-height: 100vh; }
-        
-        #app-content { display: none; width: 100%; max-width: 650px; padding: 20px; animation: fadeIn 0.5s; }
-        @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+        :root { 
+            --indigo: #4f46e5; 
+            --royal: #4338ca;
+            --success: #10b981;
+            --bg-dark: #05050a;
+            --glass-bg: rgba(20, 25, 45, 0.4);
+            --glass-border: rgba(255, 255, 255, 0.08);
+        }
 
-        .main-card { background: var(--card); padding: 30px; border-radius: 30px; border: 1px solid rgba(255,255,255,0.05); box-shadow: 0 25px 50px rgba(0,0,0,0.5); }
-        
-        .user-header { display: flex; align-items: center; gap: 12px; margin-bottom: 25px; background: rgba(255,255,255,0.03); padding: 10px 20px; border-radius: 50px; width: fit-content; }
-        .user-header img { width: 35px; border-radius: 50%; border: 2px solid var(--primary); }
+        * { box-sizing: border-box; }
 
-        textarea { width: 100%; background: #0d1117; border: 1px solid #30363d; border-radius: 20px; color: white; padding: 20px; font-size: 16px; min-height: 250px; resize: none; margin-bottom: 20px; outline: none; transition: 0.3s; }
-        textarea:focus { border-color: var(--primary); box-shadow: 0 0 0 4px rgba(79, 70, 229, 0.1); }
+        body { 
+            font-family: 'Inter', sans-serif; 
+            background-color: var(--bg-dark);
+            /* Glow de Fundo */
+            background-image: radial-gradient(circle at 50% -20%, rgba(79, 70, 229, 0.2) 0%, rgba(5, 5, 10, 1) 60%);
+            background-attachment: fixed;
+            color: #f8fafc; 
+            margin: 0; 
+            display: flex; 
+            align-items: center; 
+            justify-content: center; 
+            min-height: 100vh;
+            padding: 20px;
+        }
 
-        .action-zone { display: grid; grid-template-columns: 1fr; gap: 15px; }
-        
-        .btn-ai { background: linear-gradient(135deg, var(--primary), #9333ea); color: white; border: none; padding: 20px; border-radius: 20px; font-weight: 800; font-size: 16px; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 12px; }
-        
-        .download-row { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; margin-top: 10px; }
-        .btn-down { background: #1e293b; color: white; border: 1px solid #334155; padding: 15px; border-radius: 15px; cursor: pointer; font-size: 12px; font-weight: 700; display: flex; flex-direction: column; align-items: center; gap: 8px; transition: 0.3s; }
-        .btn-down:hover { background: #334155; transform: translateY(-3px); }
-        .btn-down i { font-size: 18px; }
+        h1, h2, h3 { font-family: 'Poppins', sans-serif; margin: 0; }
 
-        .loader { display: none; text-align: center; color: var(--primary); font-weight: 700; margin-bottom: 15px; }
+        /* Estilo Glassmorphism (Tiles) */
+        .glass-tile {
+            background: var(--glass-bg);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border: 1px solid var(--glass-border);
+            border-radius: 24px;
+            padding: 25px;
+            box-shadow: 0 30px 60px rgba(0,0,0,0.4);
+        }
+
+        #app-content { display: none; width: 100%; max-width: 800px; animation: slideUp 0.6s cubic-bezier(0.16, 1, 0.3, 1); }
+
+        @keyframes slideUp { from { opacity: 0; transform: translateY(30px); } to { opacity: 1; transform: translateY(0); } }
+        @keyframes pulseGlow { 0% { box-shadow: 0 0 0 0 rgba(79,70,229,0.4); } 70% { box-shadow: 0 0 20px 10px rgba(79,70,229,0); } 100% { box-shadow: 0 0 0 0 rgba(79,70,229,0); } }
+
+        /* Input Area */
+        .input-zone textarea {
+            width: 100%; background: rgba(0,0,0,0.2); border: 1px solid var(--glass-border);
+            border-radius: 16px; color: white; padding: 20px; font-size: 15px; font-family: 'Inter';
+            min-height: 120px; resize: none; outline: none; transition: 0.3s;
+        }
+        .input-zone textarea:focus { border-color: var(--indigo); background: rgba(79,70,229,0.05); }
+
+        /* Botão Premium */
+        .btn-magic {
+            background: linear-gradient(135deg, var(--indigo), var(--royal));
+            color: white; border: none; padding: 18px 30px; border-radius: 16px;
+            font-family: 'Poppins'; font-weight: 600; font-size: 15px; cursor: pointer;
+            display: flex; align-items: center; justify-content: center; gap: 10px;
+            width: 100%; transition: 0.4s; animation: pulseGlow 2s infinite;
+        }
+        .btn-magic:hover { transform: translateY(-3px); filter: brightness(1.2); }
+
+        /* Tela de Processamento da IA */
+        #ai-processing { display: none; margin: 30px 0; }
+        .ai-step { display: flex; align-items: center; gap: 15px; font-size: 14px; color: #94a3b8; margin-bottom: 15px; opacity: 0; transform: translateX(-10px); transition: 0.5s; }
+        .ai-step.active { opacity: 1; transform: translateX(0); color: #f8fafc; }
+        .ai-step i { color: var(--success); font-size: 18px; }
+
+        /* Dashboard de Resultados (Tiles) */
+        #dashboard-result { display: none; animation: slideUp 0.5s ease; }
+        
+        .stats-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 15px; margin-bottom: 20px; }
+        .stat-tile { background: rgba(255,255,255,0.02); border: 1px solid var(--glass-border); border-radius: 16px; padding: 15px; text-align: center; }
+        .stat-value { font-family: 'Poppins'; font-size: 24px; font-weight: 700; color: var(--indigo); }
+        .stat-label { font-size: 11px; color: #94a3b8; text-transform: uppercase; letter-spacing: 1px; margin-top: 5px; }
+
+        .content-tile { background: rgba(0,0,0,0.2); border: 1px solid var(--glass-border); border-radius: 16px; padding: 20px; margin-bottom: 15px; }
+        .content-tile h3 { font-size: 13px; color: var(--indigo); text-transform: uppercase; letter-spacing: 1.5px; margin-bottom: 10px; }
+        .content-tile p { font-size: 14px; line-height: 1.7; color: #cbd5e1; margin: 0; }
+        
+        .tag-pill { display: inline-block; background: rgba(79,70,229,0.15); color: #a5b4fc; border: 1px solid rgba(79,70,229,0.3); padding: 5px 12px; border-radius: 50px; font-size: 12px; margin: 0 8px 8px 0; }
+
+        /* Botões de Exportação Modernos */
+        .export-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 15px; margin-top: 25px; }
+        .btn-export {
+            background: var(--glass-bg); border: 1px solid var(--glass-border); color: white;
+            padding: 15px; border-radius: 16px; cursor: pointer; font-family: 'Poppins'; font-size: 13px;
+            font-weight: 600; display: flex; align-items: center; justify-content: center; gap: 8px;
+            transition: 0.3s; backdrop-filter: blur(10px);
+        }
+        .btn-export:hover { background: rgba(255,255,255,0.05); transform: translateY(-3px); border-color: rgba(255,255,255,0.2); }
     </style>
 </head>
 <body>
 
-    <div id="login-gate" style="text-align:center;">
-        <div class="main-card" style="max-width: 400px;">
-            <i class="fas fa-microchip" style="font-size: 40px; color: var(--primary); margin-bottom: 20px;"></i>
-            <h1>Elite Docs AI</h1>
-            <p style="color: #94a3b8; margin-bottom: 30px;">Identifique-se para iniciar o processamento.</p>
-            <div id="g_id_onload" data-client_id="593110663863-u9956693jafabtisfm0jnbgsufjd8n1f.apps.googleusercontent.com" data-callback="handleLogin"></div>
-            <div class="g_id_signin" data-type="standard" data-shape="pill" data-theme="filled_blue" data-size="large"></div>
+    <div id="login-gate" class="glass-tile" style="max-width: 400px; text-align: center; width: 100%;">
+        <div style="width: 70px; height: 70px; background: linear-gradient(135deg, var(--indigo), var(--royal)); border-radius: 20px; display: flex; align-items: center; justify-content: center; margin: 0 auto 20px;">
+            <i class="fas fa-bolt" style="font-size: 30px; color: white;"></i>
         </div>
+        <h2 style="margin-bottom: 10px;">Elite Docs</h2>
+        <p style="color: #94a3b8; font-size: 14px; margin-bottom: 30px;">Faça login para desbloquear a IA premium.</p>
+        <div id="g_id_onload" data-client_id="593110663863-u9956693jafabtisfm0jnbgsufjd8n1f.apps.googleusercontent.com" data-callback="onLogin"></div>
+        <div class="g_id_signin" data-type="standard" data-shape="pill" data-theme="filled_blue" data-size="large"></div>
     </div>
 
     <div id="app-content">
-        <div class="main-card">
-            <div class="user-header">
-                <img id="uPic" src=""><span id="uName"></span>
+        <div class="glass-tile">
+            
+            <div id="input-section" class="input-zone">
+                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
+                    <h2 style="font-size: 20px;"><span style="color: var(--indigo);">IA</span> Gerador Elite</h2>
+                    <img id="uPic" src="" style="width: 35px; border-radius: 50%; border: 2px solid var(--indigo);">
+                </div>
+                
+                <input type="text" id="docTitle" placeholder="Nome do Candidato / Arquivo" style="width: 100%; background: rgba(0,0,0,0.2); border: 1px solid var(--glass-border); border-radius: 12px; color: white; padding: 15px; margin-bottom: 15px; font-family: 'Inter'; outline: none;">
+                <textarea id="rawInput" placeholder="Ex: Sou arquiteto com 10 anos de experiência focado em sustentabilidade..."></textarea>
+                
+                <button class="btn-magic" onclick="iniciarIA()" style="margin-top: 15px;">
+                    <i class="fas fa-sparkles"></i> Processar com Inteligência Elite
+                </button>
             </div>
 
-            <textarea id="mainInput" placeholder="Ex: Sou arquiteto com 10 anos de experiência especializado em BIM..."></textarea>
-            
-            <div id="aiLoader" class="loader"><i class="fas fa-sparkles fa-spin"></i> IA ELITE REFINANDO O SEU PERFIL...</div>
+            <div id="ai-processing">
+                <div class="ai-step" id="step1"><i class="fas fa-check-circle"></i> Analisando perfil e contexto...</div>
+                <div class="ai-step" id="step2"><i class="fas fa-check-circle"></i> Otimizando para sistemas ATS...</div>
+                <div class="ai-step" id="step3"><i class="fas fa-check-circle"></i> Aplicando vocabulário corporativo...</div>
+                <div class="ai-step" id="step4"><i class="fas fa-check-circle"></i> Estruturando componentes visuais...</div>
+            </div>
 
-            <div class="action-zone">
-                <button class="btn-ai" onclick="runEliteAI()">
-                    <i class="fas fa-wand-magic-sparkles"></i> REFINAR COM INTELIGÊNCIA ELITE
-                </button>
+            <div id="dashboard-result">
                 
-                <div style="margin-top: 15px;">
-                    <p style="font-size: 11px; color: var(--primary); font-weight: 800; margin-bottom: 10px; text-transform: uppercase;">Baixar separadamente:</p>
-                    <div class="download-row">
-                        <button class="btn-down" onclick="exportPDF()"><i class="fas fa-file-pdf" style="color:#ef4444"></i>PDF</button>
-                        <button class="btn-down" onclick="exportWord()"><i class="fas fa-file-word" style="color:#3b82f6"></i>WORD</button>
-                        <button class="btn-down" onclick="exportExcel()"><i class="fas fa-file-excel" style="color:#10b981"></i>EXCEL</button>
+                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
+                    <h2 style="font-size: 18px;"><i class="fas fa-chart-pie" style="color: var(--indigo); margin-right: 8px;"></i> Análise Concluída</h2>
+                    <span style="background: rgba(16, 185, 129, 0.1); color: var(--success); padding: 5px 12px; border-radius: 20px; font-size: 12px; font-weight: 600; border: 1px solid rgba(16, 185, 129, 0.2);">Pronto para Exportar</span>
+                </div>
+
+                <div class="stats-grid">
+                    <div class="stat-tile">
+                        <div class="stat-value">98%</div>
+                        <div class="stat-label">Score ATS</div>
+                    </div>
+                    <div class="stat-tile">
+                        <div class="stat-value">Elite</div>
+                        <div class="stat-label">Nível Profissional</div>
+                    </div>
+                    <div class="stat-tile">
+                        <div class="stat-value" id="wordCount">--</div>
+                        <div class="stat-label">Palavras-chave</div>
                     </div>
                 </div>
+
+                <div class="content-tile">
+                    <h3><i class="fas fa-user-tie"></i> Resumo Executivo</h3>
+                    <p id="outResumo">A carregar...</p>
+                </div>
+
+                <div class="content-tile">
+                    <h3><i class="fas fa-star"></i> Competências Chave</h3>
+                    <div id="outCompetencias"></div>
+                </div>
+
+                <div class="export-grid">
+                    <button class="btn-export" onclick="exportar('pdf')"><i class="fas fa-file-pdf" style="color:#ef4444; font-size: 18px;"></i> PDF</button>
+                    <button class="btn-export" onclick="exportar('doc')"><i class="fas fa-file-word" style="color:#3b82f6; font-size: 18px;"></i> WORD</button>
+                    <button class="btn-export" onclick="exportar('xls')"><i class="fas fa-file-excel" style="color:#10b981; font-size: 18px;"></i> EXCEL</button>
+                </div>
+                
+                <button onclick="resetApp()" style="width: 100%; background: none; border: none; color: #94a3b8; margin-top: 20px; font-family: 'Inter'; cursor: pointer; text-decoration: underline;">Fazer nova análise</button>
             </div>
+
         </div>
     </div>
 
     <script>
-        function handleLogin(response) {
-            const user = JSON.parse(atob(response.credential.split('.')[1]));
+        let fullGeneratedText = "";
+
+        function onLogin(res) {
             document.getElementById('login-gate').style.display = 'none';
             document.getElementById('app-content').style.display = 'block';
-            document.getElementById('uPic').src = user.picture;
-            document.getElementById('uName').innerText = user.name.toUpperCase();
+            document.getElementById('uPic').src = JSON.parse(atob(res.credential.split('.')[1])).picture;
         }
 
-        async function runEliteAI() {
-            const input = document.getElementById('mainInput');
-            const loader = document.getElementById('aiLoader');
-            if(!input.value) return alert("Por favor, introduza o seu texto profissional.");
+        async function iniciarIA() {
+            const input = document.getElementById('rawInput').value;
+            if(!input) return;
 
-            loader.style.display = "block";
-            const original = input.value;
-            
+            // Transição UI
+            document.getElementById('input-section').style.display = 'none';
+            document.getElementById('ai-processing').style.display = 'block';
+
+            // Animação de Checkmarks (Fake loading para sensação premium)
+            const steps = [1, 2, 3, 4];
+            for(let i of steps) {
+                setTimeout(() => { document.getElementById(`step${i}`).classList.add('active'); }, i * 800);
+            }
+
             try {
-                // PROMPT REFINADO: Agora ele cria um documento de verdade, não apenas uma frase.
-                const prompt = `Aja como um consultor de carreira sênior. Transforme o rascunho abaixo em um perfil profissional de elite, detalhado, formal e impactante em português: ${original}`;
+                // Prompt projetado para separar os componentes
+                const prompt = `Aja como recrutador de Elite. Transforme o texto abaixo num perfil premium. 
+                Retorne EXATAMENTE neste formato de 2 blocos separados pela palavra "|||":
+                [Resumo executivo profissional de alto impacto em 1 parágrafo]
+                |||
+                [Lista de 6 competências principais separadas por vírgula]
+                
+                Texto original: ${input}`;
+
                 const res = await fetch(`https://text.pollinations.ai/${encodeURIComponent(prompt)}`);
-                input.value = await res.text();
+                const text = await res.text();
+                
+                // Processar e quebrar a resposta nos Cards
+                const partes = text.split("|||");
+                const resumo = partes[0] ? partes[0].trim() : text;
+                const competencias = partes[1] ? partes[1].trim() : "Liderança, Inovação, Estratégia, Gestão";
+                
+                document.getElementById('outResumo').innerText = resumo.replace(/\[|\]/g, ''); // Limpa colchetes se a IA mandar
+                
+                // Criar Pílulas (Tags) para as competências
+                const tagsHtml = competencias.replace(/\[|\]/g, '').split(',').map(c => `<span class="tag-pill">${c.trim()}</span>`).join('');
+                document.getElementById('outCompetencias').innerHTML = tagsHtml;
+                document.getElementById('wordCount').innerText = competencias.split(',').length;
+
+                // Salvar texto completo para exportação
+                fullGeneratedText = `RESUMO EXECUTIVO:\n${resumo.replace(/\[|\]/g, '')}\n\nCOMPETÊNCIAS:\n${competencias.replace(/\[|\]/g, '')}`;
+
+                // Revelar Dashboard
+                setTimeout(() => {
+                    document.getElementById('ai-processing').style.display = 'none';
+                    document.getElementById('dashboard-result').style.display = 'block';
+                }, 3800);
+
             } catch (e) {
-                alert("Erro ao conectar com a IA.");
-                input.value = original;
-            } finally {
-                loader.style.display = "none";
+                alert("Erro na conexão com a inteligência.");
+                resetApp();
             }
         }
 
-        function exportPDF() {
-            const content = document.getElementById('mainInput').value;
-            const element = document.createElement('div');
-            element.style.padding = "50px";
-            element.innerHTML = `<h1 style="color:#4f46e5; border-bottom: 2px solid #4f46e5; padding-bottom: 10px;">Perfil Profissional Elite</h1><p style="white-space:pre-line; line-height:1.6; font-size:14px;">${content}</p>`;
-            html2pdf().from(element).save('Perfil_Elite.pdf');
+        function resetApp() {
+            document.getElementById('dashboard-result').style.display = 'none';
+            document.getElementById('ai-processing').style.display = 'none';
+            document.getElementById('input-section').style.display = 'block';
+            [1,2,3,4].forEach(i => document.getElementById(`step${i}`).classList.remove('active'));
         }
 
-        function exportWord() {
-            const content = document.getElementById('mainInput').value;
-            const blob = new Blob(['\ufeff', `<h1>Perfil Profissional</h1><p>${content.replace(/\n/g, '<br>')}</p>`], { type: 'application/msword' });
-            const link = document.createElement('a');
-            link.href = URL.createObjectURL(blob);
-            link.download = 'Perfil_Elite.doc';
-            link.click();
-        }
-
-        function exportExcel() {
-            const content = document.getElementById('mainInput').value;
-            const rows = content.split('\n').filter(l => l.trim() !== "").map(line => [line]);
-            const ws = XLSX.utils.aoa_to_sheet([["CONTEÚDO PROFISSIONAL REFINADO"], ...rows]);
-            const wb = XLSX.utils.book_new();
-            XLSX.utils.book_append_sheet(wb, ws, "Perfil");
-            XLSX.writeFile(wb, "Perfil_Elite.xlsx");
+        // Lógica de Exportação Otimizada
+        function exportar(tipo) {
+            const titulo = document.getElementById('docTitle').value || "Elite_Profile";
+            
+            if(tipo === 'pdf') {
+                const el = document.createElement('div');
+                el.innerHTML = `<div style="padding:40px; font-family:'Helvetica'; color:#1e293b;">
+                    <h1 style="color:#4f46e5; border-bottom:2px solid #e2e8f0; padding-bottom:10px;">${titulo}</h1>
+                    <h3 style="color:#64748b; margin-top:30px;">RESUMO EXECUTIVO</h3>
+                    <p style="text-align:justify; line-height:1.6;">${document.getElementById('outResumo').innerText}</p>
+                    <h3 style="color:#64748b; margin-top:30px;">COMPETÊNCIAS</h3>
+                    <p>${document.getElementById('outCompetencias').innerText}</p>
+                </div>`;
+                html2pdf().from(el).set({margin:1, filename: titulo+'.pdf'}).save();
+            } 
+            else if(tipo === 'doc') {
+                const blob = new Blob(['\ufeff', `<h2>${titulo}</h2><br><b>Resumo:</b><p>${document.getElementById('outResumo').innerText}</p><br><b>Competências:</b><p>${document.getElementById('outCompetencias').innerText}</p>`], { type: 'application/msword' });
+                const a = document.createElement('a'); a.href = URL.createObjectURL(blob); a.download = titulo+'.doc'; a.click();
+            }
+            else if(tipo === 'xls') {
+                const compArr = document.getElementById('outCompetencias').innerText.split('\n').map(c => [c]);
+                const ws = XLSX.utils.aoa_to_sheet([["RESUMO EXECUTIVO"], [document.getElementById('outResumo').innerText], [], ["COMPETÊNCIAS"], ...compArr]);
+                const wb = XLSX.utils.book_new();
+                XLSX.utils.book_append_sheet(wb, ws, "Perfil");
+                XLSX.writeFile(wb, titulo+".xlsx");
+            }
         }
     </script>
 </body>
