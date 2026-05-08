@@ -1,18 +1,484 @@
-<!-- SUBSTITUA APENAS A FUNÇÃO iniciarIA() DO SEU APP POR ESTA -->
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Elite Docs AI</title>
+
+<script src="https://accounts.google.com/gsi/client" async defer></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Poppins:wght@500;600;700;800&display=swap" rel="stylesheet">
+
+<style>
+
+:root{
+--indigo:#5b4bff;
+--royal:#4338ca;
+--bg:#05050a;
+--glass:rgba(17,20,40,.55);
+--border:rgba(255,255,255,.08);
+--text:#f8fafc;
+}
+
+*{
+margin:0;
+padding:0;
+box-sizing:border-box;
+}
+
+body{
+font-family:'Inter',sans-serif;
+background:#05050a;
+background-image:
+radial-gradient(circle at top, rgba(91,75,255,.25), transparent 35%),
+radial-gradient(circle at bottom, rgba(67,56,202,.18), transparent 30%);
+color:var(--text);
+min-height:100vh;
+padding:20px;
+overflow-x:hidden;
+}
+
+body::before{
+content:'';
+position:fixed;
+width:450px;
+height:450px;
+background:rgba(91,75,255,.18);
+filter:blur(120px);
+top:-200px;
+left:-100px;
+z-index:-1;
+}
+
+.app{
+max-width:1000px;
+margin:auto;
+}
+
+.hero{
+text-align:center;
+margin-bottom:35px;
+}
+
+.logo{
+width:120px;
+height:120px;
+margin:auto;
+border-radius:32px;
+background:linear-gradient(135deg,#5b4bff,#4338ca);
+display:flex;
+align-items:center;
+justify-content:center;
+font-size:52px;
+box-shadow:0 0 60px rgba(91,75,255,.45);
+margin-bottom:25px;
+}
+
+.hero h1{
+font-family:'Poppins';
+font-size:50px;
+line-height:1.1;
+margin-bottom:15px;
+}
+
+.gradient{
+background:linear-gradient(90deg,#fff,#9b8cff);
+-webkit-background-clip:text;
+-webkit-text-fill-color:transparent;
+}
+
+.hero p{
+max-width:720px;
+margin:auto;
+line-height:1.8;
+color:#94a3b8;
+}
+
+.glass{
+background:var(--glass);
+border:1px solid var(--border);
+backdrop-filter:blur(18px);
+border-radius:30px;
+padding:30px;
+box-shadow:0 20px 60px rgba(0,0,0,.45);
+}
+
+#login-gate{
+max-width:420px;
+margin:40px auto;
+text-align:center;
+}
+
+.login-mini{
+width:90px;
+height:90px;
+margin:auto;
+border-radius:25px;
+background:linear-gradient(135deg,#5b4bff,#4338ca);
+display:flex;
+align-items:center;
+justify-content:center;
+font-size:35px;
+margin-bottom:20px;
+box-shadow:0 0 50px rgba(91,75,255,.35);
+}
+
+#app-content{
+display:none;
+animation:fade .6s ease;
+}
+
+@keyframes fade{
+from{
+opacity:0;
+transform:translateY(20px);
+}
+to{
+opacity:1;
+transform:translateY(0);
+}
+}
+
+input,textarea{
+width:100%;
+padding:18px;
+background:rgba(255,255,255,.03);
+border:1px solid var(--border);
+border-radius:18px;
+outline:none;
+color:white;
+font-family:'Inter';
+margin-bottom:15px;
+}
+
+textarea{
+min-height:180px;
+resize:none;
+}
+
+button{
+border:none;
+cursor:pointer;
+}
+
+.btn{
+width:100%;
+padding:18px;
+border-radius:18px;
+background:linear-gradient(135deg,#5b4bff,#4338ca);
+color:white;
+font-family:'Poppins';
+font-weight:600;
+font-size:15px;
+transition:.3s;
+box-shadow:0 0 40px rgba(91,75,255,.35);
+}
+
+.btn:hover{
+transform:translateY(-3px);
+}
+
+.stats{
+display:grid;
+grid-template-columns:repeat(4,1fr);
+gap:15px;
+margin-top:25px;
+}
+
+.stat{
+background:rgba(255,255,255,.03);
+border:1px solid var(--border);
+padding:20px;
+border-radius:20px;
+text-align:center;
+}
+
+.stat h2{
+font-size:28px;
+color:#9b8cff;
+margin-bottom:5px;
+}
+
+.stat span{
+font-size:12px;
+color:#94a3b8;
+}
+
+.content{
+background:rgba(255,255,255,.03);
+border:1px solid var(--border);
+padding:25px;
+border-radius:24px;
+margin-top:20px;
+}
+
+.content h3{
+margin-bottom:14px;
+font-size:14px;
+font-family:'Poppins';
+color:#9b8cff;
+text-transform:uppercase;
+}
+
+.content p{
+line-height:1.8;
+color:#d1d5db;
+}
+
+.tags{
+display:flex;
+flex-wrap:wrap;
+gap:10px;
+}
+
+.tag{
+padding:10px 16px;
+border-radius:999px;
+background:rgba(91,75,255,.12);
+border:1px solid rgba(91,75,255,.25);
+font-size:13px;
+color:#c7c5ff;
+}
+
+.export-grid{
+display:grid;
+grid-template-columns:repeat(3,1fr);
+gap:15px;
+margin-top:25px;
+}
+
+.export{
+padding:18px;
+border-radius:18px;
+background:rgba(255,255,255,.03);
+border:1px solid var(--border);
+display:flex;
+align-items:center;
+justify-content:center;
+gap:10px;
+font-family:'Poppins';
+font-weight:600;
+cursor:pointer;
+}
+
+#processing{
+display:none;
+margin-top:25px;
+}
+
+.step{
+padding:16px;
+border-radius:18px;
+margin-bottom:12px;
+background:rgba(255,255,255,.03);
+border:1px solid var(--border);
+opacity:.4;
+transition:.3s;
+}
+
+.step.active{
+opacity:1;
+transform:translateX(5px);
+}
+
+@media(max-width:800px){
+
+.hero h1{
+font-size:35px;
+}
+
+.stats{
+grid-template-columns:repeat(2,1fr);
+}
+
+.export-grid{
+grid-template-columns:1fr;
+}
+
+}
+
+</style>
+</head>
+
+<body>
+
+<div class="app">
+
+<div class="hero">
+
+<div class="logo">
+<i class="fas fa-brain"></i>
+</div>
+
+<h1>
+Elite <span class="gradient">Docs AI</span>
+</h1>
+
+<p>
+Crie currículos ATS premium, documentos profissionais e perfis corporativos usando inteligência artificial.
+</p>
+
+</div>
+
+<div id="login-gate" class="glass">
+
+<div class="login-mini">
+<i class="fas fa-bolt"></i>
+</div>
+
+<h2 style="font-family:Poppins;margin-bottom:10px;">
+Entrar
+</h2>
+
+<p style="color:#94a3b8;margin-bottom:25px;">
+Faça login para continuar.
+</p>
+
+<div id="g_id_onload"
+data-client_id="593110663863-u9956693jafabtisfm0jnbgsufjd8n1f.apps.googleusercontent.com"
+data-callback="onLogin">
+</div>
+
+<div class="g_id_signin"
+data-type="standard"
+data-shape="pill"
+data-theme="filled_blue"
+data-size="large">
+</div>
+
+</div>
+
+<div id="app-content">
+
+<div class="glass">
+
+<div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:20px;">
+
+<h2 style="font-family:Poppins;">
+IA Gerador Elite
+</h2>
+
+<div style="display:flex;align-items:center;gap:10px;">
+
+<img id="uPic"
+src=""
+style="width:42px;height:42px;border-radius:50%;border:2px solid #5b4bff;object-fit:cover;">
+
+<button onclick="logoutElite()"
+style="background:none;color:#94a3b8;">
+Sair
+</button>
+
+</div>
+
+</div>
+
+<input type="text"
+id="docTitle"
+placeholder="Nome do candidato">
+
+<textarea
+id="rawInput"
+placeholder="Ex: João Silva, desenvolvedor front-end com experiência em React, TypeScript e UI moderna..."></textarea>
+
+<button class="btn" onclick="iniciarIA()">
+<i class="fas fa-wand-magic-sparkles"></i>
+Gerar Currículo Premium
+</button>
+
+<div id="processing">
+
+<div class="step" id="s1">
+<i class="fas fa-check-circle"></i>
+Analisando perfil...
+</div>
+
+<div class="step" id="s2">
+<i class="fas fa-check-circle"></i>
+Otimizando ATS...
+</div>
+
+<div class="step" id="s3">
+<i class="fas fa-check-circle"></i>
+Gerando currículo...
+</div>
+
+<div class="step" id="s4">
+<i class="fas fa-check-circle"></i>
+Finalizando design...
+</div>
+
+</div>
+
+<div id="dashboard"></div>
+
+</div>
+
+</div>
+
+</div>
 
 <script>
+
+window.onload = () => {
+
+const savedUser = localStorage.getItem("eliteUser");
+
+if(savedUser){
+
+const user = JSON.parse(savedUser);
+
+document.getElementById('login-gate').style.display='none';
+
+document.getElementById('app-content').style.display='block';
+
+document.getElementById('uPic').src=user.picture;
+
+}
+
+}
+
+function onLogin(res){
+
+const data = JSON.parse(atob(res.credential.split('.')[1]));
+
+localStorage.setItem("eliteUser", JSON.stringify({
+name:data.name,
+email:data.email,
+picture:data.picture
+}));
+
+document.getElementById('login-gate').style.display='none';
+
+document.getElementById('app-content').style.display='block';
+
+document.getElementById('uPic').src=data.picture;
+
+}
+
+function logoutElite(){
+
+localStorage.removeItem("eliteUser");
+
+location.reload();
+
+}
 
 async function iniciarIA(){
 
 const input = document.getElementById('rawInput').value;
 
 if(!input){
-alert('Digite informações sobre o profissional.');
+alert('Digite informações.');
 return;
 }
 
 document.getElementById('processing').style.display='block';
-document.getElementById('dashboard').style.display='none';
 
 [1,2,3,4].forEach((i,index)=>{
 setTimeout(()=>{
@@ -23,11 +489,11 @@ document.getElementById('s'+i).classList.add('active');
 try{
 
 const prompt = `
-Você é um especialista premium em RH e ATS.
+Você é especialista premium em RH.
 
-Crie um currículo profissional moderno e refinado.
+Crie um currículo profissional ATS.
 
-RETORNE EXATAMENTE NESTE FORMATO:
+RETORNE EXATAMENTE:
 
 [NOME]
 |||
@@ -63,7 +529,7 @@ document.getElementById('dashboard').innerHTML = `
 
 <div class="stat">
 <h2>98%</h2>
-<span>ATS Score</span>
+<span>ATS</span>
 </div>
 
 <div class="stat">
@@ -78,76 +544,50 @@ document.getElementById('dashboard').innerHTML = `
 
 <div class="stat">
 <h2>AI+</h2>
-<span>Refinado</span>
+<span>Premium</span>
 </div>
 
 </div>
 
 <div class="content">
 
-<h3>
-<i class="fas fa-id-card"></i>
-Nome Profissional
-</h3>
+<h3>Nome Profissional</h3>
 
-<p>
-${nome.replace(/\[|\]/g,'')}
-</p>
+<p>${nome.replace(/\\[|\\]/g,'')}</p>
 
 </div>
 
 <div class="content">
 
-<h3>
-<i class="fas fa-user-tie"></i>
-Resumo Executivo
-</h3>
+<h3>Resumo Executivo</h3>
 
-<p>
-${resumo.replace(/\[|\]/g,'')}
-</p>
+<p>${resumo.replace(/\\[|\\]/g,'')}</p>
 
 </div>
 
 <div class="content">
 
-<h3>
-<i class="fas fa-briefcase"></i>
-Experiência Profissional
-</h3>
+<h3>Experiência</h3>
 
-<p>
-${experiencia.replace(/\[|\]/g,'')}
-</p>
+<p>${experiencia.replace(/\\[|\\]/g,'')}</p>
 
 </div>
 
 <div class="content">
 
-<h3>
-<i class="fas fa-graduation-cap"></i>
-Formação Acadêmica
-</h3>
+<h3>Formação</h3>
 
-<p>
-${formacao.replace(/\[|\]/g,'')}
-</p>
+<p>${formacao.replace(/\\[|\\]/g,'')}</p>
 
 </div>
 
 <div class="content">
 
-<h3>
-<i class="fas fa-star"></i>
-Competências Estratégicas
-</h3>
+<h3>Competências</h3>
 
 <div class="tags">
 
-${habilidades
-.replace(/\[|\]/g,'')
-.split(',')
-.map(skill=>`
+${habilidades.replace(/\\[|\\]/g,'').split(',').map(skill=>`
 <div class="tag">${skill.trim()}</div>
 `).join('')}
 
@@ -185,10 +625,7 @@ habilidades
 };
 
 setTimeout(()=>{
-
 document.getElementById('processing').style.display='none';
-document.getElementById('dashboard').style.display='block';
-
 },4200);
 
 }catch(e){
@@ -211,145 +648,27 @@ alert('Nenhum currículo gerado.');
 return;
 }
 
-if(tipo === 'pdf'){
+if(tipo==='pdf'){
 
 const element = document.createElement('div');
 
 element.innerHTML = `
+<div style="padding:40px;font-family:Arial;color:#111827;">
 
-<div style="
-padding:40px;
-font-family:Arial;
-color:#111827;
-">
-
-<h1 style="
-color:#5b4bff;
-font-size:32px;
-margin-bottom:10px;
-">
-${data.nome.replace(/\[|\]/g,'')}
+<h1 style="color:#5b4bff;">
+${data.nome}
 </h1>
 
-<hr style="margin:20px 0;">
+<hr>
 
-<h2>Resumo Executivo</h2>
-
-<p style="line-height:1.8;">
-${data.resumo.replace(/\[|\]/g,'')}
-</p>
-
-<h2 style="margin-top:30px;">
-Experiência Profissional
-</h2>
-
-<p style="line-height:1.8;">
-${data.experiencia.replace(/\[|\]/g,'')}
-</p>
-
-<h2 style="margin-top:30px;">
-Formação Acadêmica
-</h2>
-
-<p style="line-height:1.8;">
-${data.formacao.replace(/\[|\]/g,'')}
-</p>
-
-<h2 style="margin-top:30px;">
-Competências
-</h2>
-
-<p style="line-height:1.8;">
-${data.habilidades.replace(/\[|\]/g,'')}
-</p>
-
-</div>
-
-`;
-
-html2pdf().from(element).set({
-margin:1,
-filename:titulo+'.pdf'
-}).save();
-
-}
-
-if(tipo === 'doc'){
-
-const blob = new Blob([
-'\ufeff',
-
-`
-<h1>${data.nome}</h1>
-
-<h2>Resumo Executivo</h2>
-
+<h2>Resumo</h2>
 <p>${data.resumo}</p>
 
-<h2>Experiência Profissional</h2>
-
+<h2>Experiência</h2>
 <p>${data.experiencia}</p>
 
-<h2>Formação Acadêmica</h2>
-
+<h2>Formação</h2>
 <p>${data.formacao}</p>
 
 <h2>Competências</h2>
-
-<p>${data.habilidades}</p>
-`
-
-],{
-type:'application/msword'
-});
-
-const a = document.createElement('a');
-
-a.href = URL.createObjectURL(blob);
-
-a.download = titulo+'.doc';
-
-a.click();
-
-}
-
-if(tipo === 'xls'){
-
-const ws = XLSX.utils.aoa_to_sheet([
-
-["Nome"],
-[data.nome],
-
-[],
-
-["Resumo Executivo"],
-[data.resumo],
-
-[],
-
-["Experiência"],
-[data.experiencia],
-
-[],
-
-["Formação"],
-[data.formacao],
-
-[],
-
-["Competências"],
-[data.habilidades]
-
-]);
-
-const wb = XLSX.utils.book_new();
-
-XLSX.utils.book_append_sheet(wb, ws, "Curriculo");
-
-XLSX.writeFile(wb, titulo+".xlsx");
-
-}
-
-}
-
-</script>
+<p>${data
