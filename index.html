@@ -1,288 +1,965 @@
 <!DOCTYPE html>
 <html lang="pt-br">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Elite Docs AI | Premium Dashboard</title>
-    
-    <script src="https://accounts.google.com/gsi/client" async defer></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Poppins:wght@500;600;700;800&display=swap" rel="stylesheet">
-    
-    <style>
-        :root { 
-            --indigo: #4f46e5; 
-            --royal: #4338ca;
-            --success: #10b981;
-            --bg-dark: #05050a;
-            --glass-bg: rgba(20, 25, 45, 0.4);
-            --glass-border: rgba(255, 255, 255, 0.08);
-        }
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
 
-        * { box-sizing: border-box; }
+<title>Elite Docs AI</title>
 
-        body { 
-            font-family: 'Inter', sans-serif; 
-            background-color: var(--bg-dark);
-            /* Glow de Fundo */
-            background-image: radial-gradient(circle at 50% -20%, rgba(79, 70, 229, 0.2) 0%, rgba(5, 5, 10, 1) 60%);
-            background-attachment: fixed;
-            color: #f8fafc; 
-            margin: 0; 
-            display: flex; 
-            align-items: center; 
-            justify-content: center; 
-            min-height: 100vh;
-            padding: 20px;
-        }
+<script src="https://accounts.google.com/gsi/client" async defer></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
 
-        h1, h2, h3 { font-family: 'Poppins', sans-serif; margin: 0; }
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"/>
 
-        /* Estilo Glassmorphism (Tiles) */
-        .glass-tile {
-            background: var(--glass-bg);
-            backdrop-filter: blur(20px);
-            -webkit-backdrop-filter: blur(20px);
-            border: 1px solid var(--glass-border);
-            border-radius: 24px;
-            padding: 25px;
-            box-shadow: 0 30px 60px rgba(0,0,0,0.4);
-        }
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Poppins:wght@500;600;700;800&display=swap" rel="stylesheet"/>
 
-        #app-content { display: none; width: 100%; max-width: 800px; animation: slideUp 0.6s cubic-bezier(0.16, 1, 0.3, 1); }
+<style>
 
-        @keyframes slideUp { from { opacity: 0; transform: translateY(30px); } to { opacity: 1; transform: translateY(0); } }
-        @keyframes pulseGlow { 0% { box-shadow: 0 0 0 0 rgba(79,70,229,0.4); } 70% { box-shadow: 0 0 20px 10px rgba(79,70,229,0); } 100% { box-shadow: 0 0 0 0 rgba(79,70,229,0); } }
+:root{
+--indigo:#5b4bff;
+--royal:#4338ca;
+--success:#10b981;
+--bg:#05050a;
+--glass:rgba(16,18,32,.55);
+--border:rgba(255,255,255,.08);
+}
 
-        /* Input Area */
-        .input-zone textarea {
-            width: 100%; background: rgba(0,0,0,0.2); border: 1px solid var(--glass-border);
-            border-radius: 16px; color: white; padding: 20px; font-size: 15px; font-family: 'Inter';
-            min-height: 120px; resize: none; outline: none; transition: 0.3s;
-        }
-        .input-zone textarea:focus { border-color: var(--indigo); background: rgba(79,70,229,0.05); }
+*{
+margin:0;
+padding:0;
+box-sizing:border-box;
+}
 
-        /* Botão Premium */
-        .btn-magic {
-            background: linear-gradient(135deg, var(--indigo), var(--royal));
-            color: white; border: none; padding: 18px 30px; border-radius: 16px;
-            font-family: 'Poppins'; font-weight: 600; font-size: 15px; cursor: pointer;
-            display: flex; align-items: center; justify-content: center; gap: 10px;
-            width: 100%; transition: 0.4s; animation: pulseGlow 2s infinite;
-        }
-        .btn-magic:hover { transform: translateY(-3px); filter: brightness(1.2); }
+body{
+font-family:'Inter',sans-serif;
+background:var(--bg);
+background-image:
+radial-gradient(circle at top, rgba(91,75,255,.25), transparent 40%),
+radial-gradient(circle at bottom, rgba(91,75,255,.15), transparent 30%);
+color:white;
+overflow-x:hidden;
+min-height:100vh;
+padding:20px;
+}
 
-        /* Tela de Processamento da IA */
-        #ai-processing { display: none; margin: 30px 0; }
-        .ai-step { display: flex; align-items: center; gap: 15px; font-size: 14px; color: #94a3b8; margin-bottom: 15px; opacity: 0; transform: translateX(-10px); transition: 0.5s; }
-        .ai-step.active { opacity: 1; transform: translateX(0); color: #f8fafc; }
-        .ai-step i { color: var(--success); font-size: 18px; }
+body::before{
+content:'';
+position:fixed;
+width:500px;
+height:500px;
+background:rgba(91,75,255,.15);
+filter:blur(120px);
+top:-200px;
+left:-100px;
+z-index:-1;
+animation:floatGlow 8s ease-in-out infinite;
+}
 
-        /* Dashboard de Resultados (Tiles) */
-        #dashboard-result { display: none; animation: slideUp 0.5s ease; }
-        
-        .stats-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 15px; margin-bottom: 20px; }
-        .stat-tile { background: rgba(255,255,255,0.02); border: 1px solid var(--glass-border); border-radius: 16px; padding: 15px; text-align: center; }
-        .stat-value { font-family: 'Poppins'; font-size: 24px; font-weight: 700; color: var(--indigo); }
-        .stat-label { font-size: 11px; color: #94a3b8; text-transform: uppercase; letter-spacing: 1px; margin-top: 5px; }
+body::after{
+content:'';
+position:fixed;
+width:400px;
+height:400px;
+background:rgba(67,56,202,.12);
+filter:blur(120px);
+bottom:-150px;
+right:-100px;
+z-index:-1;
+animation:floatGlow 10s ease-in-out infinite alternate;
+}
 
-        .content-tile { background: rgba(0,0,0,0.2); border: 1px solid var(--glass-border); border-radius: 16px; padding: 20px; margin-bottom: 15px; }
-        .content-tile h3 { font-size: 13px; color: var(--indigo); text-transform: uppercase; letter-spacing: 1.5px; margin-bottom: 10px; }
-        .content-tile p { font-size: 14px; line-height: 1.7; color: #cbd5e1; margin: 0; }
-        
-        .tag-pill { display: inline-block; background: rgba(79,70,229,0.15); color: #a5b4fc; border: 1px solid rgba(79,70,229,0.3); padding: 5px 12px; border-radius: 50px; font-size: 12px; margin: 0 8px 8px 0; }
+@keyframes floatGlow{
+0%{transform:translateY(0px);}
+50%{transform:translateY(30px);}
+100%{transform:translateY(0px);}
+}
 
-        /* Botões de Exportação Modernos */
-        .export-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 15px; margin-top: 25px; }
-        .btn-export {
-            background: var(--glass-bg); border: 1px solid var(--glass-border); color: white;
-            padding: 15px; border-radius: 16px; cursor: pointer; font-family: 'Poppins'; font-size: 13px;
-            font-weight: 600; display: flex; align-items: center; justify-content: center; gap: 8px;
-            transition: 0.3s; backdrop-filter: blur(10px);
-        }
-        .btn-export:hover { background: rgba(255,255,255,0.05); transform: translateY(-3px); border-color: rgba(255,255,255,0.2); }
-    </style>
+h1,h2,h3{
+font-family:'Poppins',sans-serif;
+}
+
+.app{
+max-width:950px;
+margin:auto;
+}
+
+.hero{
+text-align:center;
+margin-bottom:30px;
+animation:fadeUp .8s ease;
+}
+
+.hero-badge{
+display:inline-flex;
+align-items:center;
+gap:10px;
+padding:10px 18px;
+background:rgba(91,75,255,.12);
+border:1px solid rgba(91,75,255,.25);
+border-radius:999px;
+font-size:13px;
+color:#c7c5ff;
+margin-bottom:20px;
+backdrop-filter:blur(10px);
+}
+
+.hero h1{
+font-size:48px;
+line-height:1.1;
+margin-bottom:16px;
+}
+
+.gradient{
+background:linear-gradient(90deg,#fff,#8b7cff);
+-webkit-background-clip:text;
+-webkit-text-fill-color:transparent;
+}
+
+.hero p{
+color:#94a3b8;
+font-size:16px;
+max-width:700px;
+margin:auto;
+line-height:1.7;
+}
+
+.mini-stats{
+display:grid;
+grid-template-columns:repeat(3,1fr);
+gap:15px;
+margin-top:35px;
+}
+
+.mini-card{
+background:var(--glass);
+border:1px solid var(--border);
+padding:20px;
+border-radius:22px;
+backdrop-filter:blur(16px);
+}
+
+.mini-card h2{
+font-size:28px;
+margin-bottom:5px;
+color:#8b7cff;
+}
+
+.mini-card span{
+font-size:13px;
+color:#94a3b8;
+}
+
+.glass{
+background:var(--glass);
+border:1px solid var(--border);
+backdrop-filter:blur(18px);
+border-radius:30px;
+padding:30px;
+box-shadow:0 20px 60px rgba(0,0,0,.45);
+}
+
+#app-content{
+display:none;
+animation:fadeUp .7s ease;
+}
+
+@keyframes fadeUp{
+from{
+opacity:0;
+transform:translateY(30px);
+}
+to{
+opacity:1;
+transform:translateY(0);
+}
+}
+
+.input-grid{
+display:grid;
+grid-template-columns:1fr 320px;
+gap:25px;
+}
+
+.preview-card{
+background:rgba(255,255,255,.03);
+border:1px solid var(--border);
+border-radius:24px;
+padding:20px;
+overflow:hidden;
+position:relative;
+}
+
+.preview-card::before{
+content:'';
+position:absolute;
+inset:0;
+background:linear-gradient(180deg,transparent,rgba(91,75,255,.08));
+pointer-events:none;
+}
+
+.preview-header{
+display:flex;
+justify-content:space-between;
+align-items:center;
+margin-bottom:20px;
+}
+
+.preview-header span{
+font-size:13px;
+color:#94a3b8;
+}
+
+.fake-cv{
+background:white;
+border-radius:18px;
+padding:15px;
+height:420px;
+overflow:hidden;
+color:#111827;
+position:relative;
+}
+
+.cv-top{
+height:80px;
+background:linear-gradient(135deg,#5b4bff,#4338ca);
+border-radius:14px;
+margin-bottom:15px;
+}
+
+.cv-line{
+height:10px;
+background:#d1d5db;
+border-radius:10px;
+margin-bottom:12px;
+}
+
+.cv-line.small{
+width:60%;
+}
+
+.cv-line.tiny{
+width:40%;
+}
+
+.form-area textarea,
+.form-area input,
+.form-area select{
+width:100%;
+background:rgba(0,0,0,.2);
+border:1px solid var(--border);
+border-radius:16px;
+padding:18px;
+color:white;
+outline:none;
+font-size:14px;
+font-family:'Inter';
+transition:.3s;
+}
+
+.form-area textarea{
+min-height:160px;
+resize:none;
+}
+
+.form-area textarea:focus,
+.form-area input:focus,
+.form-area select:focus{
+border-color:var(--indigo);
+box-shadow:0 0 0 4px rgba(91,75,255,.12);
+}
+
+.mode-grid{
+display:grid;
+grid-template-columns:repeat(2,1fr);
+gap:15px;
+margin-bottom:18px;
+}
+
+.mode-card{
+padding:18px;
+border-radius:18px;
+background:rgba(255,255,255,.03);
+border:1px solid var(--border);
+cursor:pointer;
+transition:.3s;
+}
+
+.mode-card:hover{
+transform:translateY(-3px);
+border-color:rgba(91,75,255,.35);
+}
+
+.mode-card.active{
+background:rgba(91,75,255,.12);
+border-color:rgba(91,75,255,.35);
+}
+
+.mode-card i{
+font-size:20px;
+margin-bottom:12px;
+color:#8b7cff;
+}
+
+.mode-card h3{
+font-size:14px;
+margin-bottom:5px;
+}
+
+.mode-card p{
+font-size:12px;
+line-height:1.5;
+color:#94a3b8;
+}
+
+.btn{
+margin-top:20px;
+width:100%;
+border:none;
+padding:18px;
+border-radius:18px;
+font-family:'Poppins';
+font-weight:600;
+font-size:15px;
+cursor:pointer;
+background:linear-gradient(135deg,var(--indigo),var(--royal));
+color:white;
+transition:.35s;
+box-shadow:0 0 40px rgba(91,75,255,.35);
+}
+
+.btn:hover{
+transform:translateY(-4px) scale(1.01);
+filter:brightness(1.1);
+}
+
+#processing{
+display:none;
+margin-top:30px;
+animation:fadeUp .5s ease;
+}
+
+.step{
+display:flex;
+align-items:center;
+gap:14px;
+padding:16px;
+border-radius:16px;
+margin-bottom:14px;
+background:rgba(255,255,255,.03);
+border:1px solid var(--border);
+opacity:.4;
+transition:.4s;
+}
+
+.step.active{
+opacity:1;
+transform:translateX(5px);
+}
+
+.step i{
+color:var(--success);
+font-size:18px;
+}
+
+#dashboard{
+display:none;
+margin-top:25px;
+animation:fadeUp .6s ease;
+}
+
+.stats{
+display:grid;
+grid-template-columns:repeat(4,1fr);
+gap:15px;
+margin-bottom:25px;
+}
+
+.stat{
+padding:22px;
+border-radius:22px;
+background:rgba(255,255,255,.03);
+border:1px solid var(--border);
+text-align:center;
+}
+
+.stat h2{
+font-size:28px;
+color:#8b7cff;
+margin-bottom:6px;
+}
+
+.stat span{
+font-size:12px;
+color:#94a3b8;
+text-transform:uppercase;
+letter-spacing:1px;
+}
+
+.content{
+background:rgba(255,255,255,.03);
+border:1px solid var(--border);
+padding:25px;
+border-radius:24px;
+margin-bottom:18px;
+}
+
+.content h3{
+font-size:14px;
+margin-bottom:15px;
+color:#8b7cff;
+letter-spacing:1px;
+text-transform:uppercase;
+}
+
+.content p{
+color:#d1d5db;
+line-height:1.8;
+font-size:14px;
+}
+
+.tags{
+display:flex;
+flex-wrap:wrap;
+gap:10px;
+}
+
+.tag{
+padding:10px 16px;
+background:rgba(91,75,255,.12);
+border:1px solid rgba(91,75,255,.22);
+border-radius:999px;
+font-size:13px;
+color:#c7c5ff;
+}
+
+.export-grid{
+display:grid;
+grid-template-columns:repeat(3,1fr);
+gap:15px;
+margin-top:20px;
+}
+
+.export{
+padding:18px;
+border-radius:18px;
+background:rgba(255,255,255,.03);
+border:1px solid var(--border);
+display:flex;
+align-items:center;
+justify-content:center;
+gap:10px;
+font-family:'Poppins';
+font-weight:600;
+cursor:pointer;
+transition:.3s;
+}
+
+.export:hover{
+transform:translateY(-3px);
+background:rgba(255,255,255,.05);
+}
+
+.login-box{
+max-width:420px;
+margin:70px auto;
+text-align:center;
+}
+
+.login-logo{
+width:90px;
+height:90px;
+margin:auto;
+border-radius:26px;
+background:linear-gradient(135deg,var(--indigo),var(--royal));
+display:flex;
+align-items:center;
+justify-content:center;
+font-size:35px;
+margin-bottom:25px;
+box-shadow:0 0 40px rgba(91,75,255,.35);
+}
+
+.login-box p{
+color:#94a3b8;
+margin:15px 0 25px;
+line-height:1.7;
+}
+
+@media(max-width:900px){
+
+.hero h1{
+font-size:35px;
+}
+
+.input-grid{
+grid-template-columns:1fr;
+}
+
+.stats{
+grid-template-columns:repeat(2,1fr);
+}
+
+.mini-stats{
+grid-template-columns:1fr;
+}
+
+.export-grid{
+grid-template-columns:1fr;
+}
+
+}
+
+</style>
 </head>
+
 <body>
 
-    <div id="login-gate" class="glass-tile" style="max-width: 400px; text-align: center; width: 100%;">
-        <div style="width: 70px; height: 70px; background: linear-gradient(135deg, var(--indigo), var(--royal)); border-radius: 20px; display: flex; align-items: center; justify-content: center; margin: 0 auto 20px;">
-            <i class="fas fa-bolt" style="font-size: 30px; color: white;"></i>
-        </div>
-        <h2 style="margin-bottom: 10px;">Elite Docs</h2>
-        <p style="color: #94a3b8; font-size: 14px; margin-bottom: 30px;">Faça login para desbloquear a IA premium.</p>
-        <div id="g_id_onload" data-client_id="593110663863-u9956693jafabtisfm0jnbgsufjd8n1f.apps.googleusercontent.com" data-callback="onLogin"></div>
-        <div class="g_id_signin" data-type="standard" data-shape="pill" data-theme="filled_blue" data-size="large"></div>
-    </div>
+<div class="app">
 
-    <div id="app-content">
-        <div class="glass-tile">
-            
-            <div id="input-section" class="input-zone">
-                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
-                    <h2 style="font-size: 20px;"><span style="color: var(--indigo);">IA</span> Gerador Elite</h2>
-                    <img id="uPic" src="" style="width: 35px; border-radius: 50%; border: 2px solid var(--indigo);">
-                </div>
-                
-                <input type="text" id="docTitle" placeholder="Nome do Candidato / Arquivo" style="width: 100%; background: rgba(0,0,0,0.2); border: 1px solid var(--glass-border); border-radius: 12px; color: white; padding: 15px; margin-bottom: 15px; font-family: 'Inter'; outline: none;">
-                <textarea id="rawInput" placeholder="Ex: Sou arquiteto com 10 anos de experiência focado em sustentabilidade..."></textarea>
-                
-                <button class="btn-magic" onclick="iniciarIA()" style="margin-top: 15px;">
-                    <i class="fas fa-sparkles"></i> Processar com Inteligência Elite
-                </button>
-            </div>
+<div class="hero">
 
-            <div id="ai-processing">
-                <div class="ai-step" id="step1"><i class="fas fa-check-circle"></i> Analisando perfil e contexto...</div>
-                <div class="ai-step" id="step2"><i class="fas fa-check-circle"></i> Otimizando para sistemas ATS...</div>
-                <div class="ai-step" id="step3"><i class="fas fa-check-circle"></i> Aplicando vocabulário corporativo...</div>
-                <div class="ai-step" id="step4"><i class="fas fa-check-circle"></i> Estruturando componentes visuais...</div>
-            </div>
+<div class="hero-badge">
+<i class="fas fa-sparkles"></i>
+Elite AI Technology
+</div>
 
-            <div id="dashboard-result">
-                
-                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
-                    <h2 style="font-size: 18px;"><i class="fas fa-chart-pie" style="color: var(--indigo); margin-right: 8px;"></i> Análise Concluída</h2>
-                    <span style="background: rgba(16, 185, 129, 0.1); color: var(--success); padding: 5px 12px; border-radius: 20px; font-size: 12px; font-weight: 600; border: 1px solid rgba(16, 185, 129, 0.2);">Pronto para Exportar</span>
-                </div>
+<h1>
+Crie documentos profissionais<br>
+com <span class="gradient">Inteligência Artificial</span>
+</h1>
 
-                <div class="stats-grid">
-                    <div class="stat-tile">
-                        <div class="stat-value">98%</div>
-                        <div class="stat-label">Score ATS</div>
-                    </div>
-                    <div class="stat-tile">
-                        <div class="stat-value">Elite</div>
-                        <div class="stat-label">Nível Profissional</div>
-                    </div>
-                    <div class="stat-tile">
-                        <div class="stat-value" id="wordCount">--</div>
-                        <div class="stat-label">Palavras-chave</div>
-                    </div>
-                </div>
+<p>
+Currículos ATS, perfis premium, LinkedIn otimizado, PDFs profissionais e documentos corporativos gerados automaticamente com IA avançada.
+</p>
 
-                <div class="content-tile">
-                    <h3><i class="fas fa-user-tie"></i> Resumo Executivo</h3>
-                    <p id="outResumo">A carregar...</p>
-                </div>
+<div class="mini-stats">
 
-                <div class="content-tile">
-                    <h3><i class="fas fa-star"></i> Competências Chave</h3>
-                    <div id="outCompetencias"></div>
-                </div>
+<div class="mini-card">
+<h2>98%</h2>
+<span>Compatibilidade ATS</span>
+</div>
 
-                <div class="export-grid">
-                    <button class="btn-export" onclick="exportar('pdf')"><i class="fas fa-file-pdf" style="color:#ef4444; font-size: 18px;"></i> PDF</button>
-                    <button class="btn-export" onclick="exportar('doc')"><i class="fas fa-file-word" style="color:#3b82f6; font-size: 18px;"></i> WORD</button>
-                    <button class="btn-export" onclick="exportar('xls')"><i class="fas fa-file-excel" style="color:#10b981; font-size: 18px;"></i> EXCEL</button>
-                </div>
-                
-                <button onclick="resetApp()" style="width: 100%; background: none; border: none; color: #94a3b8; margin-top: 20px; font-family: 'Inter'; cursor: pointer; text-decoration: underline;">Fazer nova análise</button>
-            </div>
+<div class="mini-card">
+<h2>+12k</h2>
+<span>Perfis Gerados</span>
+</div>
 
-        </div>
-    </div>
+<div class="mini-card">
+<h2>Elite</h2>
+<span>Nível Profissional</span>
+</div>
 
-    <script>
-        let fullGeneratedText = "";
+</div>
 
-        function onLogin(res) {
-            document.getElementById('login-gate').style.display = 'none';
-            document.getElementById('app-content').style.display = 'block';
-            document.getElementById('uPic').src = JSON.parse(atob(res.credential.split('.')[1])).picture;
-        }
+</div>
 
-        async function iniciarIA() {
-            const input = document.getElementById('rawInput').value;
-            if(!input) return;
+<div id="login-gate" class="glass login-box">
 
-            // Transição UI
-            document.getElementById('input-section').style.display = 'none';
-            document.getElementById('ai-processing').style.display = 'block';
+<div class="login-logo">
+<i class="fas fa-bolt"></i>
+</div>
 
-            // Animação de Checkmarks (Fake loading para sensação premium)
-            const steps = [1, 2, 3, 4];
-            for(let i of steps) {
-                setTimeout(() => { document.getElementById(`step${i}`).classList.add('active'); }, i * 800);
-            }
+<h2>Elite Docs AI</h2>
 
-            try {
-                // Prompt projetado para separar os componentes
-                const prompt = `Aja como recrutador de Elite. Transforme o texto abaixo num perfil premium. 
-                Retorne EXATAMENTE neste formato de 2 blocos separados pela palavra "|||":
-                [Resumo executivo profissional de alto impacto em 1 parágrafo]
-                |||
-                [Lista de 6 competências principais separadas por vírgula]
-                
-                Texto original: ${input}`;
+<p>
+Faça login para desbloquear os recursos premium da inteligência artificial.
+</p>
 
-                const res = await fetch(`https://text.pollinations.ai/${encodeURIComponent(prompt)}`);
-                const text = await res.text();
-                
-                // Processar e quebrar a resposta nos Cards
-                const partes = text.split("|||");
-                const resumo = partes[0] ? partes[0].trim() : text;
-                const competencias = partes[1] ? partes[1].trim() : "Liderança, Inovação, Estratégia, Gestão";
-                
-                document.getElementById('outResumo').innerText = resumo.replace(/\[|\]/g, ''); // Limpa colchetes se a IA mandar
-                
-                // Criar Pílulas (Tags) para as competências
-                const tagsHtml = competencias.replace(/\[|\]/g, '').split(',').map(c => `<span class="tag-pill">${c.trim()}</span>`).join('');
-                document.getElementById('outCompetencias').innerHTML = tagsHtml;
-                document.getElementById('wordCount').innerText = competencias.split(',').length;
+<div id="g_id_onload"
+data-client_id="SEU_CLIENT_ID_AQUI"
+data-callback="onLogin">
+</div>
 
-                // Salvar texto completo para exportação
-                fullGeneratedText = `RESUMO EXECUTIVO:\n${resumo.replace(/\[|\]/g, '')}\n\nCOMPETÊNCIAS:\n${competencias.replace(/\[|\]/g, '')}`;
+<div class="g_id_signin"
+data-type="standard"
+data-shape="pill"
+data-theme="filled_blue"
+data-size="large">
+</div>
 
-                // Revelar Dashboard
-                setTimeout(() => {
-                    document.getElementById('ai-processing').style.display = 'none';
-                    document.getElementById('dashboard-result').style.display = 'block';
-                }, 3800);
+</div>
 
-            } catch (e) {
-                alert("Erro na conexão com a inteligência.");
-                resetApp();
-            }
-        }
+<div id="app-content">
 
-        function resetApp() {
-            document.getElementById('dashboard-result').style.display = 'none';
-            document.getElementById('ai-processing').style.display = 'none';
-            document.getElementById('input-section').style.display = 'block';
-            [1,2,3,4].forEach(i => document.getElementById(`step${i}`).classList.remove('active'));
-        }
+<div class="glass">
 
-        // Lógica de Exportação Otimizada
-        function exportar(tipo) {
-            const titulo = document.getElementById('docTitle').value || "Elite_Profile";
-            
-            if(tipo === 'pdf') {
-                const el = document.createElement('div');
-                el.innerHTML = `<div style="padding:40px; font-family:'Helvetica'; color:#1e293b;">
-                    <h1 style="color:#4f46e5; border-bottom:2px solid #e2e8f0; padding-bottom:10px;">${titulo}</h1>
-                    <h3 style="color:#64748b; margin-top:30px;">RESUMO EXECUTIVO</h3>
-                    <p style="text-align:justify; line-height:1.6;">${document.getElementById('outResumo').innerText}</p>
-                    <h3 style="color:#64748b; margin-top:30px;">COMPETÊNCIAS</h3>
-                    <p>${document.getElementById('outCompetencias').innerText}</p>
-                </div>`;
-                html2pdf().from(el).set({margin:1, filename: titulo+'.pdf'}).save();
-            } 
-            else if(tipo === 'doc') {
-                const blob = new Blob(['\ufeff', `<h2>${titulo}</h2><br><b>Resumo:</b><p>${document.getElementById('outResumo').innerText}</p><br><b>Competências:</b><p>${document.getElementById('outCompetencias').innerText}</p>`], { type: 'application/msword' });
-                const a = document.createElement('a'); a.href = URL.createObjectURL(blob); a.download = titulo+'.doc'; a.click();
-            }
-            else if(tipo === 'xls') {
-                const compArr = document.getElementById('outCompetencias').innerText.split('\n').map(c => [c]);
-                const ws = XLSX.utils.aoa_to_sheet([["RESUMO EXECUTIVO"], [document.getElementById('outResumo').innerText], [], ["COMPETÊNCIAS"], ...compArr]);
-                const wb = XLSX.utils.book_new();
-                XLSX.utils.book_append_sheet(wb, ws, "Perfil");
-                XLSX.writeFile(wb, titulo+".xlsx");
-            }
-        }
-    </script>
+<div class="input-grid">
+
+<div class="form-area">
+
+<div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:20px;">
+
+<h2>
+<span style="color:#8b7cff;">IA</span> Gerador Elite
+</h2>
+
+<img id="uPic"
+src=""
+style="width:40px;height:40px;border-radius:50%;border:2px solid #5b4bff;object-fit:cover;"/>
+
+</div>
+
+<div class="mode-grid">
+
+<div class="mode-card active">
+<i class="fas fa-file-user"></i>
+<h3>Currículo ATS</h3>
+<p>Currículo premium otimizado para recrutadores.</p>
+</div>
+
+<div class="mode-card">
+<i class="fas fa-user-tie"></i>
+<h3>Perfil Executivo</h3>
+<p>Resumo corporativo profissional.</p>
+</div>
+
+<div class="mode-card">
+<i class="fab fa-linkedin"></i>
+<h3>LinkedIn Bio</h3>
+<p>Biografia profissional moderna.</p>
+</div>
+
+<div class="mode-card">
+<i class="fas fa-envelope-open-text"></i>
+<h3>Carta Profissional</h3>
+<p>Apresentação refinada para empresas.</p>
+</div>
+
+</div>
+
+<input type="text"
+id="docTitle"
+placeholder="Nome do Candidato / Arquivo"
+style="margin-bottom:15px;">
+
+<textarea
+id="rawInput"
+placeholder="Ex: Sou desenvolvedor front-end com 5 anos de experiência em React e interfaces modernas..."></textarea>
+
+<button class="btn" onclick="iniciarIA()">
+<i class="fas fa-wand-magic-sparkles"></i>
+Processar com Inteligência Elite
+</button>
+
+</div>
+
+<div class="preview-card">
+
+<div class="preview-header">
+<h3>Pré-visualização</h3>
+<span>Tempo real</span>
+</div>
+
+<div class="fake-cv">
+
+<div class="cv-top"></div>
+
+<div class="cv-line"></div>
+<div class="cv-line small"></div>
+
+<br>
+
+<div class="cv-line"></div>
+<div class="cv-line"></div>
+<div class="cv-line tiny"></div>
+
+<br>
+
+<div class="cv-line"></div>
+<div class="cv-line small"></div>
+
+<br>
+
+<div class="cv-line"></div>
+<div class="cv-line"></div>
+
+</div>
+
+</div>
+
+</div>
+
+<div id="processing">
+
+<div class="step" id="s1">
+<i class="fas fa-check-circle"></i>
+Analisando perfil profissional...
+</div>
+
+<div class="step" id="s2">
+<i class="fas fa-check-circle"></i>
+Otimizando para ATS...
+</div>
+
+<div class="step" id="s3">
+<i class="fas fa-check-circle"></i>
+Aplicando linguagem corporativa...
+</div>
+
+<div class="step" id="s4">
+<i class="fas fa-check-circle"></i>
+Criando estrutura visual premium...
+</div>
+
+</div>
+
+<div id="dashboard">
+
+<div class="stats">
+
+<div class="stat">
+<h2>98%</h2>
+<span>ATS Score</span>
+</div>
+
+<div class="stat">
+<h2>Elite</h2>
+<span>Nível</span>
+</div>
+
+<div class="stat">
+<h2 id="wCount">0</h2>
+<span>Skills</span>
+</div>
+
+<div class="stat">
+<h2>AI+</h2>
+<span>Refinado</span>
+</div>
+
+</div>
+
+<div class="content">
+
+<h3>
+<i class="fas fa-user-tie"></i>
+Resumo Executivo
+</h3>
+
+<p id="outResumo">
+Aguardando...
+</p>
+
+</div>
+
+<div class="content">
+
+<h3>
+<i class="fas fa-star"></i>
+Competências Estratégicas
+</h3>
+
+<div class="tags" id="outSkills"></div>
+
+</div>
+
+<div class="export-grid">
+
+<div class="export" onclick="exportar('pdf')">
+<i class="fas fa-file-pdf" style="color:#ef4444;"></i>
+PDF
+</div>
+
+<div class="export" onclick="exportar('doc')">
+<i class="fas fa-file-word" style="color:#3b82f6;"></i>
+WORD
+</div>
+
+<div class="export" onclick="exportar('xls')">
+<i class="fas fa-file-excel" style="color:#10b981;"></i>
+EXCEL
+</div>
+
+</div>
+
+</div>
+
+</div>
+
+</div>
+
+</div>
+
+<script>
+
+function onLogin(res){
+
+document.getElementById('login-gate').style.display='none';
+document.getElementById('app-content').style.display='block';
+
+const data = JSON.parse(atob(res.credential.split('.')[1]));
+
+document.getElementById('uPic').src=data.picture;
+
+}
+
+async function iniciarIA(){
+
+const input=document.getElementById('rawInput').value;
+
+if(!input){
+alert('Digite algo.');
+return;
+}
+
+document.getElementById('processing').style.display='block';
+
+[1,2,3,4].forEach((i,index)=>{
+setTimeout(()=>{
+document.getElementById('s'+i).classList.add('active');
+},index*900);
+});
+
+try{
+
+const prompt=`
+Aja como especialista premium em recrutamento corporativo.
+
+Transforme o texto abaixo em um perfil profissional premium.
+
+Responda EXATAMENTE neste formato:
+
+[Resumo profissional]
+|||
+[6 competências separadas por vírgula]
+
+Texto:
+${input}
+`;
+
+const res=await fetch(
+`https://text.pollinations.ai/${encodeURIComponent(prompt)}`
+);
+
+const text=await res.text();
+
+const partes=text.split("|||");
+
+const resumo=partes[0] || text;
+
+const skills=partes[1] || "Liderança, Estratégia, Gestão";
+
+document.getElementById('outResumo').innerText=
+resumo.replace(/\[|\]/g,'');
+
+const htmlSkills=
+skills
+.replace(/\[|\]/g,'')
+.split(',')
+.map(s=>`<div class="tag">${s.trim()}</div>`)
+.join('');
+
+document.getElementById('outSkills').innerHTML=htmlSkills;
+
+document.getElementById('wCount').innerText=
+skills.split(',').length;
+
+setTimeout(()=>{
+
+document.getElementById('processing').style.display='none';
+document.getElementById('dashboard').style.display='block';
+
+},4200);
+
+}catch(e){
+
+alert('Erro na IA.');
+
+}
+
+}
+
+function exportar(tipo){
+
+const titulo=
+document.getElementById('docTitle').value || 'Elite_Profile';
+
+if(tipo==='pdf'){
+
+const element=document.createElement('div');
+
+element.innerHTML=`
+<div style="padding:40px;font-family:Arial;color:#111827;">
+
+<h1 style="color:#5b4bff;">
+${titulo}
+</h1>
+
+<hr>
+
+<h3>Resumo Executivo</h3>
+
+<p style="line-height:1.7;">
+${document.getElementById('outResumo').innerText}
+</p>
+
+<h3>Competências</h3>
+
+<p>
+${document.getElementById('outSkills').innerText}
+</p>
+
+</div>
+`;
+
+html2pdf().from(element).set({
+margin:1,
+filename:titulo+'.pdf'
+}).save();
+
+}
+
+if(tipo==='doc'){
+
+const blob=new Blob([
+'\ufeff',
+`
+<h2>${titulo}</h2>
+
+<h3>Resumo Executivo</h3>
+
+<p>${document.getElementById('outResumo').innerText}</p>
+
+<h3>Competências</h3>
+
+<p>${document.getElementById('outSkills').innerText}</p>
+`
+],{
+type:'application/msword'
+});
+
+const a=document.createElement('a');
+
+a.href=URL.createObjectURL(blob);
+
+a.download=titulo+'.doc';
+
+a.click();
+
+}
+
+if(tipo==='xls'){
+
+const ws=XLSX.utils.aoa_to_sheet([
+["Resumo Executivo"],
+[document.getElementById('outResumo').innerText],
+[],
+["Competências"],
+[document.getElementById('outSkills').innerText]
+]);
+
+const wb=XLSX.utils.book_new();
+
+XLSX.utils.book_append_sheet(wb,ws,"Perfil");
+
+XLSX.writeFile(wb,titulo+'.xlsx');
+
+}
+
+}
+
+</script>
+
 </body>
 </html>
