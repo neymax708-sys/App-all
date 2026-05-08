@@ -1,28 +1,16 @@
 <!DOCTYPE html>
 <html lang="pt-br">
 <head>
-
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
 <title>Elite Docs AI</title>
 
-<script src="https://accounts.google.com/gsi/client" async defer></script>
-
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
 
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Poppins:wght@500;600;700;800&display=swap" rel="stylesheet">
-
 <style>
-
-:root{
---primary:#5b4bff;
---secondary:#4338ca;
---glass:rgba(18,20,40,.55);
---border:rgba(255,255,255,.08);
-}
 
 *{
 margin:0;
@@ -32,833 +20,414 @@ box-sizing:border-box;
 
 body{
 font-family:'Inter',sans-serif;
-background:#05050a;
+background:#03030a;
+color:white;
+overflow-x:hidden;
 background-image:
 radial-gradient(circle at top, rgba(91,75,255,.25), transparent 35%),
-radial-gradient(circle at bottom, rgba(67,56,202,.15), transparent 30%);
-color:white;
-min-height:100vh;
-padding:20px;
-overflow-x:hidden;
-}
-
-.app{
-max-width:1200px;
-margin:auto;
-}
-
-.hero{
-text-align:center;
-margin-bottom:35px;
-}
-
-.logo{
-width:120px;
-height:120px;
-margin:auto;
-border-radius:35px;
-background:linear-gradient(135deg,#5b4bff,#4338ca);
-display:flex;
-align-items:center;
-justify-content:center;
-font-size:55px;
-box-shadow:0 0 60px rgba(91,75,255,.45);
-margin-bottom:25px;
-}
-
-.hero h1{
-font-family:'Poppins';
-font-size:52px;
-margin-bottom:10px;
-}
-
-.gradient{
-background:linear-gradient(90deg,#fff,#9b8cff);
--webkit-background-clip:text;
--webkit-text-fill-color:transparent;
-}
-
-.hero p{
-color:#94a3b8;
-max-width:700px;
-margin:auto;
-line-height:1.8;
-}
-
-.glass{
-background:var(--glass);
-border:1px solid var(--border);
-backdrop-filter:blur(18px);
-border-radius:30px;
-padding:30px;
-box-shadow:0 20px 60px rgba(0,0,0,.4);
-}
-
-#login-gate{
-max-width:420px;
-margin:40px auto;
-text-align:center;
-}
-
-.login-logo{
-width:90px;
-height:90px;
-margin:auto;
-border-radius:25px;
-background:linear-gradient(135deg,#5b4bff,#4338ca);
-display:flex;
-align-items:center;
-justify-content:center;
-font-size:35px;
-margin-bottom:20px;
-}
-
-#app-content{
-display:none;
-}
-
-.grid{
-display:grid;
-grid-template-columns:repeat(2,1fr);
-gap:18px;
-}
-
-.card{
-background:rgba(255,255,255,.03);
-border:1px solid rgba(255,255,255,.08);
-padding:25px;
-border-radius:24px;
-cursor:pointer;
-transition:.3s;
-}
-
-.card:hover{
-transform:translateY(-5px);
-border:1px solid #5b4bff;
-background:rgba(91,75,255,.08);
-}
-
-.card i{
-font-size:34px;
-margin-bottom:18px;
-}
-
-.card h2{
-font-size:20px;
-margin-bottom:10px;
-font-family:'Poppins';
-}
-
-.card p{
-color:#94a3b8;
-line-height:1.6;
-font-size:14px;
-}
-
-input,
-textarea{
-width:100%;
-padding:18px;
-margin-bottom:15px;
-background:rgba(255,255,255,.03);
-border:1px solid rgba(255,255,255,.08);
-border-radius:18px;
-color:white;
-font-family:'Inter';
-outline:none;
-}
-
-textarea{
-min-height:180px;
-resize:none;
-}
-
-.btn{
-width:100%;
-padding:18px;
-border:none;
-border-radius:18px;
-background:linear-gradient(135deg,#5b4bff,#4338ca);
-color:white;
-font-family:'Poppins';
-font-weight:600;
-cursor:pointer;
-font-size:15px;
-transition:.3s;
-}
-
-.btn:hover{
-transform:translateY(-3px);
-}
-
-.content{
-background:rgba(255,255,255,.03);
-border:1px solid rgba(255,255,255,.08);
-padding:25px;
-border-radius:24px;
-margin-top:20px;
-}
-
-.export{
-margin-top:15px;
-padding:18px;
-border-radius:18px;
-background:rgba(255,255,255,.03);
-border:1px solid rgba(255,255,255,.08);
-display:flex;
-align-items:center;
-justify-content:center;
-gap:10px;
-font-family:'Poppins';
-cursor:pointer;
-transition:.3s;
-}
-
-.export:hover{
-background:rgba(91,75,255,.12);
-border:1px solid #5b4bff;
+radial-gradient(circle at bottom, rgba(0,140,255,.12), transparent 30%);
 }
 
 .hidden{
 display:none;
 }
 
-@media(max-width:900px){
+.container{
+max-width:1200px;
+margin:auto;
+padding:20px;
+}
 
-.grid{
-grid-template-columns:1fr;
+.hero{
+text-align:center;
+padding:30px 20px;
+}
+
+.hero img{
+width:240px;
+max-width:90%;
+margin-bottom:20px;
 }
 
 .hero h1{
-font-size:36px;
+font-size:60px;
+font-weight:800;
+margin-bottom:15px;
 }
 
+.hero p{
+font-size:22px;
+color:#9ca3af;
+line-height:1.7;
+}
+
+.grid{
+display:grid;
+grid-template-columns:repeat(auto-fit,minmax(260px,1fr));
+gap:25px;
+margin-top:50px;
+}
+
+.card{
+background:rgba(255,255,255,.04);
+border:1px solid rgba(255,255,255,.08);
+padding:35px;
+border-radius:35px;
+backdrop-filter:blur(20px);
+transition:.3s;
+cursor:pointer;
+}
+
+.card:hover{
+transform:translateY(-8px) scale(1.02);
+border-color:#5b4bff;
+box-shadow:0 0 30px rgba(91,75,255,.35);
+}
+
+.card i{
+font-size:48px;
+margin-bottom:20px;
+}
+
+.card h2{
+font-size:32px;
+margin-bottom:15px;
+}
+
+.card p{
+color:#9ca3af;
+line-height:1.7;
+font-size:18px;
+}
+
+.screen{
+margin-top:30px;
+background:rgba(255,255,255,.04);
+border:1px solid rgba(255,255,255,.08);
+padding:30px;
+border-radius:35px;
+backdrop-filter:blur(20px);
+}
+
+.back-btn{
+background:#5b4bff;
+color:white;
+border:none;
+padding:15px 25px;
+border-radius:16px;
+margin-bottom:25px;
+cursor:pointer;
+font-size:16px;
+}
+
+.input,
+.textarea{
+width:100%;
+padding:18px;
+border-radius:18px;
+border:1px solid rgba(255,255,255,.08);
+background:rgba(255,255,255,.03);
+color:white;
+margin-bottom:18px;
+font-size:16px;
+}
+
+.textarea{
+min-height:180px;
+resize:none;
+}
+
+.generate-btn{
+width:100%;
+padding:18px;
+border:none;
+border-radius:18px;
+background:linear-gradient(135deg,#5b4bff,#4338ca);
+color:white;
+font-size:18px;
+font-weight:700;
+cursor:pointer;
+transition:.3s;
+}
+
+.generate-btn:hover{
+transform:translateY(-4px);
+}
+
+.preview{
+margin-top:30px;
+}
+
+.export-btn{
+margin-top:20px;
+padding:18px;
+border-radius:18px;
+background:#5b4bff;
+text-align:center;
+cursor:pointer;
+font-weight:700;
+}
+
+@media(max-width:700px){
+.hero h1{
+font-size:42px;
+}
+
+.hero p{
+font-size:18px;
+}
 }
 
 </style>
-
 </head>
-
 <body>
 
-<div class="app">
+<div class="container">
+
+<div id="homeScreen">
 
 <div class="hero">
-
-<div class="logo">
-<i class="fas fa-brain"></i>
+<img src="logo.png">
+<h1>Elite Docs AI</h1>
+<p>Currículos ATS, PDFs, LinkedIn e cartas profissionais com IA.</p>
 </div>
-
-<h1>
-Elite <span class="gradient">Docs AI</span>
-</h1>
-
-<p>
-Currículos ATS, PDFs, LinkedIn e cartas profissionais com IA.
-</p>
-
-</div>
-
-<div id="login-gate" class="glass">
-
-<div class="login-logo">
-<i class="fas fa-bolt"></i>
-</div>
-
-<h2 style="margin-bottom:10px;font-family:Poppins;">
-Entrar
-</h2>
-
-<p style="color:#94a3b8;margin-bottom:25px;">
-Faça login para continuar.
-</p>
-
-<div id="g_id_onload"
-data-client_id="593110663863-u9956693jafabtisfm0jnbgsufjd8n1f.apps.googleusercontent.com"
-data-callback="handleCredentialResponse">
-</div>
-
-<div class="g_id_signin"
-data-type="standard"
-data-theme="filled_blue"
-data-size="large"
-data-shape="pill">
-</div>
-
-</div>
-
-<div id="app-content">
-
-<div class="glass">
 
 <div class="grid">
 
-<div class="card" onclick="abrirFormulario('curriculo')">
-<i class="fas fa-user-tie" style="color:#5b4bff;"></i>
+<div class="card" onclick="abrirTela('curriculoScreen')">
+<i class="fas fa-user-tie" style="color:#5b4bff"></i>
 <h2>Currículo ATS</h2>
-<p>Currículo premium profissional com IA.</p>
+<p>Crie currículos profissionais modernos.</p>
 </div>
 
-<div class="card" onclick="abrirFormulario('pdf')">
-<i class="fas fa-file-pdf" style="color:#ef4444;"></i>
+<div class="card" onclick="abrirTela('pdfScreen')">
+<i class="fas fa-file-pdf" style="color:#ef4444"></i>
 <h2>Documento PDF</h2>
-<p>Crie PDFs profissionais automaticamente.</p>
+<p>Monte documentos profissionais rapidamente.</p>
 </div>
 
-<div class="card" onclick="abrirFormulario('linkedin')">
-<i class="fab fa-linkedin" style="color:#0a66c2;"></i>
+<div class="card" onclick="abrirTela('linkedinScreen')">
+<i class="fab fa-linkedin" style="color:#0a66c2"></i>
 <h2>Perfil LinkedIn</h2>
-<p>Perfil otimizado para recrutadores.</p>
+<p>Perfis otimizados para recrutadores.</p>
 </div>
 
-<div class="card" onclick="abrirFormulario('carta')">
-<i class="fas fa-envelope" style="color:#10b981;"></i>
+<div class="card" onclick="abrirTela('cartaScreen')">
+<i class="fas fa-envelope" style="color:#10b981"></i>
 <h2>Carta Profissional</h2>
-<p>Cartas modernas e profissionais.</p>
+<p>Cartas elegantes e profissionais.</p>
 </div>
-
-</div>
-
-<!-- CURRICULO -->
-
-<div id="form-curriculo" class="hidden">
-
-<div class="content">
-
-<h3 style="margin-bottom:20px;color:#9b8cff;">
-Informações do Currículo
-</h3>
-
-<input type="text" id="nome" placeholder="Nome completo">
-
-<input type="text" id="cargo" placeholder="Cargo profissional">
-
-<input type="text" id="telefone" placeholder="Telefone">
-
-<input type="email" id="email" placeholder="Email">
-
-<input type="text" id="cidade" placeholder="Cidade">
-
-<input type="file" id="foto" accept="image/*">
-
-<textarea id="textoCurriculo" placeholder="Experiências, habilidades e formação..."></textarea>
-
-<button class="btn" onclick="previewCurriculo()">
-Analisar Currículo
-</button>
-
-<div id="previewCurriculo"></div>
 
 </div>
 
 </div>
 
-<!-- PDF -->
+<div id="curriculoScreen" class="screen hidden">
+<button class="back-btn" onclick="voltar()">← Voltar</button>
 
-<div id="form-pdf" class="hidden">
+<input class="input" id="nome" placeholder="Nome completo">
+<input class="input" id="cargo" placeholder="Cargo profissional">
+<input class="input" id="telefone" placeholder="Telefone">
+<input class="input" id="email" placeholder="Email">
+<input class="input" id="cidade" placeholder="Cidade">
+<input class="input" type="file" id="foto">
+<textarea class="textarea" id="textoCurriculo" placeholder="Experiências, habilidades e formação..."></textarea>
 
-<div class="content">
+<button class="generate-btn" onclick="gerarCurriculo()">Gerar Currículo</button>
 
-<h3>Documento PDF</h3>
+<div id="previewCurriculo" class="preview"></div>
+</div>
 
-<input type="text" id="tituloPDF" placeholder="Título">
+<div id="pdfScreen" class="screen hidden">
+<button class="back-btn" onclick="voltar()">← Voltar</button>
 
-<textarea id="textoPDF" placeholder="Digite o conteúdo..."></textarea>
+<input class="input" id="tituloPDF" placeholder="Título">
+<textarea class="textarea" id="textoPDF" placeholder="Digite o conteúdo..."></textarea>
 
-<button class="btn" onclick="previewPDF()">
-Analisar Documento
-</button>
+<button class="generate-btn" onclick="gerarPDF()">Gerar Documento</button>
 
 <div id="previewPDF"></div>
-
 </div>
 
-</div>
+<div id="linkedinScreen" class="screen hidden">
+<button class="back-btn" onclick="voltar()">← Voltar</button>
 
-<!-- LINKEDIN -->
+<textarea class="textarea" id="textoLinkedin" placeholder="Digite suas informações profissionais..."></textarea>
 
-<div id="form-linkedin" class="hidden">
-
-<div class="content">
-
-<h3>Perfil LinkedIn</h3>
-
-<textarea id="textoLinkedin" placeholder="Digite suas informações profissionais..."></textarea>
-
-<button class="btn" onclick="previewLinkedin()">
-Analisar Perfil
-</button>
+<button class="generate-btn" onclick="gerarLinkedin()">Gerar Perfil</button>
 
 <div id="previewLinkedin"></div>
-
 </div>
 
-</div>
+<div id="cartaScreen" class="screen hidden">
+<button class="back-btn" onclick="voltar()">← Voltar</button>
 
-<!-- CARTA -->
+<textarea class="textarea" id="textoCarta" placeholder="Digite o objetivo da carta..."></textarea>
 
-<div id="form-carta" class="hidden">
-
-<div class="content">
-
-<h3>Carta Profissional</h3>
-
-<textarea id="textoCarta" placeholder="Digite o objetivo da carta..."></textarea>
-
-<button class="btn" onclick="previewCarta()">
-Analisar Carta
-</button>
+<button class="generate-btn" onclick="gerarCarta()">Gerar Carta</button>
 
 <div id="previewCarta"></div>
-
-</div>
-
-</div>
-
-</div>
-
 </div>
 
 </div>
 
 <script>
 
-window.onload = function(){
+function abrirTela(id){
 
-const user = localStorage.getItem("eliteUser");
+document.getElementById('homeScreen').classList.add('hidden');
 
-if(user){
+const telas=document.querySelectorAll('.screen');
 
-document.getElementById("login-gate").style.display="none";
-document.getElementById("app-content").style.display="block";
+telas.forEach(t=>t.classList.add('hidden'));
 
-}
+document.getElementById(id).classList.remove('hidden');
 
-}
-
-function handleCredentialResponse(response){
-
-const data = JSON.parse(atob(response.credential.split('.')[1]));
-
-localStorage.setItem("eliteUser", JSON.stringify(data));
-
-document.getElementById("login-gate").style.display="none";
-document.getElementById("app-content").style.display="block";
+window.scrollTo({top:0,behavior:'smooth'});
 
 }
 
-function esconderTodos(){
+function voltar(){
 
-document.getElementById("form-curriculo").classList.add("hidden");
-document.getElementById("form-pdf").classList.add("hidden");
-document.getElementById("form-linkedin").classList.add("hidden");
-document.getElementById("form-carta").classList.add("hidden");
+const telas=document.querySelectorAll('.screen');
 
-}
+telas.forEach(t=>t.classList.add('hidden'));
 
-function abrirFormulario(tipo){
+document.getElementById('homeScreen').classList.remove('hidden');
 
-esconderTodos();
-
-document.getElementById("form-"+tipo).classList.remove("hidden");
+window.scrollTo({top:0,behavior:'smooth'});
 
 }
 
-async function previewCurriculo(){
+async function gerarCurriculo(){
 
-const texto = document.getElementById("textoCurriculo").value;
+const nome=document.getElementById('nome').value;
+const cargo=document.getElementById('cargo').value;
+const telefone=document.getElementById('telefone').value;
+const email=document.getElementById('email').value;
+const cidade=document.getElementById('cidade').value;
+const texto=document.getElementById('textoCurriculo').value;
 
-const prompt = `
-Crie currículo ATS premium.
+let foto='https://cdn-icons-png.flaticon.com/512/847/847969.png';
 
-RETORNE:
+const arquivo=document.getElementById('foto').files[0];
 
-[RESUMO]
-|||
-[EXPERIÊNCIA]
-|||
-[FORMAÇÃO]
-|||
-[HABILIDADES]
-
-Texto:
-${texto}
-`;
-
-let resumo = '';
-let experiencia = '';
-let formacao = '';
-let habilidades = '';
-
-try{
-
-const res = await fetch(
-'https://text.pollinations.ai/' + encodeURIComponent(prompt)
-);
-
-const data = await res.text();
-
-const partes = data.split("|||");
-
-resumo = partes[0] || '';
-experiencia = partes[1] || '';
-formacao = partes[2] || '';
-habilidades = partes[3] || '';
-
-}catch(e){
-
-resumo = texto;
-experiencia = texto;
-formacao = texto;
-habilidades = "Comunicação, Liderança, Trabalho em equipe";
-
+if(arquivo){
+foto=URL.createObjectURL(arquivo);
 }
 
-const foto = document.getElementById("foto").files[0];
-
-let fotoURL = '';
-
-if(foto){
-fotoURL = URL.createObjectURL(foto);
-}else{
-fotoURL = 'https://cdn-icons-png.flaticon.com/512/847/847969.png';
-}
-
-document.getElementById("previewCurriculo").innerHTML = `
-
-<div id="curriculoPDF" style="
-background:white;
-color:#222;
-border-radius:25px;
-overflow:hidden;
-margin-top:25px;
-box-shadow:0 20px 60px rgba(0,0,0,.4);
-font-family:Arial;
-">
-
+const html=`
+<div id="curriculoPDF" style="background:white;color:#111;border-radius:25px;overflow:hidden;font-family:Arial;">
 <div style="display:flex;flex-wrap:wrap;">
 
-<div style="
-width:280px;
-background:#005fcc;
-color:white;
-padding:30px 20px;
-">
+<div style="width:280px;background:#005fcc;color:white;padding:30px;">
 
-<div style="text-align:center;margin-bottom:25px;">
+<img src="${foto}" style="width:140px;height:140px;border-radius:25px;object-fit:cover;border:4px solid white;margin-bottom:25px;">
 
-<img
-src="${fotoURL}"
-style="
-width:130px;
-height:130px;
-border-radius:20px;
-object-fit:cover;
-border:4px solid white;
-background:white;
-">
+<h2 style="font-size:28px;margin-bottom:25px;">${nome}</h2>
+
+<h3>CONTATO</h3>
+<p>📞 ${telefone}</p>
+<p>✉️ ${email}</p>
+<p>📍 ${cidade}</p>
+
+<br>
+
+<h3>HABILIDADES</h3>
+<p>• Comunicação</p>
+<p>• Liderança</p>
+<p>• Trabalho em equipe</p>
 
 </div>
 
-<h2 style="
-font-size:22px;
-margin-bottom:25px;
-text-align:center;
-line-height:1.3;
-font-weight:bold;
-">
-${document.getElementById("nome").value}
-</h2>
+<div style="flex:1;padding:40px;min-width:300px;">
 
-<div style="margin-bottom:30px;">
+<h1 style="font-size:50px;color:#005fcc;">${nome}</h1>
+<p style="font-size:24px;color:#555;margin-bottom:25px;">${cargo}</p>
 
-<h3 style="
-font-size:16px;
-margin-bottom:15px;
-border-bottom:1px solid rgba(255,255,255,.4);
-padding-bottom:8px;
-">
-CONTATO
-</h3>
-
-<p style="margin-bottom:10px;">
-📞 ${document.getElementById("telefone").value}
-</p>
-
-<p style="margin-bottom:10px;">
-✉️ ${document.getElementById("email").value}
-</p>
-
-<p style="margin-bottom:10px;">
-📍 ${document.getElementById("cidade").value}
-</p>
-
-</div>
-
-<div style="margin-bottom:30px;">
-
-<h3 style="
-font-size:16px;
-margin-bottom:15px;
-border-bottom:1px solid rgba(255,255,255,.4);
-padding-bottom:8px;
-">
-HABILIDADES
-</h3>
-
-${habilidades.split(',').map(skill=>`
-<p style="margin-bottom:10px;font-size:14px;">
-• ${skill.trim()}
-</p>
-`).join('')}
+<h2 style="color:#005fcc;margin-bottom:15px;">RESUMO PROFISSIONAL</h2>
+<p style="line-height:1.8;color:#444;">${texto}</p>
 
 </div>
 
 </div>
-
-<div style="
-flex:1;
-padding:40px 35px;
-min-width:300px;
-">
-
-<h1 style="
-font-size:42px;
-color:#005fcc;
-font-weight:900;
-line-height:1.1;
-margin-bottom:8px;
-font-family:Poppins;
-">
-${document.getElementById("nome").value}
-</h1>
-
-<p style="
-font-size:20px;
-color:#555;
-margin-bottom:30px;
-">
-${document.getElementById("cargo").value}
-</p>
-
-<h3 style="
-color:#005fcc;
-font-size:18px;
-margin-bottom:15px;
-border-bottom:2px solid #dbeafe;
-padding-bottom:8px;
-">
-RESUMO PROFISSIONAL
-</h3>
-
-<p style="
-line-height:1.8;
-margin-bottom:30px;
-color:#444;
-">
-${resumo}
-</p>
-
-<h3 style="
-color:#005fcc;
-font-size:18px;
-margin-bottom:15px;
-border-bottom:2px solid #dbeafe;
-padding-bottom:8px;
-">
-EXPERIÊNCIA
-</h3>
-
-<p style="
-line-height:1.8;
-margin-bottom:30px;
-color:#444;
-white-space:pre-line;
-">
-${experiencia}
-</p>
-
-<h3 style="
-color:#005fcc;
-font-size:18px;
-margin-bottom:15px;
-border-bottom:2px solid #dbeafe;
-padding-bottom:8px;
-">
-FORMAÇÃO
-</h3>
-
-<p style="
-line-height:1.8;
-margin-bottom:30px;
-color:#444;
-white-space:pre-line;
-">
-${formacao}
-</p>
-
 </div>
 
-</div>
-
-</div>
-
-<div class="export" onclick="baixarCurriculoPDF()">
-
-<i class="fas fa-file-pdf" style="color:#ef4444;"></i>
-
+<div class="export-btn" onclick="baixarCurriculo()">
+<i class="fas fa-file-pdf"></i>
 Baixar Currículo PDF
-
 </div>
-
 `;
+
+
+document.getElementById('previewCurriculo').innerHTML=html;
 
 }
 
-function baixarCurriculoPDF(){
+function baixarCurriculo(){
 
-const el = document.getElementById("curriculoPDF");
+const el=document.getElementById('curriculoPDF');
 
 html2pdf().set({
-
 margin:0,
-filename:'curriculo-premium.pdf',
-image:{ type:'jpeg', quality:1 },
-html2canvas:{ scale:2 },
-jsPDF:{ unit:'mm', format:'a4', orientation:'portrait' }
-
+filename:'curriculo.pdf',
+image:{type:'jpeg',quality:1},
+html2canvas:{scale:2},
+jsPDF:{unit:'mm',format:'a4',orientation:'portrait'}
 }).from(el).save();
 
 }
 
-function previewPDF(){
+function gerarPDF(){
 
-const titulo = document.getElementById("tituloPDF").value;
-const texto = document.getElementById("textoPDF").value;
+const titulo=document.getElementById('tituloPDF').value;
+const texto=document.getElementById('textoPDF').value;
 
-document.getElementById("previewPDF").innerHTML = `
-
-<div class="content">
-
-<h3>${titulo}</h3>
-
-<p style="line-height:1.8;white-space:pre-line;">
-${texto}
-</p>
-
-<div class="export" onclick="baixarPDF()">
-
-<i class="fas fa-file-pdf" style="color:#ef4444;"></i>
-
-Baixar PDF
-
+const html=`
+<div id="pdfArea" style="background:white;color:#111;padding:40px;border-radius:25px;">
+<h1>${titulo}</h1>
+<p style="margin-top:20px;line-height:1.8;white-space:pre-line;">${texto}</p>
 </div>
 
-</div>
-
+<div class="export-btn" onclick="baixarPDF()">Baixar PDF</div>
 `;
+
+document.getElementById('previewPDF').innerHTML=html;
 
 }
 
 function baixarPDF(){
-
-const el = document.getElementById("previewPDF");
-
-html2pdf().from(el).save("documento.pdf");
-
+const el=document.getElementById('pdfArea');
+html2pdf().from(el).save('documento.pdf');
 }
 
-function previewLinkedin(){
+function gerarLinkedin(){
 
-const texto = document.getElementById("textoLinkedin").value;
+const texto=document.getElementById('textoLinkedin').value;
 
-document.getElementById("previewLinkedin").innerHTML = `
-
-<div class="content">
-
-<h3>Perfil LinkedIn</h3>
-
-<p style="line-height:1.8;white-space:pre-line;">
-${texto}
-</p>
-
-<div class="export" onclick="baixarLinkedin()">
-
-<i class="fab fa-linkedin"></i>
-
-Baixar Perfil
-
+document.getElementById('previewLinkedin').innerHTML=`
+<div class="screen">
+<h2>Perfil LinkedIn</h2>
+<p style="line-height:1.8;white-space:pre-line;">${texto}</p>
 </div>
-
-</div>
-
 `;
 
 }
 
-function baixarLinkedin(){
+function gerarCarta(){
 
-const blob = new Blob(
-[document.getElementById("previewLinkedin").innerText],
-{type:'text/plain'}
-);
+const texto=document.getElementById('textoCarta').value;
 
-const a = document.createElement('a');
-
-a.href = URL.createObjectURL(blob);
-
-a.download = 'linkedin.txt';
-
-a.click();
-
-}
-
-function previewCarta(){
-
-const texto = document.getElementById("textoCarta").value;
-
-document.getElementById("previewCarta").innerHTML = `
-
-<div class="content">
-
-<h3>Carta Profissional</h3>
-
-<p style="line-height:1.8;white-space:pre-line;">
-${texto}
-</p>
-
-<div class="export" onclick="baixarCarta()">
-
-<i class="fas fa-file-word"></i>
-
-Baixar Carta
-
+document.getElementById('previewCarta').innerHTML=`
+<div class="screen">
+<h2>Carta Profissional</h2>
+<p style="line-height:1.8;white-space:pre-line;">${texto}</p>
 </div>
-
-</div>
-
 `;
-
-}
-
-function baixarCarta(){
-
-const blob = new Blob(
-[document.getElementById("previewCarta").innerText],
-{type:'text/plain'}
-);
-
-const a = document.createElement('a');
-
-a.href = URL.createObjectURL(blob);
-
-a.download = 'carta-profissional.txt';
-
-a.click();
 
 }
 
 </script>
 
 </body>
-</html>a
+</html>
