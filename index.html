@@ -1,336 +1,286 @@
 <!DOCTYPE html>
 <html lang="pt-br">
 <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Elite Docs AI</title>
+    <link rel="icon" type="image/png" href="logo.png">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
 
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            font-family: 'Inter', sans-serif;
+            background: #050510;
+            color: white;
+            padding: 12px;
+            overflow-x: hidden;
+            background-image: radial-gradient(circle at top, rgba(91,75,255,.18), transparent 35%);
+        }
+        .hidden { display: none; }
+        .container { max-width: 700px; margin: auto; }
+        .hero { text-align: center; padding: 25px 10px; }
+        .logo { width: 100px; height: 100px; object-fit: contain; margin-bottom: 15px; }
+        .hero h1 { font-size: 32px; font-weight: 800; }
+        .hero p { color: #9ca3af; font-size: 14px; margin-top: 5px; }
 
-<title>Elite Docs AI</title>
+        /* GRID ESTILO XIAOMI/APP */
+        .grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 12px;
+            margin-top: 25px;
+        }
+        .card {
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            padding: 15px 5px;
+            border-radius: 20px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            cursor: pointer;
+            transition: 0.2s;
+            backdrop-filter: blur(10px);
+        }
+        .card:active { transform: scale(0.95); }
+        .card i { font-size: 28px; margin-bottom: 8px; }
+        .card span { font-size: 11px; font-weight: 700; }
 
-<link rel="icon" type="image/png" href="logo.png">
-  
-<link rel="preconnect" href="https://fonts.googleapis.com">
+        /* TELAS E INPUTS */
+        .screen {
+            margin-top: 10px;
+            background: rgba(255, 255, 255, 0.04);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            padding: 20px;
+            border-radius: 24px;
+        }
+        .back-btn { background: none; border: none; color: #5b4bff; font-weight: 700; cursor: pointer; margin-bottom: 15px; }
+        .input, .textarea {
+            width: 100%; padding: 14px; margin-bottom: 12px; border-radius: 12px;
+            border: 1px solid rgba(255, 255, 255, 0.1); background: rgba(255, 255, 255, 0.05);
+            color: white; outline: none; font-size: 14px;
+        }
+        .textarea { min-height: 120px; }
+        .row { display: flex; gap: 8px; margin-bottom: 15px; }
+        .generate-btn {
+            padding: 14px; border: none; border-radius: 12px; font-weight: 700;
+            cursor: pointer; flex: 1; color: white;
+        }
+        .btn-primary { background: linear-gradient(135deg, #5b4bff, #4338ca); }
+        .btn-ai { background: #8b5cf6; }
+        .btn-summary { background: #0ea5e9; }
 
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+        /* PREVIEW */
+        .preview-box { background: white; color: #222; padding: 15px; border-radius: 15px; margin-top: 15px; font-size: 13px; }
+        .curriculo-preview-flex { display: flex; gap: 15px; flex-wrap: wrap; }
+        .side-bar-preview { width: 140px; background: #005fcc; color: white; padding: 15px; border-radius: 12px; }
+        .main-content-preview { flex: 1; min-width: 200px; }
+        .foto-preview { width: 80px; height: 80px; border-radius: 50%; object-fit: cover; border: 3px solid white; margin-bottom: 10px; }
+        .download-btn { background: #10b981; color: white; padding: 15px; border-radius: 12px; text-align: center; font-weight: 700; cursor: pointer; margin-top: 10px; }
 
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-
-<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
-
-<!-- 🔥 ADIÇÃO: OCR (SEM MEXER NO RESTO) -->
-<script src="https://cdn.jsdelivr.net/npm/tesseract.js@5/dist/tesseract.min.js"></script>
-
-<style>
-
-*{
-margin:0;
-padding:0;
-box-sizing:border-box;
-}
-
-body{
-font-family:'Inter',sans-serif;
-background:#050510;
-color:white;
-padding:12px;
-overflow-x:hidden;
-background-image:
-radial-gradient(circle at top, rgba(91,75,255,.18), transparent 35%);
-}
-
-.hidden{display:none;}
-
-.container{
-max-width:700px;
-margin:auto;
-}
-
-.hero{
-text-align:center;
-padding:25px 10px;
-}
-
-.logo{
-width:130px;
-margin-bottom:15px;
-}
-
-.hero h1{
-font-size:34px;
-font-weight:800;
-}
-
-.hero p{
-margin-top:8px;
-color:#9ca3af;
-font-size:14px;
-}
-
-.grid{
-display:grid;
-grid-template-columns:repeat(3,1fr);
-gap:14px;
-margin-top:25px;
-}
-
-.card{
-background:rgba(255,255,255,.05);
-border:1px solid rgba(255,255,255,.08);
-padding:22px 10px;
-border-radius:24px;
-display:flex;
-flex-direction:column;
-align-items:center;
-justify-content:center;
-cursor:pointer;
-transition:.2s;
-text-align:center;
-min-height:110px;
-backdrop-filter:blur(10px);
-}
-
-.card:active{
-transform:scale(.95);
-}
-
-.card i{
-font-size:30px;
-margin-bottom:10px;
-}
-
-.card span{
-font-size:12px;
-font-weight:700;
-color:white;
-}
-
-.screen{
-margin-top:10px;
-background:rgba(255,255,255,.04);
-border:1px solid rgba(255,255,255,.08);
-padding:18px;
-border-radius:24px;
-backdrop-filter:blur(20px);
-}
-
-.back-btn{
-background:none;
-border:none;
-color:#5b4bff;
-font-weight:700;
-font-size:15px;
-margin-bottom:15px;
-cursor:pointer;
-}
-
-.input,
-.textarea{
-width:100%;
-padding:15px;
-margin-bottom:12px;
-border-radius:14px;
-border:1px solid rgba(255,255,255,.08);
-background:rgba(255,255,255,.04);
-color:white;
-outline:none;
-font-size:14px;
-}
-
-.textarea{
-min-height:140px;
-resize:none;
-}
-
-.generate-btn{
-padding:14px;
-border:none;
-border-radius:14px;
-background:linear-gradient(135deg,#5b4bff,#4338ca);
-color:white;
-font-weight:700;
-font-size:14px;
-cursor:pointer;
-flex:1;
-}
-
-.preview-box{
-background:white;
-color:#222;
-padding:18px;
-border-radius:18px;
-margin-top:18px;
-overflow:hidden;
-}
-
-.row{
-display:flex;
-gap:10px;
-flex-wrap:wrap;
-}
-
-</style>
-
+        @media (max-width: 500px) {
+            .side-bar-preview { width: 100%; text-align: center; }
+            .foto-preview { margin: 0 auto 10px auto; }
+        }
+    </style>
 </head>
-
 <body>
 
 <div class="container">
+    <div id="homeScreen">
+        <div class="hero">
+            <img src="logo.png" class="logo">
+            <h1>Elite Docs AI</h1>
+            <p>Seus documentos com perfeição premium</p>
+        </div>
+        <div class="grid">
+            <div class="card" onclick="abrirTela('curriculoScreen')"><i class="fas fa-user-tie" style="color:#5b4bff"></i><span>Currículo</span></div>
+            <div class="card" onclick="abrirTela('pdfScreen')"><i class="fas fa-file-pdf" style="color:#ef4444"></i><span>PDF</span></div>
+            <div class="card" onclick="abrirTela('wordScreen')"><i class="fas fa-file-word" style="color:#2b579a"></i><span>Word</span></div>
+            <div class="card" onclick="abrirTela('excelScreen')"><i class="fas fa-file-excel" style="color:#217346"></i><span>Excel</span></div>
+            <div class="card" onclick="abrirTela('pptScreen')"><i class="fas fa-file-powerpoint" style="color:#d24726"></i><span>PPT</span></div>
+            <div class="card" onclick="abrirTela('txtScreen')"><i class="fas fa-file-lines" style="color:#9ca3af"></i><span>TXT</span></div>
+            <div class="card" onclick="abrirTela('linkedinScreen')"><i class="fab fa-linkedin" style="color:#0a66c2"></i><span>LinkedIn</span></div>
+            <div class="card" onclick="abrirTela('cartaScreen')"><i class="fas fa-envelope" style="color:#10b981"></i><span>Carta</span></div>
+            <div class="card" onclick="abrirTela('assinaturaScreen')"><i class="fas fa-signature" style="color:#06b6d4"></i><span>Assinatura</span></div>
+        </div>
+    </div>
 
-<!-- HOME (INTOCADO) -->
-<div id="homeScreen">
-<div class="hero">
-<img src="logo.png" class="logo">
-<h1>Elite Docs AI</h1>
-<p>Currículos, PDFs e documentos premium</p>
+    <div id="curriculoScreen" class="screen hidden">
+        <button class="back-btn" onclick="voltar()">← Voltar</button>
+        <input class="input" id="nome" placeholder="Nome completo">
+        <input class="input" id="cargo" placeholder="Cargo profissional">
+        <input class="input" id="telefone" placeholder="Telefone">
+        <input class="input" id="email" placeholder="Email">
+        <input class="input" id="cidade" placeholder="Cidade/Estado">
+        <label style="font-size: 12px; color: #9ca3af; margin-bottom: 5px; display: block;">Foto de perfil:</label>
+        <input class="input" type="file" id="fotoCurriculo" accept="image/*">
+        <textarea class="textarea" id="textoCurriculo" placeholder="Experiências e Habilidades..."></textarea>
+        
+        <div class="row">
+            <button class="generate-btn btn-ai" onclick="melhorarIA('textoCurriculo')">✨ Melhorar IA</button>
+            <button class="generate-btn btn-summary" onclick="resumirIA('textoCurriculo')">🧠 Resumir</button>
+        </div>
+        
+        <button class="generate-btn btn-primary" onclick="previaCurriculo()">Ver Prévia e Gerar</button>
+
+        <div id="areaPreview" class="hidden">
+            <div class="preview-box" id="previewConteudo"></div>
+            <div class="download-btn" onclick="baixarCurriculoPremium()">BAIXAR PDF PREMIUM</div>
+        </div>
+    </div>
+
+    <div id="pdfScreen" class="screen hidden">
+        <button class="back-btn" onclick="voltar()">← Voltar</button>
+        <input class="input" id="tituloPDF" placeholder="Título">
+        <textarea class="textarea" id="textoPDF" placeholder="Conteúdo do documento..."></textarea>
+        <button class="generate-btn btn-ai" onclick="melhorarIA('textoPDF')" style="margin-bottom: 10px;">✨ Melhorar IA</button>
+        <button class="generate-btn btn-primary" style="width: 100%;" onclick="gerarPDFSimples()">Baixar PDF</button>
+    </div>
 </div>
 
-<div class="grid">
-
-<div class="card" onclick="abrirTela('curriculoScreen')"><i class="fas fa-user-tie"></i><span>Currículo</span></div>
-<div class="card" onclick="abrirTela('pdfScreen')"><i class="fas fa-file-pdf"></i><span>PDF</span></div>
-<div class="card" onclick="abrirTela('wordScreen')"><i class="fas fa-file-word"></i><span>Word</span></div>
-<div class="card" onclick="abrirTela('excelScreen')"><i class="fas fa-file-excel"></i><span>Excel</span></div>
-<div class="card" onclick="abrirTela('pptScreen')"><i class="fas fa-file-powerpoint"></i><span>PPT</span></div>
-<div class="card" onclick="abrirTela('txtScreen')"><i class="fas fa-file-lines"></i><span>TXT</span></div>
-<div class="card" onclick="abrirTela('linkedinScreen')"><i class="fab fa-linkedin"></i><span>LinkedIn</span></div>
-<div class="card" onclick="abrirTela('cartaScreen')"><i class="fas fa-envelope"></i><span>Carta</span></div>
-<div class="card" onclick="abrirTela('assinaturaScreen')"><i class="fas fa-signature"></i><span>Assinatura</span></div>
-
-</div>
-</div>
-
-<!-- ========================= -->
-<!-- ADIÇÃO: FUNÇÃO OCR GLOBAL -->
-<!-- ========================= -->
 <script>
+    function abrirTela(id) {
+        document.getElementById('homeScreen').classList.add('hidden');
+        document.querySelectorAll('.screen').forEach(s => s.classList.add('hidden'));
+        document.getElementById(id).classList.remove('hidden');
+        window.scrollTo(0,0);
+    }
 
-function abrirTela(id){
-document.getElementById('homeScreen').classList.add('hidden');
-document.getElementById(id).classList.remove('hidden');
-}
+    function voltar() {
+        document.querySelectorAll('.screen').forEach(s => s.classList.add('hidden'));
+        document.getElementById('homeScreen').classList.remove('hidden');
+    }
 
-function voltar(){
-document.querySelectorAll('.screen').forEach(s=>s.classList.add('hidden'));
-document.getElementById('homeScreen').classList.remove('hidden');
-}
+    // IA FUNÇÕES
+    async function melhorarIA(id) {
+        const campo = document.getElementById(id);
+        if(!campo.value) return alert("Digite algo primeiro!");
+        campo.value = "IA trabalhando...";
+        const resp = await fetch('https://text.pollinations.ai/' + encodeURIComponent("Melhore profissionalmente este texto para currículo: " + campo.value));
+        campo.value = await resp.text();
+    }
 
-/* 🔥 OCR UNIVERSAL (NOVA FUNÇÃO SEM MEXER NO APP) */
-async function lerImagem(fileId, targetId){
+    async function resumirIA(id) {
+        const campo = document.getElementById(id);
+        if(!campo.value) return alert("Digite algo primeiro!");
+        campo.value = "Resumindo...";
+        const resp = await fetch('https://text.pollinations.ai/' + encodeURIComponent("Resuma este texto profissional em tópicos: " + campo.value));
+        campo.value = await resp.text();
+    }
 
-const file = document.getElementById(fileId).files[0];
-if(!file) return;
+    // PREVIA CURRICULO
+    function previaCurriculo() {
+        const nome = document.getElementById('nome').value;
+        const cargo = document.getElementById('cargo').value;
+        const texto = document.getElementById('textoCurriculo').value;
+        const foto = document.getElementById('fotoCurriculo').files[0];
+        let fotoURL = 'https://cdn-icons-png.flaticon.com/512/847/847969.png';
 
-document.getElementById(targetId).value = "Lendo imagem...";
+        if(foto) fotoURL = URL.createObjectURL(foto);
 
-const result = await Tesseract.recognize(file, 'por');
+        document.getElementById('areaPreview').classList.remove('hidden');
+        document.getElementById('previewConteudo').innerHTML = `
+            <div class="curriculo-preview-flex">
+                <div class="side-bar-preview">
+                    <img src="${fotoURL}" class="foto-preview">
+                    <p><b>Contato</b></p>
+                    <p style="font-size:10px">${document.getElementById('telefone').value}</p>
+                    <p style="font-size:10px">${document.getElementById('email').value}</p>
+                </div>
+                <div class="main-content-preview">
+                    <h2 style="color:#005fcc">${nome || 'Seu Nome'}</h2>
+                    <p style="color:#666"><b>${cargo || 'Seu Cargo'}</b></p>
+                    <hr style="margin:10px 0">
+                    <p style="white-space: pre-line">${texto || 'Seu resumo aparecerá aqui...'}</p>
+                </div>
+            </div>
+        `;
+    }
 
-document.getElementById(targetId).value = result.data.text;
+    // GERAR PDF PREMIUM CORRIGIDO
+    async function baixarCurriculoPremium() {
+        const { jsPDF } = window.jspdf;
+        const pdf = new jsPDF();
+        
+        const nome = document.getElementById('nome').value || "CURRICULO";
+        const cargo = document.getElementById('cargo').value;
+        const telefone = document.getElementById('telefone').value;
+        const email = document.getElementById('email').value;
+        const cidade = document.getElementById('cidade').value;
+        const texto = document.getElementById('textoCurriculo').value;
+        const fotoFile = document.getElementById('fotoCurriculo').files[0];
 
-}
+        // Barra Lateral Azul
+        pdf.setFillColor(0, 95, 204);
+        pdf.rect(0, 0, 65, 297, 'F');
 
+        // Textos Barra Lateral (Branco)
+        pdf.setTextColor(255, 255, 255);
+        pdf.setFontSize(10);
+        pdf.setFont("helvetica", "bold");
+        pdf.text("CONTATO", 10, 70);
+        pdf.setLineWidth(0.3);
+        pdf.setDrawColor(255, 255, 255);
+        pdf.line(10, 72, 55, 72);
+        
+        pdf.setFont("helvetica", "normal");
+        pdf.setFontSize(9);
+        pdf.text("Tel: " + telefone, 10, 80);
+        pdf.text(email, 10, 87, { maxWidth: 45 });
+        pdf.text(cidade, 10, 100, { maxWidth: 45 });
+
+        // Lado Direito
+        pdf.setTextColor(0, 95, 204);
+        pdf.setFontSize(24);
+        pdf.setFont("helvetica", "bold");
+        pdf.text(nome.toUpperCase(), 75, 30);
+
+        pdf.setTextColor(100, 100, 100);
+        pdf.setFontSize(14);
+        pdf.text(cargo.toUpperCase(), 75, 40);
+
+        pdf.setTextColor(0, 95, 204);
+        pdf.setFontSize(13);
+        pdf.text("RESUMO PROFISSIONAL", 75, 60);
+        pdf.setDrawColor(0, 95, 204);
+        pdf.line(75, 62, 195, 62);
+
+        pdf.setTextColor(40, 40, 40);
+        pdf.setFontSize(11);
+        pdf.setFont("helvetica", "normal");
+        const splitTexto = pdf.splitTextToSize(texto, 115);
+        pdf.text(splitTexto, 75, 72);
+
+        // Processar Foto
+        if (fotoFile) {
+            const reader = new FileReader();
+            reader.readAsDataURL(fotoFile);
+            reader.onload = function (e) {
+                const imgData = e.target.result;
+                // Desenhar foto em cima da barra azul
+                pdf.addImage(imgData, 'JPEG', 15, 15, 35, 35); 
+                pdf.save(nome + "-EliteDocs.pdf");
+            };
+        } else {
+            pdf.save(nome + "-EliteDocs.pdf");
+        }
+    }
+
+    function gerarPDFSimples() {
+        const { jsPDF } = window.jspdf;
+        const pdf = new jsPDF();
+        pdf.setFontSize(20);
+        pdf.text(document.getElementById('tituloPDF').value, 20, 20);
+        pdf.setFontSize(12);
+        const linhas = pdf.splitTextToSize(document.getElementById('textoPDF').value, 170);
+        pdf.text(linhas, 20, 35);
+        pdf.save("documento.pdf");
+    }
 </script>
-
-<!-- ========================= -->
-<!-- CURRÍCULO (SÓ ADIÇÃO) -->
-<!-- ========================= -->
-<div id="curriculoScreen" class="screen hidden">
-<button class="back-btn" onclick="voltar()">← Voltar</button>
-
-<input class="input" id="nome" placeholder="Nome">
-<input class="input" id="cargo" placeholder="Cargo">
-
-<!-- 🔥 ADIÇÃO CÂMERA -->
-<input class="input" type="file" id="fotoCurriculo" accept="image/*" capture="environment">
-
-<textarea class="textarea" id="textoCurriculo"></textarea>
-
-<button class="generate-btn" onclick="lerImagem('fotoCurriculo','textoCurriculo')">📸 Ler Foto</button>
-
-</div>
-
-<!-- PDF -->
-<div id="pdfScreen" class="screen hidden">
-<button class="back-btn" onclick="voltar()">← Voltar</button>
-
-<input class="input" id="tituloPDF">
-<textarea class="textarea" id="textoPDF"></textarea>
-
-<input class="input" type="file" id="pdfCam" accept="image/*" capture="environment">
-
-<button class="generate-btn" onclick="lerImagem('pdfCam','textoPDF')">📸 Ler Foto</button>
-</div>
-
-<!-- WORD -->
-<div id="wordScreen" class="screen hidden">
-<button class="back-btn" onclick="voltar()">← Voltar</button>
-
-<textarea class="textarea" id="textoWord"></textarea>
-<input class="input" type="file" id="wordCam" accept="image/*" capture="environment">
-
-<button class="generate-btn" onclick="lerImagem('wordCam','textoWord')">📸 Ler Foto</button>
-</div>
-
-<!-- EXCEL -->
-<div id="excelScreen" class="screen hidden">
-<button class="back-btn" onclick="voltar()">← Voltar</button>
-
-<textarea class="textarea" id="textoExcel"></textarea>
-<input class="input" type="file" id="excelCam" accept="image/*" capture="environment">
-
-<button class="generate-btn" onclick="lerImagem('excelCam','textoExcel')">📸 Ler Foto</button>
-</div>
-
-<!-- PPT -->
-<div id="pptScreen" class="screen hidden">
-<button class="back-btn" onclick="voltar()">← Voltar</button>
-
-<textarea class="textarea" id="textoPPT"></textarea>
-<input class="input" type="file" id="pptCam" accept="image/*" capture="environment">
-
-<button class="generate-btn" onclick="lerImagem('pptCam','textoPPT')">📸 Ler Foto</button>
-</div>
-
-<!-- TXT -->
-<div id="txtScreen" class="screen hidden">
-<button class="back-btn" onclick="voltar()">← Voltar</button>
-
-<textarea class="textarea" id="textoTXT"></textarea>
-<input class="input" type="file" id="txtCam" accept="image/*" capture="environment">
-
-<button class="generate-btn" onclick="lerImagem('txtCam','textoTXT')">📸 Ler Foto</button>
-</div>
-
-<!-- LINKEDIN -->
-<div id="linkedinScreen" class="screen hidden">
-<button class="back-btn" onclick="voltar()">← Voltar</button>
-
-<textarea class="textarea" id="textoLinkedin"></textarea>
-<input class="input" type="file" id="linkedinCam" accept="image/*" capture="environment">
-
-<button class="generate-btn" onclick="lerImagem('linkedinCam','textoLinkedin')">📸 Ler Foto</button>
-</div>
-
-<!-- CARTA -->
-<div id="cartaScreen" class="screen hidden">
-<button class="back-btn" onclick="voltar()">← Voltar</button>
-
-<textarea class="textarea" id="textoCarta"></textarea>
-<input class="input" type="file" id="cartaCam" accept="image/*" capture="environment">
-
-<button class="generate-btn" onclick="lerImagem('cartaCam','textoCarta')">📸 Ler Foto</button>
-</div>
-
-<!-- ASSINATURA -->
-<div id="assinaturaScreen" class="screen hidden">
-<button class="back-btn" onclick="voltar()">← Voltar</button>
-
-<input class="input" id="nomeAssinatura">
-<input class="input" type="file" id="assinaturaCam" accept="image/*" capture="environment">
-
-<button class="generate-btn" onclick="lerImagem('assinaturaCam','nomeAssinatura')">📸 Ler Foto</button>
-</div>
-
-</div>
-
 </body>
 </html>
