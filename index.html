@@ -9,7 +9,6 @@
 
 <script src="https://accounts.google.com/gsi/client" async defer></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
 
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 
@@ -21,9 +20,8 @@
 --primary:#5b4bff;
 --secondary:#4338ca;
 --bg:#05050a;
---glass:rgba(16,18,32,.6);
+--glass:rgba(18,20,40,.58);
 --border:rgba(255,255,255,.08);
---text:#f8fafc;
 }
 
 *{
@@ -57,7 +55,7 @@ z-index:-1;
 }
 
 .app{
-max-width:1050px;
+max-width:1000px;
 margin:auto;
 }
 
@@ -82,7 +80,7 @@ margin-bottom:25px;
 
 .hero h1{
 font-family:'Poppins';
-font-size:52px;
+font-size:50px;
 margin-bottom:15px;
 }
 
@@ -129,28 +127,11 @@ margin-bottom:20px;
 
 #app-content{
 display:none;
-animation:fade .6s ease;
 }
 
-@keyframes fade{
-from{
-opacity:0;
-transform:translateY(20px);
-}
-to{
-opacity:1;
-transform:translateY(0);
-}
-}
-
-.topbar{
-display:flex;
-justify-content:space-between;
-align-items:center;
-margin-bottom:25px;
-}
-
-input,textarea,select{
+input,
+textarea,
+select{
 width:100%;
 padding:18px;
 background:rgba(255,255,255,.03);
@@ -186,31 +167,6 @@ box-shadow:0 0 40px rgba(91,75,255,.35);
 transform:translateY(-3px);
 }
 
-.stats{
-display:grid;
-grid-template-columns:repeat(4,1fr);
-gap:15px;
-margin-top:25px;
-}
-
-.stat{
-background:rgba(255,255,255,.03);
-border:1px solid rgba(255,255,255,.08);
-padding:20px;
-border-radius:20px;
-text-align:center;
-}
-
-.stat h2{
-font-size:28px;
-color:#9b8cff;
-}
-
-.stat span{
-font-size:12px;
-color:#94a3b8;
-}
-
 .content{
 background:rgba(255,255,255,.03);
 border:1px solid rgba(255,255,255,.08);
@@ -220,7 +176,7 @@ margin-top:20px;
 }
 
 .content h3{
-margin-bottom:14px;
+margin-bottom:15px;
 font-size:14px;
 font-family:'Poppins';
 color:#9b8cff;
@@ -248,14 +204,8 @@ font-size:13px;
 color:#c7c5ff;
 }
 
-.export-grid{
-display:grid;
-grid-template-columns:repeat(3,1fr);
-gap:15px;
-margin-top:25px;
-}
-
 .export{
+margin-top:25px;
 padding:18px;
 border-radius:18px;
 background:rgba(255,255,255,.03);
@@ -267,32 +217,6 @@ gap:10px;
 font-family:'Poppins';
 font-weight:600;
 cursor:pointer;
-transition:.3s;
-}
-
-.export:hover{
-transform:translateY(-3px);
-}
-
-@media(max-width:850px){
-
-.hero h1{
-font-size:36px;
-}
-
-.stats{
-grid-template-columns:repeat(2,1fr);
-}
-
-.export-grid{
-grid-template-columns:1fr;
-}
-
-.topbar{
-flex-direction:column;
-gap:15px;
-}
-
 }
 
 </style>
@@ -313,7 +237,7 @@ Elite <span class="gradient">Docs AI</span>
 </h1>
 
 <p>
-Crie currículos ATS, cartas profissionais, documentos premium e perfis LinkedIn usando IA.
+Crie currículos ATS premium com IA.
 </p>
 
 </div>
@@ -351,50 +275,32 @@ data-size="large">
 
 <div class="glass">
 
-<div class="topbar">
-
-<h2 style="font-family:Poppins;">
-Gerador Inteligente
-</h2>
-
-<img id="uPic"
-src=""
-style="width:45px;height:45px;border-radius:50%;border:2px solid #5b4bff;object-fit:cover;">
-
-</div>
-
 <select id="tipoDocumento">
 
 <option value="curriculo">
 Currículo ATS
 </option>
 
-<option value="linkedin">
-Perfil LinkedIn
-</option>
-
-<option value="carta">
-Carta Profissional
-</option>
-
-<option value="pdf">
-Documento PDF
-</option>
-
 </select>
 
-<input
-type="text"
-id="docTitle"
-placeholder="Nome do documento">
+<input type="text" id="nomePessoa" placeholder="Nome completo">
+
+<input type="text" id="cargoPessoa" placeholder="Cargo profissional">
+
+<input type="text" id="telefonePessoa" placeholder="Telefone">
+
+<input type="email" id="emailPessoa" placeholder="Email">
+
+<input type="text" id="cidadePessoa" placeholder="Cidade">
+
+<input type="file" id="fotoPessoa" accept="image/*">
 
 <textarea
 id="rawInput"
-placeholder="Digite as informações aqui..."></textarea>
+placeholder="Fale sobre experiência, habilidades e formação..."></textarea>
 
 <button class="btn" onclick="gerarDocumento()">
-<i class="fas fa-wand-magic-sparkles"></i>
-Gerar Documento
+Gerar Currículo Premium
 </button>
 
 <div id="dashboard"></div>
@@ -419,8 +325,6 @@ document.getElementById("login-gate").style.display = "none";
 
 document.getElementById("app-content").style.display = "block";
 
-document.getElementById("uPic").src = data.picture;
-
 }
 
 }
@@ -440,34 +344,41 @@ document.getElementById("login-gate").style.display = "none";
 
 document.getElementById("app-content").style.display = "block";
 
-document.getElementById("uPic").src = data.picture;
-
 }
 
 async function gerarDocumento(){
 
-const tipo =
-document.getElementById('tipoDocumento').value;
-
 const input =
 document.getElementById('rawInput').value;
+
+const nome =
+document.getElementById('nomePessoa').value;
+
+const cargo =
+document.getElementById('cargoPessoa').value;
+
+const telefone =
+document.getElementById('telefonePessoa').value;
+
+const email =
+document.getElementById('emailPessoa').value;
+
+const cidade =
+document.getElementById('cidadePessoa').value;
+
+const foto =
+document.getElementById('fotoPessoa').files[0];
 
 if(!input){
 alert('Digite algo.');
 return;
 }
 
-let prompt = '';
-
-if(tipo === 'curriculo'){
-
-prompt = `
-Crie um currículo ATS premium.
+const prompt = `
+Crie um currículo ATS profissional.
 
 RETORNE:
 
-[NOME]
-|||
 [RESUMO]
 |||
 [EXPERIÊNCIA]
@@ -480,59 +391,32 @@ Texto:
 ${input}
 `;
 
-}
-
-if(tipo === 'linkedin'){
-
-prompt = `
-Crie um perfil LinkedIn profissional premium.
-
-Texto:
-${input}
-`;
-
-}
-
-if(tipo === 'carta'){
-
-prompt = `
-Crie uma carta profissional moderna.
-
-Texto:
-${input}
-`;
-
-}
-
-if(tipo === 'pdf'){
-
-prompt = `
-Crie um documento profissional formatado.
-
-Texto:
-${input}
-`;
-
-}
-
 const res = await fetch(
 'https://text.pollinations.ai/' + encodeURIComponent(prompt)
 );
 
 const text = await res.text();
 
-if(tipo === 'curriculo'){
-
 const partes = text.split("|||");
 
-const nome = partes[0] || '';
-const resumo = partes[1] || '';
-const experiencia = partes[2] || '';
-const formacao = partes[3] || '';
-const habilidades = partes[4] || '';
+const resumo = partes[0] || '';
+const experiencia = partes[1] || '';
+const formacao = partes[2] || '';
+const habilidades = partes[3] || '';
+
+let fotoURL = '';
+
+if(foto){
+fotoURL = URL.createObjectURL(foto);
+}
 
 window.curriculoData = {
 nome,
+cargo,
+telefone,
+email,
+cidade,
+fotoURL,
 resumo,
 experiencia,
 formacao,
@@ -541,48 +425,79 @@ habilidades
 
 document.getElementById('dashboard').innerHTML = `
 
-<div class="stats">
+<div class="content">
 
-<div class="stat">
-<h2>98%</h2>
-<span>ATS</span>
+<div style="
+display:flex;
+gap:25px;
+align-items:center;
+flex-wrap:wrap;
+">
+
+<img
+src="${fotoURL}"
+style="
+width:120px;
+height:120px;
+border-radius:24px;
+object-fit:cover;
+border:3px solid #5b4bff;
+">
+
+<div>
+
+<h1 style="
+font-family:Poppins;
+font-size:32px;
+margin-bottom:8px;
+">
+${nome}
+</h1>
+
+<p style="color:#9b8cff;font-size:18px;">
+${cargo}
+</p>
+
+<p style="margin-top:10px;">
+📞 ${telefone}
+</p>
+
+<p>
+✉️ ${email}
+</p>
+
+<p>
+📍 ${cidade}
+</p>
+
 </div>
 
-<div class="stat">
-<h2>Elite</h2>
-<span>Nível</span>
-</div>
-
-<div class="stat">
-<h2>${habilidades.split(',').length}</h2>
-<span>Skills</span>
-</div>
-
-<div class="stat">
-<h2>AI+</h2>
-<span>Premium</span>
 </div>
 
 </div>
 
 <div class="content">
-<h3>Nome</h3>
-<p>${nome}</p>
-</div>
 
-<div class="content">
-<h3>Resumo</h3>
+<h3>Resumo Profissional</h3>
+
 <p>${resumo}</p>
+
 </div>
 
 <div class="content">
+
 <h3>Experiência</h3>
+
 <p>${experiencia}</p>
+
 </div>
 
 <div class="content">
+
 <h3>Formação</h3>
+
 <p>${formacao}</p>
+
 </div>
 
 <div class="content">
@@ -599,57 +514,13 @@ ${habilidades.split(',').map(skill => `
 
 </div>
 
-<div class="export-grid">
+<div class="export"
+onclick="baixarCurriculoPremiumPDF()">
 
-<div class="export" onclick="baixarCurriculoPDF()">
-<i class="fas fa-file-pdf" style="color:#ef4444;"></i>
-Currículo PDF
-</div>
+<i class="fas fa-file-pdf"
+style="color:#ef4444;"></i>
 
-<div class="export" onclick="baixarCurriculoDOC()">
-<i class="fas fa-file-word" style="color:#3b82f6;"></i>
-Currículo Word
-</div>
-
-<div class="export" onclick="baixarCurriculoXLS()">
-<i class="fas fa-file-excel" style="color:#10b981;"></i>
-Currículo Excel
-</div>
-
-</div>
-
-`;
-
-}else{
-
-window.docTexto = text;
-
-document.getElementById('dashboard').innerHTML = `
-
-<div class="content">
-
-<h3>Documento Gerado</h3>
-
-<p>${text}</p>
-
-</div>
-
-<div class="export-grid">
-
-<div class="export" onclick="baixarTextoPDF()">
-<i class="fas fa-file-pdf" style="color:#ef4444;"></i>
-Baixar PDF
-</div>
-
-<div class="export" onclick="baixarTextoDOC()">
-<i class="fas fa-file-word" style="color:#3b82f6;"></i>
-Baixar Word
-</div>
-
-<div class="export" onclick="baixarTextoTXT()">
-<i class="fas fa-file-lines"></i>
-Baixar TXT
-</div>
+Baixar Currículo PDF
 
 </div>
 
@@ -657,20 +528,68 @@ Baixar TXT
 
 }
 
-}
-
-function baixarCurriculoPDF(){
+function baixarCurriculoPremiumPDF(){
 
 const d = window.curriculoData;
 
 const el = document.createElement('div');
 
 el.innerHTML = `
-<div style="padding:40px;font-family:Arial;">
 
-<h1>${d.nome}</h1>
+<div style="
+padding:40px;
+font-family:Arial;
+color:#111827;
+">
 
-<h2>Resumo</h2>
+<div style="
+display:flex;
+gap:25px;
+align-items:center;
+margin-bottom:35px;
+">
+
+<img
+src="${d.fotoURL}"
+style="
+width:120px;
+height:120px;
+border-radius:20px;
+object-fit:cover;
+">
+
+<div>
+
+<h1 style="
+font-size:34px;
+margin-bottom:10px;
+color:#4338ca;
+">
+${d.nome}
+</h1>
+
+<h2 style="
+font-size:20px;
+font-weight:normal;
+margin-bottom:10px;
+color:#64748b;
+">
+${d.cargo}
+</h2>
+
+<p>📞 ${d.telefone}</p>
+
+<p>✉️ ${d.email}</p>
+
+<p>📍 ${d.cidade}</p>
+
+</div>
+
+</div>
+
+<hr>
+
+<h2>Resumo Profissional</h2>
 <p>${d.resumo}</p>
 
 <h2>Experiência</h2>
@@ -685,109 +604,7 @@ el.innerHTML = `
 </div>
 `;
 
-html2pdf().from(el).save('curriculo.pdf');
-
-}
-
-function baixarCurriculoDOC(){
-
-const d = window.curriculoData;
-
-const blob = new Blob([`
-<h1>${d.nome}</h1>
-<h2>Resumo</h2>
-<p>${d.resumo}</p>
-<h2>Experiência</h2>
-<p>${d.experiencia}</p>
-<h2>Formação</h2>
-<p>${d.formacao}</p>
-<h2>Competências</h2>
-<p>${d.habilidades}</p>
-`],{
-type:'application/msword'
-});
-
-const a = document.createElement('a');
-
-a.href = URL.createObjectURL(blob);
-
-a.download = 'curriculo.doc';
-
-a.click();
-
-}
-
-function baixarCurriculoXLS(){
-
-const d = window.curriculoData;
-
-const ws = XLSX.utils.aoa_to_sheet([
-["Nome"], [d.nome],
-[],
-["Resumo"], [d.resumo],
-[],
-["Experiência"], [d.experiencia],
-[],
-["Formação"], [d.formacao],
-[],
-["Competências"], [d.habilidades]
-]);
-
-const wb = XLSX.utils.book_new();
-
-XLSX.utils.book_append_sheet(wb, ws, "Curriculo");
-
-XLSX.writeFile(wb, "curriculo.xlsx");
-
-}
-
-function baixarTextoPDF(){
-
-const el = document.createElement('div');
-
-el.innerHTML = `
-<div style="padding:40px;font-family:Arial;">
-${window.docTexto}
-</div>
-`;
-
-html2pdf().from(el).save('documento.pdf');
-
-}
-
-function baixarTextoDOC(){
-
-const blob = new Blob([
-window.docTexto
-],{
-type:'application/msword'
-});
-
-const a = document.createElement('a');
-
-a.href = URL.createObjectURL(blob);
-
-a.download = 'documento.doc';
-
-a.click();
-
-}
-
-function baixarTextoTXT(){
-
-const blob = new Blob([
-window.docTexto
-],{
-type:'text/plain'
-});
-
-const a = document.createElement('a');
-
-a.href = URL.createObjectURL(blob);
-
-a.download = 'documento.txt';
-
-a.click();
+html2pdf().from(el).save('curriculo-premium.pdf');
 
 }
 
