@@ -1,61 +1,120 @@
-<style>
-    /* Efeito de carregamento */
-    .loading { 
-        border: 4px solid rgba(255,255,255,0.1); 
-        border-left-color: #4f46e5; 
-        border-radius: 50%; 
-        width: 24px; height: 24px; 
-        animation: spin 1s linear infinite; 
-        display: none; margin: 10px auto;
-    }
-    @keyframes spin { to { transform: rotate(360deg); } }
-
-    /* Menu de estilos */
-    .style-selector {
-        display: flex; gap: 5px; margin-bottom: 15px; overflow-x: auto; padding-bottom: 5px;
-    }
-    .style-btn {
-        background: #1e293b; border: 1px solid #334155; color: #94a3b8;
-        padding: 8px 15px; border-radius: 10px; font-size: 11px; cursor: pointer; white-space: nowrap;
-    }
-    .style-btn.active { background: #4f46e5; color: white; border-color: #4f46e5; }
-</style>
-
-<div class="style-selector">
-    <button class="style-btn active" onclick="setStyle('Formal', this)">👔 Executivo</button>
-    <button class="style-btn" onclick="setStyle('Criativo', this)">💡 Criativo</button>
-    <button class="style-btn" onclick="setStyle('Direto', this)">🎯 Direto</button>
-</div>
-<div id="loader" class="loading"></div>
-
-<script>
-    let currentStyle = 'Formal';
-
-    function setStyle(style, btn) {
-        currentStyle = style;
-        document.querySelectorAll('.style-btn').forEach(b => b.classList.remove('active'));
-        btn.classList.add('active');
-    }
-
-    async function aiRefine() {
-        const body = document.getElementById('docBody');
-        const loader = document.getElementById('loader');
-        if(!body.value) return;
-
-        const originalText = body.value;
-        body.disabled = true; // Bloqueia para não digitar enquanto processa
-        loader.style.display = 'block';
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Elite Docs AI | Master</title>
+    
+    <script src="https://accounts.google.com/gsi/client" async defer></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <style>
+        :root { --primary: #4f46e5; --bg: #070b14; --card: #111827; }
+        body { font-family: 'Inter', sans-serif; background: var(--bg); color: #f9fafb; margin: 0; display: flex; align-items: center; justify-content: center; min-height: 100vh; }
         
-        try {
-            const prompt = `Reescreva o seguinte texto em português com um tom ${currentStyle}: ${originalText}`;
-            const res = await fetch(`https://text.pollinations.ai/${encodeURIComponent(prompt)}`);
-            body.value = await res.text();
-        } catch (e) {
-            alert("Erro na conexão. Tente novamente.");
-            body.value = originalText;
-        } finally {
-            body.disabled = false;
-            loader.style.display = 'none';
+        #app-content { display: none; width: 100%; max-width: 600px; padding: 20px; }
+        .editor-container { background: var(--card); padding: 30px; border-radius: 30px; border: 1px solid rgba(255,255,255,0.1); }
+        
+        /* Seletor de Formato */
+        .format-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; margin-bottom: 20px; }
+        .format-card { 
+            background: #1e293b; padding: 15px; border-radius: 15px; text-align: center; 
+            cursor: pointer; border: 2px solid transparent; transition: 0.3s;
         }
-    }
-</script>
+        .format-card.active { border-color: var(--primary); background: rgba(79, 70, 229, 0.1); }
+        .format-card i { display: block; font-size: 20px; margin-bottom: 5px; }
+        .format-card span { font-size: 10px; font-weight: 700; text-transform: uppercase; }
+
+        input, textarea { width: 100%; background: #0d1117; border: 1px solid #30363d; border-radius: 15px; color: white; padding: 15px; margin-bottom: 15px; outline: none; }
+        .btn-main { width: 100%; background: var(--primary); border: none; padding: 20px; border-radius: 18px; color: white; font-weight: 800; cursor: pointer; }
+        .loading { display: none; text-align: center; margin: 10px; color: var(--primary); font-size: 12px; }
+    </style>
+</head>
+<body>
+
+    <div id="login-gate">...</div>
+
+    <div id="app-content">
+        <div class="editor-container">
+            <h2 style="margin-top:0">Criar Novo Documento</h2>
+            
+            <div class="format-grid">
+                <div class="format-card active" onclick="setFormat('PDF', this)">
+                    <i class="fas fa-file-pdf" style="color:#ef4444"></i><span>PDF</span>
+                </div>
+                <div class="format-card" onclick="setFormat('DOCS', this)">
+                    <i class="fas fa-file-word" style="color:#3b82f6"></i><span>Word/Docs</span>
+                </div>
+                <div class="format-card" onclick="setFormat('XLS', this)">
+                    <i class="fas fa-file-excel" style="color:#10b981"></i><span>Excel</span>
+                </div>
+            </div>
+
+            <input type="text" id="docTitle" placeholder="Nome do arquivo final...">
+            <textarea id="docBody" placeholder="Escreva o conteúdo ou rascunho aqui..." style="height:200px"></textarea>
+            
+            <div id="loader" class="loading"><i class="fas fa-sync fa-spin"></i> Inteligência Elite Refinando...</div>
+            
+            <button class="btn-main" onclick="processarEExportar()">
+                GERAR E BAIXAR AGORA
+            </button>
+        </div>
+    </div>
+
+    <script>
+        let selectedFormat = 'PDF';
+
+        function setFormat(fmt, el) {
+            selectedFormat = fmt;
+            document.querySelectorAll('.format-card').forEach(c => c.classList.remove('active'));
+            el.classList.add('active');
+        }
+
+        async function processarEExportar() {
+            const title = document.getElementById('docTitle').value || "Elite_Document";
+            const body = document.getElementById('docBody');
+            const loader = document.getElementById('loader');
+            
+            if(!body.value) return alert("Escreva algo primeiro!");
+
+            loader.style.display = "block";
+            
+            try {
+                // REFINADA NA IA: Agora ela entende o formato
+                const prompt = `Atue como um assistente executivo. Transforme o texto abaixo em um conteúdo profissional adequado para um arquivo ${selectedFormat}: ${body.value}`;
+                const res = await fetch(`https://text.pollinations.ai/${encodeURIComponent(prompt)}`);
+                const refinedText = await res.text();
+                body.value = refinedText;
+
+                // LOGICA DE EXPORTAÇÃO POR TIPO
+                if(selectedFormat === 'PDF') {
+                    const temp = document.createElement('div');
+                    temp.innerHTML = `<div style="padding:40px"><h1>${title}</h1><p style="white-space:pre-line">${refinedText}</p></div>`;
+                    await html2pdf().from(temp).save(`${title}.pdf`);
+                } 
+                else if(selectedFormat === 'DOCS') {
+                    const blob = new Blob(['\ufeff', `<h1>${title}</h1><p>${refinedText}</p>`], { type: 'application/msword' });
+                    const url = URL.createObjectURL(blob);
+                    const link = document.createElement('a');
+                    link.href = url;
+                    link.download = `${title}.doc`;
+                    link.click();
+                }
+                else if(selectedFormat === 'XLS') {
+                    const ws = XLSX.utils.aoa_to_sheet([[title], [refinedText]]);
+                    const wb = XLSX.utils.book_new();
+                    XLSX.utils.book_append_sheet(wb, ws, "EliteData");
+                    XLSX.writeFile(wb, `${title}.xlsx`);
+                }
+
+            } catch (e) {
+                alert("Erro ao processar. Tente novamente.");
+            } finally {
+                loader.style.display = "none";
+            }
+        }
+    </script>
+</body>
+</html>
