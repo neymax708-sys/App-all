@@ -185,11 +185,13 @@ font-size:15px;
 width:100%;
 }
 
-#curriculoPDF{
+#curriculoPDF,
+#pdfDocumento{
+background:#ffffff !important;
+color:#111111 !important;
 width:100%;
 overflow:hidden;
 border-radius:20px;
-background:white;
 }
 
 @media(min-width:768px){
@@ -242,7 +244,7 @@ padding:30px;
 
 <div class="hero">
 
-<!-- COLOQUE SUA LOGO COM O NOME logo.png -->
+<!-- SUA LOGO -->
 <img src="logo.png" class="logo">
 
 <h1>Elite Docs AI</h1>
@@ -432,15 +434,10 @@ behavior:'smooth'
 async function gerarCurriculo(){
 
 const nome=document.getElementById('nome').value;
-
 const cargo=document.getElementById('cargo').value;
-
 const telefone=document.getElementById('telefone').value;
-
 const email=document.getElementById('email').value;
-
 const cidade=document.getElementById('cidade').value;
-
 const texto=document.getElementById('textoCurriculo').value;
 
 let foto='https://cdn-icons-png.flaticon.com/512/847/847969.png';
@@ -453,14 +450,7 @@ foto=URL.createObjectURL(arquivo);
 
 document.getElementById('previewCurriculo').innerHTML=`
 
-<div id="curriculoPDF" style="
-background:#ffffff;
-color:#111111;
-width:100%;
-border-radius:20px;
-overflow:hidden;
-font-family:Arial;
-">
+<div id="curriculoPDF">
 
 <div style="
 display:flex;
@@ -572,11 +562,8 @@ ${texto}
 </div>
 
 <div class="export-btn" onclick="baixarCurriculo()">
-
 <i class="fas fa-file-pdf"></i>
-
 Baixar Currículo PDF
-
 </div>
 
 `;
@@ -585,40 +572,59 @@ Baixar Currículo PDF
 
 function baixarCurriculo(){
 
-const element=document.getElementById('curriculoPDF');
+const element = document.getElementById("curriculoPDF");
 
-const opt={
+const options = {
 
-margin:0,
-filename:'curriculo-premium.pdf',
+margin: 0,
 
-image:{
-type:'jpeg',
-quality:1
+filename: "curriculo-premium.pdf",
+
+image: {
+type: "jpeg",
+quality: 1
 },
 
-html2canvas:{
-scale:3,
-useCORS:true,
-backgroundColor:'#ffffff'
+html2canvas: {
+
+scale: 4,
+
+useCORS: true,
+
+allowTaint: true,
+
+backgroundColor: "#ffffff",
+
+scrollY: 0
+
 },
 
-jsPDF:{
-unit:'mm',
-format:'a4',
-orientation:'portrait'
+jsPDF: {
+
+unit: "mm",
+
+format: "a4",
+
+orientation: "portrait"
+
+},
+
+pagebreak: {
+mode: ['avoid-all']
 }
 
 };
 
-html2pdf().set(opt).from(element).save();
+html2pdf()
+.set(options)
+.from(element)
+.save();
 
 }
 
 function gerarPDF(){
 
 const titulo=document.getElementById('tituloPDF').value;
-
 const texto=document.getElementById('textoPDF').value;
 
 document.getElementById('previewPDF').innerHTML=`
@@ -646,11 +652,8 @@ ${texto}
 </div>
 
 <div class="export-btn" onclick="baixarPDF()">
-
 <i class="fas fa-file-pdf"></i>
-
 Baixar PDF
-
 </div>
 
 `;
@@ -659,32 +662,53 @@ Baixar PDF
 
 function baixarPDF(){
 
-const element=document.getElementById('pdfDocumento');
+const element = document.getElementById("pdfDocumento");
 
-const opt={
+const options = {
 
-margin:0,
-filename:'documento.pdf',
+margin: 0,
 
-image:{
-type:'jpeg',
-quality:1
+filename: "documento.pdf",
+
+image: {
+type: "jpeg",
+quality: 1
 },
 
-html2canvas:{
-scale:3,
-backgroundColor:'#ffffff'
+html2canvas: {
+
+scale: 4,
+
+useCORS: true,
+
+allowTaint: true,
+
+backgroundColor: "#ffffff",
+
+scrollY: 0
+
 },
 
-jsPDF:{
-unit:'mm',
-format:'a4',
-orientation:'portrait'
+jsPDF: {
+
+unit: "mm",
+
+format: "a4",
+
+orientation: "portrait"
+
+},
+
+pagebreak: {
+mode: ['avoid-all']
 }
 
 };
 
-html2pdf().set(opt).from(element).save();
+html2pdf()
+.set(options)
+.from(element)
+.save();
 
 }
 
