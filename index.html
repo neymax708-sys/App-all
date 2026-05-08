@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Elite Docs AI | Master</title>
+    <title>Elite Docs AI | Master V18</title>
     
     <script src="https://accounts.google.com/gsi/client" async defer></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
@@ -14,76 +14,70 @@
         :root { --primary: #4f46e5; --bg: #070b14; --card: #111827; }
         body { font-family: 'Inter', sans-serif; background: var(--bg); color: #f9fafb; margin: 0; display: flex; align-items: center; justify-content: center; min-height: 100vh; }
         
-        #app-content { display: none; width: 100%; max-width: 500px; padding: 20px; animation: fadeIn 0.5s; }
-        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+        #app-content { display: none; width: 100%; max-width: 650px; padding: 20px; animation: fadeIn 0.5s; }
+        @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
 
-        .editor-container { background: var(--card); padding: 25px; border-radius: 30px; border: 1px solid rgba(255,255,255,0.05); }
+        .main-card { background: var(--card); padding: 30px; border-radius: 30px; border: 1px solid rgba(255,255,255,0.05); box-shadow: 0 25px 50px rgba(0,0,0,0.5); }
         
-        /* SELETOR DE OBJETIVO */
-        .goal-selector { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; margin-bottom: 20px; }
-        .goal-card { 
-            background: rgba(255,255,255,0.03); padding: 15px 5px; border-radius: 15px; text-align: center; 
-            cursor: pointer; border: 2px solid transparent; transition: 0.3s;
-        }
-        .goal-card.active { border-color: var(--primary); background: rgba(79, 70, 229, 0.1); }
-        .goal-card i { font-size: 22px; margin-bottom: 8px; display: block; }
-        .goal-card span { font-size: 10px; font-weight: 800; text-transform: uppercase; }
+        .user-header { display: flex; align-items: center; gap: 12px; margin-bottom: 25px; background: rgba(255,255,255,0.03); padding: 10px 20px; border-radius: 50px; width: fit-content; }
+        .user-header img { width: 35px; border-radius: 50%; border: 2px solid var(--primary); }
 
-        input, textarea { width: 100%; background: #0d1117; border: 1px solid #30363d; border-radius: 15px; color: white; padding: 15px; margin-bottom: 15px; outline: none; }
-        textarea { height: 250px; font-size: 16px; line-height: 1.5; }
+        textarea { width: 100%; background: #0d1117; border: 1px solid #30363d; border-radius: 20px; color: white; padding: 20px; font-size: 16px; min-height: 250px; resize: none; margin-bottom: 20px; outline: none; transition: 0.3s; }
+        textarea:focus { border-color: var(--primary); box-shadow: 0 0 0 4px rgba(79, 70, 229, 0.1); }
 
-        .btn-refine { width: 100%; background: var(--primary); border: none; padding: 20px; border-radius: 20px; color: white; font-weight: 800; cursor: pointer; font-size: 16px; margin-bottom: 10px; }
-        .loading { display: none; text-align: center; color: var(--primary); margin: 15px 0; font-weight: 700; font-size: 13px; }
+        .action-zone { display: grid; grid-template-columns: 1fr; gap: 15px; }
+        
+        .btn-ai { background: linear-gradient(135deg, var(--primary), #9333ea); color: white; border: none; padding: 20px; border-radius: 20px; font-weight: 800; font-size: 16px; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 12px; }
+        
+        .download-row { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; margin-top: 10px; }
+        .btn-down { background: #1e293b; color: white; border: 1px solid #334155; padding: 15px; border-radius: 15px; cursor: pointer; font-size: 12px; font-weight: 700; display: flex; flex-direction: column; align-items: center; gap: 8px; transition: 0.3s; }
+        .btn-down:hover { background: #334155; transform: translateY(-3px); }
+        .btn-down i { font-size: 18px; }
+
+        .loader { display: none; text-align: center; color: var(--primary); font-weight: 700; margin-bottom: 15px; }
     </style>
 </head>
 <body>
 
-    <div id="login-gate">
-        <div style="background:var(--card); padding:50px; border-radius:40px; text-align:center; border:1px solid rgba(255,255,255,0.1)">
-            <i class="fas fa-crown" style="font-size:40px; color:var(--primary); margin-bottom:20px"></i>
+    <div id="login-gate" style="text-align:center;">
+        <div class="main-card" style="max-width: 400px;">
+            <i class="fas fa-microchip" style="font-size: 40px; color: var(--primary); margin-bottom: 20px;"></i>
             <h1>Elite Docs AI</h1>
-            <div id="g_id_onload" data-client_id="593110663863-u9956693jafabtisfm0jnbgsufjd8n1f.apps.googleusercontent.com" data-callback="onSuccess"></div>
-            <div class="g_id_signin" data-type="standard" data-shape="pill" data-theme="filled_blue"></div>
+            <p style="color: #94a3b8; margin-bottom: 30px;">Identifique-se para iniciar o processamento.</p>
+            <div id="g_id_onload" data-client_id="593110663863-u9956693jafabtisfm0jnbgsufjd8n1f.apps.googleusercontent.com" data-callback="handleLogin"></div>
+            <div class="g_id_signin" data-type="standard" data-shape="pill" data-theme="filled_blue" data-size="large"></div>
         </div>
     </div>
 
     <div id="app-content">
-        <div class="editor-container">
-            <div style="display:flex; align-items:center; gap:10px; margin-bottom:20px">
-                <img id="uPic" src="" style="width:35px; border-radius:50%; border:2px solid var(--primary)">
-                <span id="uName" style="font-weight:900; font-size:14px"></span>
+        <div class="main-card">
+            <div class="user-header">
+                <img id="uPic" src=""><span id="uName"></span>
             </div>
 
-            <p style="font-size:11px; color:var(--primary); font-weight:800; text-transform:uppercase; margin-bottom:10px">Selecione o Objetivo:</p>
-            <div class="goal-selector">
-                <div class="goal-card active" onclick="setGoal('PDF', this)">
-                    <i class="fas fa-file-pdf" style="color:#ff4d4d"></i><span>PDF Elite</span>
-                </div>
-                <div class="goal-card" onclick="setGoal('DOCS', this)">
-                    <i class="fas fa-file-word" style="color:#4d94ff"></i><span>Google Docs</span>
-                </div>
-                <div class="goal-card" onclick="setGoal('XLS', this)">
-                    <i class="fas fa-file-excel" style="color:#2ecc71"></i><span>Excel/XLS</span>
-                </div>
-            </div>
-
-            <input type="text" id="docTitle" placeholder="Título do Documento...">
-            <textarea id="docBody" placeholder="Escreva aqui o que deseja que a IA transforme..."></textarea>
+            <textarea id="mainInput" placeholder="Ex: Sou arquiteto com 10 anos de experiência especializado em BIM..."></textarea>
             
-            <div id="loader" class="loading">
-                <i class="fas fa-spinner fa-spin"></i> REFINANDO E GERANDO ARQUIVO...
-            </div>
+            <div id="aiLoader" class="loader"><i class="fas fa-sparkles fa-spin"></i> IA ELITE REFINANDO O SEU PERFIL...</div>
 
-            <button class="btn-refine" id="mainBtn" onclick="gerarObjetivo()">
-                REFINAR E BAIXAR AGORA
-            </button>
+            <div class="action-zone">
+                <button class="btn-ai" onclick="runEliteAI()">
+                    <i class="fas fa-wand-magic-sparkles"></i> REFINAR COM INTELIGÊNCIA ELITE
+                </button>
+                
+                <div style="margin-top: 15px;">
+                    <p style="font-size: 11px; color: var(--primary); font-weight: 800; margin-bottom: 10px; text-transform: uppercase;">Baixar separadamente:</p>
+                    <div class="download-row">
+                        <button class="btn-down" onclick="exportPDF()"><i class="fas fa-file-pdf" style="color:#ef4444"></i>PDF</button>
+                        <button class="btn-down" onclick="exportWord()"><i class="fas fa-file-word" style="color:#3b82f6"></i>WORD</button>
+                        <button class="btn-down" onclick="exportExcel()"><i class="fas fa-file-excel" style="color:#10b981"></i>EXCEL</button>
+                    </div>
+                </div>
+            </div>
         </div>
     </div>
 
     <script>
-        let currentGoal = 'PDF';
-
-        function onSuccess(response) {
+        function handleLogin(response) {
             const user = JSON.parse(atob(response.credential.split('.')[1]));
             document.getElementById('login-gate').style.display = 'none';
             document.getElementById('app-content').style.display = 'block';
@@ -91,55 +85,51 @@
             document.getElementById('uName').innerText = user.name.toUpperCase();
         }
 
-        function setGoal(goal, el) {
-            currentGoal = goal;
-            document.querySelectorAll('.goal-card').forEach(c => c.classList.remove('active'));
-            el.classList.add('active');
-        }
+        async function runEliteAI() {
+            const input = document.getElementById('mainInput');
+            const loader = document.getElementById('aiLoader');
+            if(!input.value) return alert("Por favor, introduza o seu texto profissional.");
 
-        async function gerarObjetivo() {
-            const title = document.getElementById('docTitle').value || "Elite_Document";
-            const body = document.getElementById('docBody');
-            const loader = document.getElementById('loader');
-            const btn = document.getElementById('mainBtn');
-            
-            if(!body.value) return alert("Por favor, escreva algo!");
-
-            btn.style.display = "none";
             loader.style.display = "block";
+            const original = input.value;
             
             try {
-                // REFINAMENTO DA IA COM FOCO NO FORMATO
-                const prompt = `Aja como um redator sênior. Transforme este conteúdo num documento profissional de alta qualidade, pronto para ser um arquivo ${currentGoal}: ${body.value}`;
+                // PROMPT REFINADO: Agora ele cria um documento de verdade, não apenas uma frase.
+                const prompt = `Aja como um consultor de carreira sênior. Transforme o rascunho abaixo em um perfil profissional de elite, detalhado, formal e impactante em português: ${original}`;
                 const res = await fetch(`https://text.pollinations.ai/${encodeURIComponent(prompt)}`);
-                const refinedText = await res.text();
-                body.value = refinedText;
-
-                // DOWNLOAD AUTOMÁTICO BASEADO NO OBJETIVO
-                if(currentGoal === 'PDF') {
-                    const temp = document.createElement('div');
-                    temp.innerHTML = `<div style="padding:50px; color:#1a1a1a"><h1>${title}</h1><p style="white-space:pre-line; font-size:14px">${refinedText}</p></div>`;
-                    await html2pdf().from(temp).save(`${title}.pdf`);
-                } 
-                else if(currentGoal === 'DOCS') {
-                    const content = `<html><body><h1>${title}</h1><p>${refinedText.replace(/\n/g, '<br>')}</p></body></html>`;
-                    const blob = new Blob(['\ufeff', content], { type: 'application/msword' });
-                    const url = URL.createObjectURL(blob);
-                    const a = document.createElement('a'); a.href = url; a.download = `${title}.doc`; a.click();
-                }
-                else if(currentGoal === 'XLS') {
-                    const rows = refinedText.split('\n').map(line => [line]);
-                    const ws = XLSX.utils.aoa_to_sheet([[title], ...rows]);
-                    const wb = XLSX.utils.book_new();
-                    XLSX.utils.book_append_sheet(wb, ws, "Dados");
-                    XLSX.writeFile(wb, `${title}.xlsx`);
-                }
+                input.value = await res.text();
             } catch (e) {
-                alert("Erro ao processar. Tente novamente.");
+                alert("Erro ao conectar com a IA.");
+                input.value = original;
             } finally {
                 loader.style.display = "none";
-                btn.style.display = "block";
             }
+        }
+
+        function exportPDF() {
+            const content = document.getElementById('mainInput').value;
+            const element = document.createElement('div');
+            element.style.padding = "50px";
+            element.innerHTML = `<h1 style="color:#4f46e5; border-bottom: 2px solid #4f46e5; padding-bottom: 10px;">Perfil Profissional Elite</h1><p style="white-space:pre-line; line-height:1.6; font-size:14px;">${content}</p>`;
+            html2pdf().from(element).save('Perfil_Elite.pdf');
+        }
+
+        function exportWord() {
+            const content = document.getElementById('mainInput').value;
+            const blob = new Blob(['\ufeff', `<h1>Perfil Profissional</h1><p>${content.replace(/\n/g, '<br>')}</p>`], { type: 'application/msword' });
+            const link = document.createElement('a');
+            link.href = URL.createObjectURL(blob);
+            link.download = 'Perfil_Elite.doc';
+            link.click();
+        }
+
+        function exportExcel() {
+            const content = document.getElementById('mainInput').value;
+            const rows = content.split('\n').filter(l => l.trim() !== "").map(line => [line]);
+            const ws = XLSX.utils.aoa_to_sheet([["CONTEÚDO PROFISSIONAL REFINADO"], ...rows]);
+            const wb = XLSX.utils.book_new();
+            XLSX.utils.book_append_sheet(wb, ws, "Perfil");
+            XLSX.writeFile(wb, "Perfil_Elite.xlsx");
         }
     </script>
 </body>
