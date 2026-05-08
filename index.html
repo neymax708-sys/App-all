@@ -4,14 +4,21 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Elite Docs AI</title>
+    
+    <link rel="manifest" href="manifest.json">
     <link rel="icon" type="image/png" href="logo.png">
+    <meta name="theme-color" content="#5b4bff">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
 
     <style>
         * { margin: 0; padding: 0; box-sizing: border-box; }
+        
         body {
             font-family: 'Inter', sans-serif;
             background: #050510;
@@ -20,37 +27,43 @@
             overflow-x: hidden;
             background-image: radial-gradient(circle at top, rgba(91,75,255,.18), transparent 35%);
         }
+
         .hidden { display: none; }
         .container { max-width: 700px; margin: auto; }
+
+        /* Estilo do Topo */
         .hero { text-align: center; padding: 25px 10px; }
-        .logo { width: 100px; height: 100px; object-fit: contain; margin-bottom: 15px; }
-        .hero h1 { font-size: 32px; font-weight: 800; }
+        .logo-app { width: 100px; height: 100px; object-fit: contain; margin-bottom: 15px; border-radius: 20px; }
+        .hero h1 { font-size: 32px; font-weight: 800; letter-spacing: -1px; }
         .hero p { color: #9ca3af; font-size: 14px; margin-top: 5px; }
 
-        /* GRID ESTILO XIAOMI/APP */
+        /* Grid de Apps (Estilo Xiaomi) */
         .grid {
             display: grid;
             grid-template-columns: repeat(3, 1fr);
             gap: 12px;
             margin-top: 25px;
         }
+
         .card {
             background: rgba(255, 255, 255, 0.05);
             border: 1px solid rgba(255, 255, 255, 0.08);
-            padding: 15px 5px;
-            border-radius: 20px;
+            padding: 18px 5px;
+            border-radius: 22px;
             display: flex;
             flex-direction: column;
             align-items: center;
+            justify-content: center;
             cursor: pointer;
             transition: 0.2s;
             backdrop-filter: blur(10px);
         }
-        .card:active { transform: scale(0.95); }
+
+        .card:active { transform: scale(0.95); background: rgba(255, 255, 255, 0.1); }
         .card i { font-size: 28px; margin-bottom: 8px; }
         .card span { font-size: 11px; font-weight: 700; }
 
-        /* TELAS E INPUTS */
+        /* Telas de Edição */
         .screen {
             margin-top: 10px;
             background: rgba(255, 255, 255, 0.04);
@@ -58,97 +71,102 @@
             padding: 20px;
             border-radius: 24px;
         }
-        .back-btn { background: none; border: none; color: #5b4bff; font-weight: 700; cursor: pointer; margin-bottom: 15px; }
+
+        .back-btn {
+            background: none; border: none; color: #5b4bff;
+            font-weight: 700; font-size: 15px; margin-bottom: 15px; cursor: pointer;
+        }
+
         .input, .textarea {
-            width: 100%; padding: 14px; margin-bottom: 12px; border-radius: 12px;
-            border: 1px solid rgba(255, 255, 255, 0.1); background: rgba(255, 255, 255, 0.05);
+            width: 100%; padding: 15px; margin-bottom: 12px; border-radius: 14px;
+            border: 1px solid rgba(255, 255, 255, 0.1); background: rgba(255, 255, 255, 0.04);
             color: white; outline: none; font-size: 14px;
         }
-        .textarea { min-height: 120px; }
+        .textarea { min-height: 140px; }
+
         .row { display: flex; gap: 8px; margin-bottom: 15px; }
+
         .generate-btn {
-            padding: 14px; border: none; border-radius: 12px; font-weight: 700;
-            cursor: pointer; flex: 1; color: white;
+            padding: 15px; border: none; border-radius: 14px;
+            background: linear-gradient(135deg, #5b4bff, #4338ca);
+            color: white; font-weight: 700; font-size: 14px; cursor: pointer; flex: 1;
         }
-        .btn-primary { background: linear-gradient(135deg, #5b4bff, #4338ca); }
-        .btn-ai { background: #8b5cf6; }
-        .btn-summary { background: #0ea5e9; }
 
-        /* PREVIEW */
-        .preview-box { background: white; color: #222; padding: 15px; border-radius: 15px; margin-top: 15px; font-size: 13px; }
-        .curriculo-preview-flex { display: flex; gap: 15px; flex-wrap: wrap; }
-        .side-bar-preview { width: 140px; background: #005fcc; color: white; padding: 15px; border-radius: 12px; }
-        .main-content-preview { flex: 1; min-width: 200px; }
-        .foto-preview { width: 80px; height: 80px; border-radius: 50%; object-fit: cover; border: 3px solid white; margin-bottom: 10px; }
-        .download-btn { background: #10b981; color: white; padding: 15px; border-radius: 12px; text-align: center; font-weight: 700; cursor: pointer; margin-top: 10px; }
+        /* Preview Visual */
+        .preview-box { background: white; color: #333; padding: 15px; border-radius: 18px; margin-top: 15px; }
+        .cv-flex { display: flex; gap: 15px; flex-wrap: wrap; }
+        .cv-side { width: 140px; background: #005fcc; color: white; padding: 15px; border-radius: 12px; font-size: 10px; }
+        .cv-main { flex: 1; min-width: 200px; }
+        .cv-foto { width: 70px; height: 70px; border-radius: 50%; border: 3px solid white; object-fit: cover; margin-bottom: 10px; }
 
-        @media (max-width: 500px) {
-            .side-bar-preview { width: 100%; text-align: center; }
-            .foto-preview { margin: 0 auto 10px auto; }
+        .download-btn {
+            background: #10b981; color: white; padding: 16px; border-radius: 14px;
+            text-align: center; font-weight: 800; cursor: pointer; margin-top: 10px;
         }
     </style>
 </head>
 <body>
 
 <div class="container">
+
     <div id="homeScreen">
         <div class="hero">
-            <img src="logo.png" class="logo">
+            <img src="logo.png" class="logo-app" alt="Elite Docs">
             <h1>Elite Docs AI</h1>
-            <p>Seus documentos com perfeição premium</p>
+            <p>O seu estúdio de documentos profissionais</p>
         </div>
+
         <div class="grid">
-            <div class="card" onclick="abrirTela('curriculoScreen')"><i class="fas fa-user-tie" style="color:#5b4bff"></i><span>Currículo</span></div>
-            <div class="card" onclick="abrirTela('pdfScreen')"><i class="fas fa-file-pdf" style="color:#ef4444"></i><span>PDF</span></div>
-            <div class="card" onclick="abrirTela('wordScreen')"><i class="fas fa-file-word" style="color:#2b579a"></i><span>Word</span></div>
-            <div class="card" onclick="abrirTela('excelScreen')"><i class="fas fa-file-excel" style="color:#217346"></i><span>Excel</span></div>
-            <div class="card" onclick="abrirTela('pptScreen')"><i class="fas fa-file-powerpoint" style="color:#d24726"></i><span>PPT</span></div>
-            <div class="card" onclick="abrirTela('txtScreen')"><i class="fas fa-file-lines" style="color:#9ca3af"></i><span>TXT</span></div>
-            <div class="card" onclick="abrirTela('linkedinScreen')"><i class="fab fa-linkedin" style="color:#0a66c2"></i><span>LinkedIn</span></div>
-            <div class="card" onclick="abrirTela('cartaScreen')"><i class="fas fa-envelope" style="color:#10b981"></i><span>Carta</span></div>
-            <div class="card" onclick="abrirTela('assinaturaScreen')"><i class="fas fa-signature" style="color:#06b6d4"></i><span>Assinatura</span></div>
+            <div class="card" onclick="irPara('curriculoScreen')"><i class="fas fa-user-tie" style="color:#5b4bff"></i><span>Currículo</span></div>
+            <div class="card" onclick="irPara('pdfScreen')"><i class="fas fa-file-pdf" style="color:#ef4444"></i><span>PDF</span></div>
+            <div class="card" onclick="alert('Funcionalidade em breve!')"><i class="fas fa-file-word" style="color:#2b579a"></i><span>Word</span></div>
+            <div class="card" onclick="alert('Funcionalidade em breve!')"><i class="fas fa-file-excel" style="color:#217346"></i><span>Excel</span></div>
+            <div class="card" onclick="irPara('linkedinScreen')"><i class="fab fa-linkedin" style="color:#0a66c2"></i><span>LinkedIn</span></div>
+            <div class="card" onclick="irPara('cartaScreen')"><i class="fas fa-envelope" style="color:#10b981"></i><span>Carta</span></div>
         </div>
     </div>
 
     <div id="curriculoScreen" class="screen hidden">
         <button class="back-btn" onclick="voltar()">← Voltar</button>
-        <input class="input" id="nome" placeholder="Nome completo">
-        <input class="input" id="cargo" placeholder="Cargo profissional">
-        <input class="input" id="telefone" placeholder="Telefone">
-        <input class="input" id="email" placeholder="Email">
-        <input class="input" id="cidade" placeholder="Cidade/Estado">
-        <label style="font-size: 12px; color: #9ca3af; margin-bottom: 5px; display: block;">Foto de perfil:</label>
-        <input class="input" type="file" id="fotoCurriculo" accept="image/*">
-        <textarea class="textarea" id="textoCurriculo" placeholder="Experiências e Habilidades..."></textarea>
+        <input class="input" id="nome" placeholder="Nome Completo">
+        <input class="input" id="cargo" placeholder="Cargo Profissional">
+        <input class="input" id="telefone" placeholder="Telemóvel/WhatsApp">
+        <input class="input" id="email" placeholder="E-mail">
+        <input class="input" id="cidade" placeholder="Cidade / Estado">
         
+        <p style="font-size: 12px; color: #9ca3af; margin: 5px;">Foto de Perfil:</p>
+        <input class="input" type="file" id="fotoInput" accept="image/*">
+        
+        <textarea class="textarea" id="resumo" placeholder="Descreva as suas experiências e competências..."></textarea>
+
         <div class="row">
-            <button class="generate-btn btn-ai" onclick="melhorarIA('textoCurriculo')">✨ Melhorar IA</button>
-            <button class="generate-btn btn-summary" onclick="resumirIA('textoCurriculo')">🧠 Resumir</button>
+            <button class="generate-btn" style="background:#8b5cf6" onclick="usarIA('resumo', 'melhorar')">✨ Melhorar IA</button>
+            <button class="generate-btn" style="background:#0ea5e9" onclick="usarIA('resumo', 'resumir')">🧠 Resumir</button>
         </div>
-        
-        <button class="generate-btn btn-primary" onclick="previaCurriculo()">Ver Prévia e Gerar</button>
+
+        <button class="generate-btn" onclick="gerarPrevia()">Visualizar Currículo</button>
 
         <div id="areaPreview" class="hidden">
-            <div class="preview-box" id="previewConteudo"></div>
-            <div class="download-btn" onclick="baixarCurriculoPremium()">BAIXAR PDF PREMIUM</div>
+            <div class="preview-box" id="htmlPreview"></div>
+            <div class="download-btn" onclick="gerarPDFPremium()">BAIXAR PDF PROFISSIONAL</div>
         </div>
     </div>
 
     <div id="pdfScreen" class="screen hidden">
         <button class="back-btn" onclick="voltar()">← Voltar</button>
-        <input class="input" id="tituloPDF" placeholder="Título">
-        <textarea class="textarea" id="textoPDF" placeholder="Conteúdo do documento..."></textarea>
-        <button class="generate-btn btn-ai" onclick="melhorarIA('textoPDF')" style="margin-bottom: 10px;">✨ Melhorar IA</button>
-        <button class="generate-btn btn-primary" style="width: 100%;" onclick="gerarPDFSimples()">Baixar PDF</button>
+        <input class="input" id="pdfTitulo" placeholder="Título do Documento">
+        <textarea class="textarea" id="pdfTexto" placeholder="Escreva o conteúdo do seu PDF aqui..."></textarea>
+        <button class="generate-btn" onclick="gerarPDFSimples()">Descarregar PDF</button>
     </div>
+
 </div>
 
 <script>
-    function abrirTela(id) {
+    // Navegação Simples
+    function irPara(id) {
         document.getElementById('homeScreen').classList.add('hidden');
         document.querySelectorAll('.screen').forEach(s => s.classList.add('hidden'));
         document.getElementById(id).classList.remove('hidden');
-        window.scrollTo(0,0);
     }
 
     function voltar() {
@@ -156,131 +174,131 @@
         document.getElementById('homeScreen').classList.remove('hidden');
     }
 
-    // IA FUNÇÕES
-    async function melhorarIA(id) {
-        const campo = document.getElementById(id);
-        if(!campo.value) return alert("Digite algo primeiro!");
-        campo.value = "IA trabalhando...";
-        const resp = await fetch('https://text.pollinations.ai/' + encodeURIComponent("Melhore profissionalmente este texto para currículo: " + campo.value));
-        campo.value = await resp.text();
+    // Integração com IA (API Pollinations)
+    async function usarIA(idCampo, tipo) {
+        const campo = document.getElementById(idCampo);
+        if(!campo.value) return alert("Por favor, escreva algo primeiro.");
+        
+        const original = campo.value;
+        campo.value = "A IA está a processar...";
+        
+        const prompt = tipo === 'melhorar' ? 
+            "Reescreva de forma profissional para um currículo premium: " + original :
+            "Resuma em tópicos profissionais para currículo: " + original;
+
+        try {
+            const r = await fetch('https://text.pollinations.ai/' + encodeURIComponent(prompt));
+            campo.value = await r.text();
+        } catch(e) {
+            alert("Erro ao conectar com a IA.");
+            campo.value = original;
+        }
     }
 
-    async function resumirIA(id) {
-        const campo = document.getElementById(id);
-        if(!campo.value) return alert("Digite algo primeiro!");
-        campo.value = "Resumindo...";
-        const resp = await fetch('https://text.pollinations.ai/' + encodeURIComponent("Resuma este texto profissional em tópicos: " + campo.value));
-        campo.value = await resp.text();
-    }
-
-    // PREVIA CURRICULO
-    function previaCurriculo() {
-        const nome = document.getElementById('nome').value;
-        const cargo = document.getElementById('cargo').value;
-        const texto = document.getElementById('textoCurriculo').value;
-        const foto = document.getElementById('fotoCurriculo').files[0];
-        let fotoURL = 'https://cdn-icons-png.flaticon.com/512/847/847969.png';
-
-        if(foto) fotoURL = URL.createObjectURL(foto);
+    // Prévia em tempo real
+    function gerarPrevia() {
+        const nome = document.getElementById('nome').value || "Seu Nome";
+        const cargo = document.getElementById('cargo').value || "Seu Cargo";
+        const resumo = document.getElementById('resumo').value || "...";
+        const foto = document.getElementById('fotoInput').files[0];
+        
+        let urlFoto = "https://cdn-icons-png.flaticon.com/512/149/149071.png";
+        if(foto) urlFoto = URL.createObjectURL(foto);
 
         document.getElementById('areaPreview').classList.remove('hidden');
-        document.getElementById('previewConteudo').innerHTML = `
-            <div class="curriculo-preview-flex">
-                <div class="side-bar-preview">
-                    <img src="${fotoURL}" class="foto-preview">
-                    <p><b>Contato</b></p>
-                    <p style="font-size:10px">${document.getElementById('telefone').value}</p>
-                    <p style="font-size:10px">${document.getElementById('email').value}</p>
+        document.getElementById('htmlPreview').innerHTML = `
+            <div class="cv-flex">
+                <div class="cv-side">
+                    <img src="${urlFoto}" class="cv-foto">
+                    <p><b>CONTACTO</b></p>
+                    <p>${document.getElementById('telefone').value}</p>
+                    <p>${document.getElementById('email').value}</p>
                 </div>
-                <div class="main-content-preview">
-                    <h2 style="color:#005fcc">${nome || 'Seu Nome'}</h2>
-                    <p style="color:#666"><b>${cargo || 'Seu Cargo'}</b></p>
-                    <hr style="margin:10px 0">
-                    <p style="white-space: pre-line">${texto || 'Seu resumo aparecerá aqui...'}</p>
+                <div class="cv-main">
+                    <h2 style="color:#005fcc">${nome}</h2>
+                    <p style="color:#666"><b>${cargo}</b></p>
+                    <hr style="margin:10px 0; border:0; border-top:1px solid #ddd">
+                    <p style="font-size:11px; line-height:1.6; white-space:pre-line">${resumo}</p>
                 </div>
             </div>
         `;
     }
 
-    // GERAR PDF PREMIUM CORRIGIDO
-    async function baixarCurriculoPremium() {
+    // Geração do PDF com Layout Premium (Estilo Foto 2)
+    async function gerarPDFPremium() {
         const { jsPDF } = window.jspdf;
-        const pdf = new jsPDF();
-        
-        const nome = document.getElementById('nome').value || "CURRICULO";
-        const cargo = document.getElementById('cargo').value;
-        const telefone = document.getElementById('telefone').value;
-        const email = document.getElementById('email').value;
-        const cidade = document.getElementById('cidade').value;
-        const texto = document.getElementById('textoCurriculo').value;
-        const fotoFile = document.getElementById('fotoCurriculo').files[0];
+        const doc = new jsPDF();
 
-        // Barra Lateral Azul
-        pdf.setFillColor(0, 95, 204);
-        pdf.rect(0, 0, 65, 297, 'F');
+        const nome = document.getElementById('nome').value.toUpperCase();
+        const cargo = document.getElementById('cargo').value.toUpperCase();
+        const resumo = document.getElementById('resumo').value;
+        const foto = document.getElementById('fotoInput').files[0];
 
-        // Textos Barra Lateral (Branco)
-        pdf.setTextColor(255, 255, 255);
-        pdf.setFontSize(10);
-        pdf.setFont("helvetica", "bold");
-        pdf.text("CONTATO", 10, 70);
-        pdf.setLineWidth(0.3);
-        pdf.setDrawColor(255, 255, 255);
-        pdf.line(10, 72, 55, 72);
-        
-        pdf.setFont("helvetica", "normal");
-        pdf.setFontSize(9);
-        pdf.text("Tel: " + telefone, 10, 80);
-        pdf.text(email, 10, 87, { maxWidth: 45 });
-        pdf.text(cidade, 10, 100, { maxWidth: 45 });
+        // 1. Barra Lateral Azul
+        doc.setFillColor(0, 95, 204);
+        doc.rect(0, 0, 65, 297, 'F');
 
-        // Lado Direito
-        pdf.setTextColor(0, 95, 204);
-        pdf.setFontSize(24);
-        pdf.setFont("helvetica", "bold");
-        pdf.text(nome.toUpperCase(), 75, 30);
+        // 2. Textos Barra Lateral (Branco)
+        doc.setTextColor(255, 255, 255);
+        doc.setFontSize(10);
+        doc.setFont("helvetica", "bold");
+        doc.text("CONTACTO", 10, 75);
+        doc.line(10, 77, 55, 77);
 
-        pdf.setTextColor(100, 100, 100);
-        pdf.setFontSize(14);
-        pdf.text(cargo.toUpperCase(), 75, 40);
+        doc.setFont("helvetica", "normal");
+        doc.setFontSize(8);
+        doc.text(document.getElementById('telefone').value, 10, 85);
+        doc.text(document.getElementById('email').value, 10, 92, { maxWidth: 45 });
+        doc.text(document.getElementById('cidade').value, 10, 105);
 
-        pdf.setTextColor(0, 95, 204);
-        pdf.setFontSize(13);
-        pdf.text("RESUMO PROFISSIONAL", 75, 60);
-        pdf.setDrawColor(0, 95, 204);
-        pdf.line(75, 62, 195, 62);
+        // 3. Conteúdo Direita (Lado Branco)
+        doc.setTextColor(0, 95, 204);
+        doc.setFontSize(22);
+        doc.setFont("helvetica", "bold");
+        doc.text(nome, 72, 30);
 
-        pdf.setTextColor(40, 40, 40);
-        pdf.setFontSize(11);
-        pdf.setFont("helvetica", "normal");
-        const splitTexto = pdf.splitTextToSize(texto, 115);
-        pdf.text(splitTexto, 75, 72);
+        doc.setTextColor(100, 100, 100);
+        doc.setFontSize(14);
+        doc.text(cargo, 72, 40);
 
-        // Processar Foto
-        if (fotoFile) {
-            const reader = new FileReader();
-            reader.readAsDataURL(fotoFile);
-            reader.onload = function (e) {
-                const imgData = e.target.result;
-                // Desenhar foto em cima da barra azul
-                pdf.addImage(imgData, 'JPEG', 15, 15, 35, 35); 
-                pdf.save(nome + "-EliteDocs.pdf");
+        doc.setTextColor(0, 95, 204);
+        doc.setFontSize(12);
+        doc.text("RESUMO PROFISSIONAL", 72, 60);
+        doc.line(72, 62, 195, 62);
+
+        doc.setTextColor(40, 40, 40);
+        doc.setFontSize(10);
+        doc.setFont("helvetica", "normal");
+        const linhas = doc.splitTextToSize(resumo, 115);
+        doc.text(linhas, 72, 70);
+
+        // 4. Inserir Foto se existir
+        if (foto) {
+            const leitor = new FileReader();
+            leitor.readAsDataURL(foto);
+            leitor.onload = function (e) {
+                doc.addImage(e.target.result, 'JPEG', 15, 20, 35, 35);
+                doc.save(`CV_${nome}.pdf`);
             };
         } else {
-            pdf.save(nome + "-EliteDocs.pdf");
+            doc.save(`CV_${nome}.pdf`);
         }
     }
 
     function gerarPDFSimples() {
         const { jsPDF } = window.jspdf;
-        const pdf = new jsPDF();
-        pdf.setFontSize(20);
-        pdf.text(document.getElementById('tituloPDF').value, 20, 20);
-        pdf.setFontSize(12);
-        const linhas = pdf.splitTextToSize(document.getElementById('textoPDF').value, 170);
-        pdf.text(linhas, 20, 35);
-        pdf.save("documento.pdf");
+        const doc = new jsPDF();
+        doc.text(document.getElementById('pdfTitulo').value, 20, 20);
+        const txt = doc.splitTextToSize(document.getElementById('pdfTexto').value, 170);
+        doc.text(txt, 20, 35);
+        doc.save("documento.pdf");
+    }
+
+    // Registro para Modo App (PWA)
+    if ('serviceWorker' in navigator) {
+        navigator.serviceWorker.register('sw.js');
     }
 </script>
+
 </body>
 </html>
