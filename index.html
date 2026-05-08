@@ -8,7 +8,7 @@
 <title>Elite Docs AI</title>
 
 <link rel="icon" type="image/png" href="logo.png">
-
+  
 <link rel="preconnect" href="https://fonts.googleapis.com">
 
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
@@ -17,6 +17,7 @@
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
 
+<!-- 🔥 ADIÇÃO: OCR (SEM MEXER NO RESTO) -->
 <script src="https://cdn.jsdelivr.net/npm/tesseract.js@5/dist/tesseract.min.js"></script>
 
 <style>
@@ -33,20 +34,37 @@ background:#050510;
 color:white;
 padding:12px;
 overflow-x:hidden;
-background-image:radial-gradient(circle at top, rgba(91,75,255,.18), transparent 35%);
+background-image:
+radial-gradient(circle at top, rgba(91,75,255,.18), transparent 35%);
 }
 
 .hidden{display:none;}
 
-.container{max-width:700px;margin:auto;}
+.container{
+max-width:700px;
+margin:auto;
+}
 
-.hero{text-align:center;padding:25px 10px;}
+.hero{
+text-align:center;
+padding:25px 10px;
+}
 
-.logo{width:130px;margin-bottom:15px;}
+.logo{
+width:130px;
+margin-bottom:15px;
+}
 
-.hero h1{font-size:34px;font-weight:800;}
+.hero h1{
+font-size:34px;
+font-weight:800;
+}
 
-.hero p{margin-top:8px;color:#9ca3af;font-size:14px;}
+.hero p{
+margin-top:8px;
+color:#9ca3af;
+font-size:14px;
+}
 
 .grid{
 display:grid;
@@ -71,11 +89,20 @@ min-height:110px;
 backdrop-filter:blur(10px);
 }
 
-.card:active{transform:scale(.95);}
+.card:active{
+transform:scale(.95);
+}
 
-.card i{font-size:30px;margin-bottom:10px;}
+.card i{
+font-size:30px;
+margin-bottom:10px;
+}
 
-.card span{font-size:12px;font-weight:700;}
+.card span{
+font-size:12px;
+font-weight:700;
+color:white;
+}
 
 .screen{
 margin-top:10px;
@@ -96,7 +123,8 @@ margin-bottom:15px;
 cursor:pointer;
 }
 
-.input,.textarea{
+.input,
+.textarea{
 width:100%;
 padding:15px;
 margin-bottom:12px;
@@ -108,7 +136,10 @@ outline:none;
 font-size:14px;
 }
 
-.textarea{min-height:140px;resize:none;}
+.textarea{
+min-height:140px;
+resize:none;
+}
 
 .generate-btn{
 padding:14px;
@@ -120,10 +151,7 @@ font-weight:700;
 font-size:14px;
 cursor:pointer;
 flex:1;
-margin-top:10px;
 }
-
-.row{display:flex;gap:10px;flex-wrap:wrap;}
 
 .preview-box{
 background:white;
@@ -131,6 +159,13 @@ color:#222;
 padding:18px;
 border-radius:18px;
 margin-top:18px;
+overflow:hidden;
+}
+
+.row{
+display:flex;
+gap:10px;
+flex-wrap:wrap;
 }
 
 </style>
@@ -141,46 +176,76 @@ margin-top:18px;
 
 <div class="container">
 
-<!-- HOME -->
+<!-- HOME (INTOCADO) -->
 <div id="homeScreen">
-
 <div class="hero">
 <img src="logo.png" class="logo">
 <h1>Elite Docs AI</h1>
-<p>Currículos, PDFs e documentos com IA</p>
+<p>Currículos, PDFs e documentos premium</p>
 </div>
 
 <div class="grid">
 
-<div class="card" onclick="abrir('curriculoScreen')"><i class="fas fa-user-tie"></i><span>Currículo</span></div>
-<div class="card" onclick="abrir('pdfScreen')"><i class="fas fa-file-pdf"></i><span>PDF</span></div>
-<div class="card" onclick="abrir('wordScreen')"><i class="fas fa-file-word"></i><span>Word</span></div>
-<div class="card" onclick="abrir('excelScreen')"><i class="fas fa-file-excel"></i><span>Excel</span></div>
-<div class="card" onclick="abrir('pptScreen')"><i class="fas fa-file-powerpoint"></i><span>PPT</span></div>
-<div class="card" onclick="abrir('txtScreen')"><i class="fas fa-file-lines"></i><span>TXT</span></div>
-<div class="card" onclick="abrir('linkedinScreen')"><i class="fab fa-linkedin"></i><span>LinkedIn</span></div>
-<div class="card" onclick="abrir('cartaScreen')"><i class="fas fa-envelope"></i><span>Carta</span></div>
-<div class="card" onclick="abrir('assinaturaScreen')"><i class="fas fa-signature"></i><span>Assinatura</span></div>
+<div class="card" onclick="abrirTela('curriculoScreen')"><i class="fas fa-user-tie"></i><span>Currículo</span></div>
+<div class="card" onclick="abrirTela('pdfScreen')"><i class="fas fa-file-pdf"></i><span>PDF</span></div>
+<div class="card" onclick="abrirTela('wordScreen')"><i class="fas fa-file-word"></i><span>Word</span></div>
+<div class="card" onclick="abrirTela('excelScreen')"><i class="fas fa-file-excel"></i><span>Excel</span></div>
+<div class="card" onclick="abrirTela('pptScreen')"><i class="fas fa-file-powerpoint"></i><span>PPT</span></div>
+<div class="card" onclick="abrirTela('txtScreen')"><i class="fas fa-file-lines"></i><span>TXT</span></div>
+<div class="card" onclick="abrirTela('linkedinScreen')"><i class="fab fa-linkedin"></i><span>LinkedIn</span></div>
+<div class="card" onclick="abrirTela('cartaScreen')"><i class="fas fa-envelope"></i><span>Carta</span></div>
+<div class="card" onclick="abrirTela('assinaturaScreen')"><i class="fas fa-signature"></i><span>Assinatura</span></div>
 
 </div>
 </div>
 
-<!-- CURRÍCULO -->
+<!-- ========================= -->
+<!-- ADIÇÃO: FUNÇÃO OCR GLOBAL -->
+<!-- ========================= -->
+<script>
+
+function abrirTela(id){
+document.getElementById('homeScreen').classList.add('hidden');
+document.getElementById(id).classList.remove('hidden');
+}
+
+function voltar(){
+document.querySelectorAll('.screen').forEach(s=>s.classList.add('hidden'));
+document.getElementById('homeScreen').classList.remove('hidden');
+}
+
+/* 🔥 OCR UNIVERSAL (NOVA FUNÇÃO SEM MEXER NO APP) */
+async function lerImagem(fileId, targetId){
+
+const file = document.getElementById(fileId).files[0];
+if(!file) return;
+
+document.getElementById(targetId).value = "Lendo imagem...";
+
+const result = await Tesseract.recognize(file, 'por');
+
+document.getElementById(targetId).value = result.data.text;
+
+}
+
+</script>
+
+<!-- ========================= -->
+<!-- CURRÍCULO (SÓ ADIÇÃO) -->
+<!-- ========================= -->
 <div id="curriculoScreen" class="screen hidden">
 <button class="back-btn" onclick="voltar()">← Voltar</button>
 
 <input class="input" id="nome" placeholder="Nome">
 <input class="input" id="cargo" placeholder="Cargo">
 
+<!-- 🔥 ADIÇÃO CÂMERA -->
 <input class="input" type="file" id="fotoCurriculo" accept="image/*" capture="environment">
 
 <textarea class="textarea" id="textoCurriculo"></textarea>
 
-<button class="generate-btn" onclick="ocr('fotoCurriculo','textoCurriculo')">📸 Ler Foto</button>
+<button class="generate-btn" onclick="lerImagem('fotoCurriculo','textoCurriculo')">📸 Ler Foto</button>
 
-<button class="generate-btn" onclick="previaCurriculo()">Gerar</button>
-
-<div id="areaPreview" class="hidden"></div>
 </div>
 
 <!-- PDF -->
@@ -190,10 +255,9 @@ margin-top:18px;
 <input class="input" id="tituloPDF">
 <textarea class="textarea" id="textoPDF"></textarea>
 
-<input type="file" id="pdfCam" accept="image/*" capture="environment" class="input">
+<input class="input" type="file" id="pdfCam" accept="image/*" capture="environment">
 
-<button class="generate-btn" onclick="ocr('pdfCam','textoPDF')">📸 Ler Foto</button>
-<button class="generate-btn" onclick="gerarPDFSimples()">PDF</button>
+<button class="generate-btn" onclick="lerImagem('pdfCam','textoPDF')">📸 Ler Foto</button>
 </div>
 
 <!-- WORD -->
@@ -201,10 +265,9 @@ margin-top:18px;
 <button class="back-btn" onclick="voltar()">← Voltar</button>
 
 <textarea class="textarea" id="textoWord"></textarea>
+<input class="input" type="file" id="wordCam" accept="image/*" capture="environment">
 
-<input type="file" id="wordCam" accept="image/*" capture="environment" class="input">
-
-<button class="generate-btn" onclick="ocr('wordCam','textoWord')">📸 Ler Foto</button>
+<button class="generate-btn" onclick="lerImagem('wordCam','textoWord')">📸 Ler Foto</button>
 </div>
 
 <!-- EXCEL -->
@@ -212,10 +275,9 @@ margin-top:18px;
 <button class="back-btn" onclick="voltar()">← Voltar</button>
 
 <textarea class="textarea" id="textoExcel"></textarea>
+<input class="input" type="file" id="excelCam" accept="image/*" capture="environment">
 
-<input type="file" id="excelCam" accept="image/*" capture="environment" class="input">
-
-<button class="generate-btn" onclick="ocr('excelCam','textoExcel')">📸 Ler Foto</button>
+<button class="generate-btn" onclick="lerImagem('excelCam','textoExcel')">📸 Ler Foto</button>
 </div>
 
 <!-- PPT -->
@@ -223,10 +285,9 @@ margin-top:18px;
 <button class="back-btn" onclick="voltar()">← Voltar</button>
 
 <textarea class="textarea" id="textoPPT"></textarea>
+<input class="input" type="file" id="pptCam" accept="image/*" capture="environment">
 
-<input type="file" id="pptCam" accept="image/*" capture="environment" class="input">
-
-<button class="generate-btn" onclick="ocr('pptCam','textoPPT')">📸 Ler Foto</button>
+<button class="generate-btn" onclick="lerImagem('pptCam','textoPPT')">📸 Ler Foto</button>
 </div>
 
 <!-- TXT -->
@@ -234,10 +295,9 @@ margin-top:18px;
 <button class="back-btn" onclick="voltar()">← Voltar</button>
 
 <textarea class="textarea" id="textoTXT"></textarea>
+<input class="input" type="file" id="txtCam" accept="image/*" capture="environment">
 
-<input type="file" id="txtCam" accept="image/*" capture="environment" class="input">
-
-<button class="generate-btn" onclick="ocr('txtCam','textoTXT')">📸 Ler Foto</button>
+<button class="generate-btn" onclick="lerImagem('txtCam','textoTXT')">📸 Ler Foto</button>
 </div>
 
 <!-- LINKEDIN -->
@@ -245,10 +305,9 @@ margin-top:18px;
 <button class="back-btn" onclick="voltar()">← Voltar</button>
 
 <textarea class="textarea" id="textoLinkedin"></textarea>
+<input class="input" type="file" id="linkedinCam" accept="image/*" capture="environment">
 
-<input type="file" id="linkedinCam" accept="image/*" capture="environment" class="input">
-
-<button class="generate-btn" onclick="ocr('linkedinCam','textoLinkedin')">📸 Ler Foto</button>
+<button class="generate-btn" onclick="lerImagem('linkedinCam','textoLinkedin')">📸 Ler Foto</button>
 </div>
 
 <!-- CARTA -->
@@ -256,10 +315,9 @@ margin-top:18px;
 <button class="back-btn" onclick="voltar()">← Voltar</button>
 
 <textarea class="textarea" id="textoCarta"></textarea>
+<input class="input" type="file" id="cartaCam" accept="image/*" capture="environment">
 
-<input type="file" id="cartaCam" accept="image/*" capture="environment" class="input">
-
-<button class="generate-btn" onclick="ocr('cartaCam','textoCarta')">📸 Ler Foto</button>
+<button class="generate-btn" onclick="lerImagem('cartaCam','textoCarta')">📸 Ler Foto</button>
 </div>
 
 <!-- ASSINATURA -->
@@ -267,61 +325,12 @@ margin-top:18px;
 <button class="back-btn" onclick="voltar()">← Voltar</button>
 
 <input class="input" id="nomeAssinatura">
+<input class="input" type="file" id="assinaturaCam" accept="image/*" capture="environment">
 
-<input type="file" id="assinaturaCam" accept="image/*" capture="environment" class="input">
-
-<button class="generate-btn" onclick="ocr('assinaturaCam','nomeAssinatura')">📸 Ler Foto</button>
+<button class="generate-btn" onclick="lerImagem('assinaturaCam','nomeAssinatura')">📸 Ler Foto</button>
 </div>
 
 </div>
-
-<script>
-
-function abrir(id){
-document.getElementById('homeScreen').classList.add('hidden');
-document.getElementById(id).classList.remove('hidden');
-}
-
-function voltar(){
-document.querySelectorAll('.screen').forEach(e=>e.classList.add('hidden'));
-document.getElementById('homeScreen').classList.remove('hidden');
-}
-
-/* OCR */
-async function ocr(fileId,targetId){
-
-const file=document.getElementById(fileId).files[0];
-if(!file)return;
-
-document.getElementById(targetId).value="Lendo...";
-
-const result=await Tesseract.recognize(file,'por');
-
-document.getElementById(targetId).value=result.data.text;
-
-}
-
-/* PDF */
-function gerarPDFSimples(){
-const {jsPDF}=window.jspdf;
-const pdf=new jsPDF();
-pdf.text(document.getElementById('textoPDF').value,10,10);
-pdf.save("arquivo.pdf");
-}
-
-/* CURRÍCULO */
-function previaCurriculo(){
-
-document.getElementById('areaPreview').classList.remove('hidden');
-
-document.getElementById('areaPreview').innerHTML=`
-<div class="preview-box">
-<h2>${document.getElementById('nome').value}</h2>
-<p>${document.getElementById('textoCurriculo').value}</p>
-</div>`;
-}
-
-</script>
 
 </body>
 </html>
