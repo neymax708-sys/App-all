@@ -3,151 +3,163 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Elite AI Workspace v6</title>
+    <title>Elite AI Workspace v7</title>
+    
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
+    
     <style>
         :root { --primary: #4f46e5; --bg: #0f172a; --card: #1e293b; --text: #f1f5f9; }
-        * { box-sizing: border-box; transition: all 0.3s ease; }
-        body { font-family: 'Inter', sans-serif; background: var(--bg); color: var(--text); margin: 0; padding: 0; overflow-x: hidden; }
+        * { box-sizing: border-box; transition: 0.3s ease; }
+        body { font-family: 'Inter', sans-serif; background: var(--bg); color: var(--text); margin: 0; padding: 0; }
 
-        /* HEADER FIXO */
-        header { background: var(--card); padding: 15px; text-align: center; border-bottom: 1px solid rgba(255,255,255,0.1); position: sticky; top: 0; z-index: 100; }
-        header h1 { font-size: 20px; margin: 0; background: linear-gradient(to right, #818cf8, #c084fc); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+        header { background: var(--card); padding: 15px; text-align: center; border-bottom: 1px solid rgba(255,255,255,0.1); position: sticky; top:0; z-index:100; }
+        header h1 { font-size: 22px; margin: 0; background: linear-gradient(to right, #818cf8, #c084fc); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
 
-        .content-wrapper { padding: 20px; max-width: 500px; margin: 0 auto; }
+        .container { max-width: 500px; margin: 0 auto; padding: 20px; }
+        .card { background: var(--card); border-radius: 24px; padding: 25px; border: 1px solid rgba(255,255,255,0.05); }
 
-        /* EDITOR */
-        .editor-card { background: var(--card); border-radius: 24px; padding: 25px; box-shadow: 0 20px 40px rgba(0,0,0,0.4); }
-        label { display: block; font-size: 10px; font-weight: 800; color: #6366f1; text-transform: uppercase; margin-bottom: 8px; letter-spacing: 1px; }
+        label { display: block; font-size: 11px; font-weight: 800; color: #6366f1; text-transform: uppercase; margin-bottom: 8px; }
         input, textarea { width: 100%; background: rgba(15,23,42,0.6); border: 1px solid #334155; border-radius: 15px; color: white; padding: 15px; font-size: 16px; margin-bottom: 20px; }
-        textarea { height: 200px; resize: none; }
+        textarea { height: 220px; resize: none; }
+
+        .mic-btn { width: 50px; height: 50px; border-radius: 50%; border: none; background: #334155; color: white; cursor: pointer; display: flex; align-items: center; justify-content: center; margin: -75px 10px 25px auto; position: relative; z-index: 10; }
+        .mic-active { background: #ef4444; box-shadow: 0 0 20px rgba(239, 68, 68, 0.5); }
+
+        .btn-action { width: 100%; border: none; padding: 18px; border-radius: 16px; font-weight: 700; cursor: pointer; font-size: 16px; margin-bottom: 12px; display: flex; align-items: center; justify-content: center; gap: 10px; }
+        .btn-ai { background: var(--primary); color: white; }
+        .btn-view { background: #10b981; color: white; }
+
+        /* VISUALIZADOR INTERNO (WORKSPACE) */
+        #workspace { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: #f1f5f9; z-index: 200; display: none; overflow-y: auto; }
+        .toolbar { background: #1e293b; padding: 15px; display: flex; justify-content: space-between; position: sticky; top: 0; }
+        .tool-btn { background: rgba(255,255,255,0.1); color: white; border: none; padding: 10px 15px; border-radius: 10px; cursor: pointer; font-size: 12px; display: flex; align-items: center; gap: 6px; }
         
-        .mic-container { position: relative; height: 0; overflow: visible; }
-        .mic-btn { position: absolute; right: 10px; bottom: 40px; width: 45px; height: 45px; border-radius: 50%; border: none; background: #334155; color: white; cursor: pointer; display: flex; align-items: center; justify-content: center; box-shadow: 0 4px 12px rgba(0,0,0,0.3); }
-        .mic-active { background: #ef4444; animation: pulse 1.5s infinite; }
+        .paper { background: white; width: 90%; max-width: 800px; min-height: 1100px; margin: 30px auto; padding: 60px; box-shadow: 0 10px 40px rgba(0,0,0,0.1); color: #1e293b; }
+        .paper h2 { color: #4f46e5; border-bottom: 2px solid #e2e8f0; padding-bottom: 20px; font-family: 'Times New Roman', serif; }
+        .paper p { font-family: 'Times New Roman', serif; font-size: 18px; line-height: 1.8; white-space: pre-line; }
 
-        .action-btn { width: 100%; background: var(--primary); color: white; border: none; padding: 18px; border-radius: 15px; font-weight: 700; cursor: pointer; font-size: 16px; margin-bottom: 10px; }
-
-        /* VISUALIZADOR INTERNO (O PRÓPRIO APP) */
-        #doc-viewer { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: #e2e8f0; z-index: 200; display: none; overflow-y: auto; padding: 20px; }
-        .viewer-tools { max-width: 800px; margin: 0 auto 15px; display: flex; gap: 10px; justify-content: space-between; }
-        .tool-btn { background: white; color: #1e293b; border: none; padding: 10px 15px; border-radius: 10px; font-weight: 600; cursor: pointer; display: flex; align-items: center; gap: 8px; font-size: 13px; box-shadow: 0 2px 5px rgba(0,0,0,0.1); }
-        .tool-btn.close { background: #ef4444; color: white; }
-
-        .a4-page { background: white; width: 100%; max-width: 800px; min-height: 1000px; margin: 0 auto; padding: 60px; box-shadow: 0 15px 40px rgba(0,0,0,0.2); border-radius: 2px; color: #1e293b; }
-        .a4-page h2 { border-bottom: 3px solid #4f46e5; padding-bottom: 15px; margin-top: 0; font-family: 'Georgia', serif; }
-        .a4-page p { font-family: 'Georgia', serif; line-height: 1.8; font-size: 18px; white-space: pre-line; }
-
-        @keyframes pulse { 0% { box-shadow: 0 0 0 0 rgba(239, 68, 68, 0.7); } 70% { box-shadow: 0 0 0 15px rgba(239, 68, 68, 0); } 100% { box-shadow: 0 0 0 0 rgba(239, 68, 68, 0); } }
+        #status { text-align: center; font-size: 12px; color: #818cf8; font-weight: 600; }
     </style>
 </head>
 <body>
 
-    <header>
-        <h1>Elite AI Workspace</h1>
-    </header>
+    <header><h1>Elite AI Workspace</h1></header>
 
-    <div class="content-wrapper" id="main-app">
-        <div class="editor-card">
-            <label>Título Executivo</label>
-            <input type="text" id="docTitle" placeholder="Digite o título...">
+    <div class="container" id="main-ui">
+        <div class="card">
+            <label>Título do Projeto</label>
+            <input type="text" id="docTitle" placeholder="Ex: Relatório Financeiro">
             
-            <label>Desenvolvimento</label>
-            <textarea id="textContent" placeholder="Sua ideia ou rascunho..."></textarea>
+            <label>Conteúdo / Dados</label>
+            <textarea id="textContent" placeholder="Fale ou digite aqui os dados ou o texto..."></textarea>
             
-            <div class="mic-container">
-                <button class="mic-btn" id="micBtn" onclick="toggleMic()">
-                    <i class="fas fa-microphone" id="micIcon"></i>
-                </button>
-            </div>
+            <button class="mic-btn" id="micBtn" onclick="handleMic()">
+                <i class="fas fa-microphone" id="micIcon"></i>
+            </button>
 
-            <button class="action-btn" onclick="processAI()">
-                <i class="fas fa-wand-magic-sparkles"></i> Melhorar com Inteligência
+            <button class="btn-action btn-ai" onclick="runAI()">
+                <i class="fas fa-wand-magic-sparkles"></i> Refinar com IA
             </button>
-            <button class="action-btn" style="background: #10b981;" onclick="openViewer()">
-                <i class="fas fa-eye"></i> Abrir Documento no App
+            
+            <button class="btn-action btn-view" onclick="showWorkspace()">
+                <i class="fas fa-file-invoice"></i> Visualizar Documento
             </button>
-            <div id="status" style="text-align: center; color: #6366f1; font-weight: 600; margin-top: 10px;">Status: Online</div>
+            <p id="status">Sistema Pronto</p>
         </div>
     </div>
 
-    <div id="doc-viewer">
-        <div class="viewer-tools">
-            <button class="tool-btn close" onclick="closeViewer()">
-                <i class="fas fa-arrow-left"></i> Voltar
-            </button>
-            <div style="display: flex; gap: 8px;">
-                <button class="tool-btn" onclick="download('pdf')"><i class="fas fa-file-pdf"></i> PDF</button>
-                <button class="tool-btn" onclick="download('doc')"><i class="fas fa-file-word"></i> Word</button>
+    <div id="workspace">
+        <div class="toolbar">
+            <button class="tool-btn" style="background:#ef4444" onclick="hideWorkspace()"><i class="fas fa-times"></i> Fechar</button>
+            <div style="display:flex; gap:8px;">
+                <button class="tool-btn" onclick="exportDoc('pdf')"><i class="fas fa-file-pdf"></i> PDF</button>
+                <button class="tool-btn" onclick="exportDoc('xlsx')"><i class="fas fa-file-excel"></i> EXCEL</button>
+                <button class="tool-btn" onclick="exportDoc('doc')"><i class="fas fa-file-word"></i> DOC</button>
             </div>
         </div>
 
-        <div class="a4-page" id="printable">
-            <h2 id="viewTitle">Título do Documento</h2>
-            <p id="viewBody">O conteúdo será renderizado aqui...</p>
+        <div class="paper" id="paper-area">
+            <h2 id="viewTitle"></h2>
+            <p id="viewBody"></p>
         </div>
     </div>
 
     <script>
+        // Config de Voz
         const recognition = new (window.SpeechRecognition || window.webkitSpeechRecognition)();
         recognition.lang = 'pt-BR';
-        let listening = false;
+        let isMicOn = false;
 
-        function openViewer() {
-            document.getElementById('viewTitle').innerText = document.getElementById('docTitle').value || "Documento Sem Título";
-            document.getElementById('viewBody').innerText = document.getElementById('textContent').value || "Sem conteúdo para exibir.";
-            document.getElementById('doc-viewer').style.display = 'block';
-            document.body.style.overflow = 'hidden'; // Trava o scroll do fundo
-        }
-
-        function closeViewer() {
-            document.getElementById('doc-viewer').style.display = 'none';
-            document.body.style.overflow = 'auto';
-        }
-
-        function toggleMic() {
-            const icon = document.getElementById('micIcon');
+        function handleMic() {
             const btn = document.getElementById('micBtn');
-            if(!listening) {
+            const icon = document.getElementById('micIcon');
+            if(!isMicOn) {
                 recognition.start();
                 btn.classList.add('mic-active');
                 icon.className = "fas fa-stop";
-                listening = true;
             } else {
                 recognition.stop();
                 btn.classList.remove('mic-active');
                 icon.className = "fas fa-microphone";
-                listening = false;
             }
+            isMicOn = !isMicOn;
         }
 
         recognition.onresult = (e) => {
             document.getElementById('textContent').value += " " + e.results[0][0].transcript;
-            toggleMic();
+            handleMic();
         };
 
-        async function processAI() {
-            const text = document.getElementById('textContent');
-            const status = document.getElementById('status');
-            if(!text.value) return;
-
-            status.innerText = "⏳ IA Gerando Documento Profissional...";
-            try {
-                const res = await fetch(`https://text.pollinations.ai/${encodeURIComponent("Transforme o texto a seguir em um documento profissional, formatado, elegante e executivo em português: " + text.value)}`);
-                text.value = await res.text();
-                status.innerText = "✅ Documento Criado com Sucesso!";
-            } catch (e) { status.innerText = "❌ Erro ao conectar com IA."; }
+        // Workspace
+        function showWorkspace() {
+            document.getElementById('viewTitle').innerText = document.getElementById('docTitle').value || "Documento Elite";
+            document.getElementById('viewBody').innerText = document.getElementById('textContent').value || "Sem conteúdo.";
+            document.getElementById('workspace').style.display = 'block';
         }
 
-        function download(type) {
-            const title = document.getElementById('docTitle').value || "Documento_IA";
+        function hideWorkspace() { document.getElementById('workspace').style.display = 'none'; }
+
+        // IA
+        async function runAI() {
+            const field = document.getElementById('textContent');
+            const status = document.getElementById('status');
+            if(!field.value) return;
+
+            status.innerText = "⏳ IA Estruturando Arquivos...";
+            const prompt = "Reorganize o conteúdo a seguir de forma extremamente profissional. Se parecerem dados de tabela, separe por vírgulas. Se for texto, use linguagem corporativa sênior: " + field.value;
+            
+            try {
+                const res = await fetch(`https://text.pollinations.ai/${encodeURIComponent(prompt)}`);
+                field.value = await res.text();
+                status.innerText = "✅ Conteúdo Otimizado!";
+            } catch (e) { status.innerText = "❌ Erro na IA."; }
+        }
+
+        // EXPORTAÇÃO PROFISSIONAL
+        function exportDoc(type) {
+            const title = document.getElementById('docTitle').value || "Doc_Elite";
+            const content = document.getElementById('textContent').value;
+
             if(type === 'pdf') {
-                html2pdf().from(document.getElementById('printable')).save(`${title}.pdf`);
-            } else if(type === 'doc') {
-                const blob = new Blob(['\ufeff', document.getElementById('printable').innerHTML], { type: 'application/msword' });
-                const url = URL.createObjectURL(blob);
-                const a = document.createElement('a'); a.href = url; a.download = `${title}.doc`; a.click();
+                const element = document.getElementById('paper-area');
+                html2pdf().set({ margin: 1, filename: title+'.pdf', image: { type: 'jpeg', quality: 0.98 }, html2canvas: { scale: 2 }, jsPDF: { unit: 'in', format: 'letter', orientation: 'portrait' } }).from(element).save();
+            } 
+            else if(type === 'xlsx') {
+                // Transforma texto em Planilha Real (XLSX)
+                const rows = content.split('\n').map(line => line.split(/[,;|]/).map(item => item.trim()));
+                const wb = XLSX.utils.book_new();
+                const ws = XLSX.utils.aoa_to_sheet(rows);
+                XLSX.utils.book_append_sheet(wb, ws, "Dados Elite");
+                XLSX.writeFile(wb, `${title}.xlsx`);
+            }
+            else if(type === 'doc') {
+                const blob = new Blob(['\ufeff', document.getElementById('paper-area').innerHTML], { type: 'application/msword' });
+                const link = document.createElement('a');
+                link.href = URL.createObjectURL(blob);
+                link.download = `${title}.doc`;
+                link.click();
             }
         }
     </script>
