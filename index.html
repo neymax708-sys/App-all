@@ -1,562 +1,279 @@
 <!DOCTYPE html>
 <html lang="pt-br">
 <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Elite Docs AI</title>
+    
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
 
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
 
-<title>Elite Docs AI</title>
+        body {
+            font-family: 'Inter', sans-serif;
+            background: #03030a;
+            color: white;
+            padding: 12px;
+            background-image: radial-gradient(circle at top, rgba(91,75,255,.15), transparent 40%);
+        }
 
-<link rel="preconnect" href="https://fonts.googleapis.com">
+        .container { width: 100%; max-width: 600px; margin: auto; }
 
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+        .hero { text-align: center; padding: 30px 10px; }
+        .hero h1 { font-size: 28px; font-weight: 800; letter-spacing: -1px; }
+        .hero p { color: #9ca3af; font-size: 14px; margin-top: 5px; }
 
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+        /* GRID ESTILO APP LEITOR */
+        .grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 12px;
+            margin-top: 20px;
+        }
 
-<!-- IA -->
-<script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+        .card {
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            padding: 20px 5px;
+            border-radius: 20px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            cursor: pointer;
+            transition: 0.2s;
+        }
 
-<!-- PDF -->
-<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+        .card:active { transform: scale(0.92); background: rgba(255, 255, 255, 0.1); }
+        .card i { font-size: 30px; margin-bottom: 8px; }
+        .card span { font-size: 12px; font-weight: 600; color: #eee; }
 
-<style>
+        /* TELAS */
+        .screen {
+            background: rgba(255, 255, 255, 0.03);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            padding: 20px;
+            border-radius: 24px;
+            backdrop-filter: blur(10px);
+            margin-top: 10px;
+        }
 
-*{
-margin:0;
-padding:0;
-box-sizing:border-box;
-}
+        .hidden { display: none; }
 
-body{
-font-family:'Inter',sans-serif;
-background:#03030a;
-color:white;
-overflow-x:hidden;
-padding:12px;
-background-image:
-radial-gradient(circle at top, rgba(91,75,255,.25), transparent 35%),
-radial-gradient(circle at bottom, rgba(0,140,255,.12), transparent 30%);
-}
+        .back-btn {
+            background: none;
+            color: #5b4bff;
+            border: none;
+            font-weight: 700;
+            margin-bottom: 15px;
+            cursor: pointer;
+            font-size: 16px;
+        }
 
-.hidden{
-display:none;
-}
+        .input, .textarea {
+            width: 100%;
+            padding: 14px;
+            border-radius: 12px;
+            border: 1px solid rgba(255,255,255,0.1);
+            background: rgba(255,255,255,0.05);
+            color: white;
+            margin-bottom: 10px;
+            outline: none;
+        }
 
-.container{
-width:100%;
-max-width:1200px;
-margin:auto;
-}
+        .textarea { min-height: 120px; }
 
-.hero{
-text-align:center;
-padding:20px 10px;
-}
+        .generate-btn {
+            width: 100%;
+            padding: 16px;
+            border: none;
+            border-radius: 12px;
+            background: #5b4bff;
+            color: white;
+            font-weight: 700;
+            font-size: 16px;
+            margin-top: 10px;
+        }
 
-.logo{
-width:220px;
-max-width:90%;
-margin-bottom:15px;
-filter:drop-shadow(0 0 20px rgba(91,75,255,.5));
-}
+        .preview-box {
+            background: white;
+            color: #333;
+            padding: 15px;
+            border-radius: 12px;
+            margin-top: 20px;
+            font-size: 12px;
+            min-height: 100px;
+        }
 
-.hero h1{
-font-size:36px;
-font-weight:800;
-margin-bottom:10px;
-}
-
-.hero p{
-color:#9ca3af;
-font-size:16px;
-}
-
-.grid{
-display:grid;
-grid-template-columns:1fr;
-gap:18px;
-margin-top:30px;
-}
-
-.card{
-background:rgba(255,255,255,.04);
-border:1px solid rgba(255,255,255,.08);
-padding:24px;
-border-radius:28px;
-backdrop-filter:blur(20px);
-cursor:pointer;
-transition:.3s;
-}
-
-.card:hover{
-transform:translateY(-5px);
-border-color:#5b4bff;
-}
-
-.card i{
-font-size:40px;
-margin-bottom:15px;
-}
-
-.card h2{
-font-size:24px;
-margin-bottom:10px;
-}
-
-.card p{
-color:#9ca3af;
-line-height:1.6;
-}
-
-.screen{
-margin-top:20px;
-background:rgba(255,255,255,.04);
-border:1px solid rgba(255,255,255,.08);
-padding:20px;
-border-radius:28px;
-backdrop-filter:blur(20px);
-}
-
-.back-btn{
-width:100%;
-padding:15px;
-border:none;
-border-radius:16px;
-background:#5b4bff;
-color:white;
-font-weight:700;
-margin-bottom:20px;
-cursor:pointer;
-}
-
-.input,
-.textarea{
-width:100%;
-padding:16px;
-border-radius:16px;
-border:1px solid rgba(255,255,255,.08);
-background:rgba(255,255,255,.03);
-color:white;
-margin-bottom:16px;
-font-size:15px;
-outline:none;
-}
-
-.textarea{
-min-height:180px;
-resize:none;
-}
-
-.generate-btn{
-width:100%;
-padding:16px;
-border:none;
-border-radius:16px;
-background:linear-gradient(135deg,#5b4bff,#4338ca);
-color:white;
-font-size:16px;
-font-weight:700;
-cursor:pointer;
-}
-
-.export-btn{
-margin-top:20px;
-padding:16px;
-background:#5b4bff;
-border-radius:16px;
-text-align:center;
-font-weight:700;
-cursor:pointer;
-}
-
-.preview{
-margin-top:20px;
-}
-
-.preview-box{
-background:white;
-color:#111;
-padding:25px;
-border-radius:20px;
-overflow:hidden;
-}
-
-.curriculo-layout{
-display:flex;
-flex-wrap:wrap;
-}
-
-.sidebar{
-width:100%;
-max-width:250px;
-background:#005fcc;
-color:white;
-padding:25px;
-}
-
-.main{
-flex:1;
-padding:25px;
-}
-
-.foto{
-width:120px;
-height:120px;
-border-radius:20px;
-object-fit:cover;
-border:4px solid white;
-margin-bottom:20px;
-}
-
-@media(min-width:768px){
-
-.grid{
-grid-template-columns:repeat(2,1fr);
-}
-
-.hero h1{
-font-size:60px;
-}
-
-}
-
-</style>
-
+        .download-btn {
+            background: #10b981;
+            color: white;
+            text-align: center;
+            padding: 15px;
+            border-radius: 12px;
+            margin-top: 10px;
+            font-weight: 700;
+            cursor: pointer;
+        }
+    </style>
 </head>
-
 <body>
 
 <div class="container">
+    <div id="homeScreen">
+        <div class="hero">
+            <h1>Elite Docs AI</h1>
+            <p>Seus documentos com perfeição</p>
+        </div>
 
-<!-- HOME -->
+        <div class="grid">
+            <div class="card" onclick="abrirTela('pdfScreen')">
+                <i class="fas fa-file-pdf" style="color:#ef4444"></i>
+                <span>PDF</span>
+            </div>
+            <div class="card" onclick="alert('Funcionalidade em breve!')">
+                <i class="fas fa-file-word" style="color:#2b579a"></i>
+                <span>Word</span>
+            </div>
+            <div class="card" onclick="alert('Funcionalidade em breve!')">
+                <i class="fas fa-file-excel" style="color:#217346"></i>
+                <span>Excel</span>
+            </div>
+            <div class="card" onclick="abrirTela('curriculoScreen')">
+                <i class="fas fa-user-tie" style="color:#5b4bff"></i>
+                <span>Currículo</span>
+            </div>
+            <div class="card" onclick="abrirTela('linkedinScreen')">
+                <i class="fab fa-linkedin" style="color:#0a66c2"></i>
+                <span>LinkedIn</span>
+            </div>
+            <div class="card" onclick="abrirTela('cartaScreen')">
+                <i class="fas fa-envelope" style="color:#f59e0b"></i>
+                <span>Carta</span>
+            </div>
+        </div>
+    </div>
 
-<div id="homeScreen">
+    <div id="curriculoScreen" class="screen hidden">
+        <button class="back-btn" onclick="voltar()">← Voltar</button>
+        <input class="input" id="nome" placeholder="Nome Completo">
+        <input class="input" id="cargo" placeholder="Cargo (Ex: Arquiteto)">
+        <input class="input" id="telefone" placeholder="Telefone">
+        <input class="input" id="email" placeholder="Email">
+        <input class="input" id="cidade" placeholder="Cidade/Estado">
+        <textarea class="textarea" id="textoCurriculo" placeholder="Resumo profissional e experiências..."></textarea>
+        
+        <button class="generate-btn" onclick="previaCurriculo()">Ver Prévia</button>
+        
+        <div id="areaPreview" class="hidden">
+            <div class="preview-box" id="previewTexto"></div>
+            <div class="download-btn" onclick="baixarCurriculoPremium()">
+                <i class="fas fa-download"></i> BAIXAR PDF PREMIUM
+            </div>
+        </div>
+    </div>
 
-<div class="hero">
-
-<img src="logo.png" class="logo">
-
-<h1>Elite Docs AI</h1>
-
-<p>
-Currículos ATS, PDFs, LinkedIn e cartas profissionais com IA.
-</p>
-
-</div>
-
-<div class="grid">
-
-<div class="card" onclick="abrirTela('curriculoScreen')">
-
-<i class="fas fa-user-tie" style="color:#5b4bff"></i>
-
-<h2>Currículo ATS</h2>
-
-<p>
-Crie currículos modernos com IA.
-</p>
-
-</div>
-
-<div class="card" onclick="abrirTela('pdfScreen')">
-
-<i class="fas fa-file-pdf" style="color:#ef4444"></i>
-
-<h2>Documento PDF</h2>
-
-<p>
-Crie PDFs profissionais.
-</p>
-
-</div>
-
-<div class="card" onclick="abrirTela('linkedinScreen')">
-
-<i class="fab fa-linkedin" style="color:#0a66c2"></i>
-
-<h2>Perfil LinkedIn</h2>
-
-<p>
-Perfil otimizado automaticamente.
-</p>
-
-</div>
-
-<div class="card" onclick="abrirTela('cartaScreen')">
-
-<i class="fas fa-envelope" style="color:#10b981"></i>
-
-<h2>Carta Profissional</h2>
-
-<p>
-Cartas modernas com IA.
-</p>
-
-</div>
-
-</div>
-
-</div>
-
-<!-- CURRICULO -->
-
-<div id="curriculoScreen" class="screen hidden">
-
-<button class="back-btn" onclick="voltar()">
-← Voltar
-</button>
-
-<input class="input" id="nome" placeholder="Nome completo">
-
-<input class="input" id="cargo" placeholder="Cargo profissional">
-
-<input class="input" id="telefone" placeholder="Telefone">
-
-<input class="input" id="email" placeholder="Email">
-
-<input class="input" id="cidade" placeholder="Cidade">
-
-<input class="input" type="file" id="foto">
-
-<textarea class="textarea" id="textoCurriculo" placeholder="Experiências, habilidades e formação..."></textarea>
-
-<button class="generate-btn" onclick="gerarIAcurriculo()">
-Gerar Currículo com IA
-</button>
-
-<div id="previewCurriculo" class="preview"></div>
-
-</div>
-
+    <div id="pdfScreen" class="screen hidden"><button class="back-btn" onclick="voltar()">← Voltar</button><p>Criação de PDF padrão...</p></div>
+    <div id="linkedinScreen" class="screen hidden"><button class="back-btn" onclick="voltar()">← Voltar</button><p>Otimização de LinkedIn...</p></div>
+    <div id="cartaScreen" class="screen hidden"><button class="back-btn" onclick="voltar()">← Voltar</button><p>Carta de apresentação...</p></div>
 </div>
 
 <script>
-
-function abrirTela(id){
-
-document.getElementById('homeScreen').classList.add('hidden');
-
-document.querySelectorAll('.screen').forEach(t=>{
-t.classList.add('hidden');
-});
-
-document.getElementById(id).classList.remove('hidden');
-
-}
-
-function voltar(){
-
-document.querySelectorAll('.screen').forEach(t=>{
-t.classList.add('hidden');
-});
-
-document.getElementById('homeScreen').classList.remove('hidden');
-
-}
-
-async function gerarIAcurriculo(){
-
-const nome=document.getElementById('nome').value;
-const cargo=document.getElementById('cargo').value;
-const telefone=document.getElementById('telefone').value;
-const email=document.getElementById('email').value;
-const cidade=document.getElementById('cidade').value;
-const texto=document.getElementById('textoCurriculo').value;
-
-let foto='https://cdn-icons-png.flaticon.com/512/847/847969.png';
-
-const arquivo=document.getElementById('foto').files[0];
-
-if(arquivo){
-foto=URL.createObjectURL(arquivo);
-}
-
-const prompt=`
-Crie um resumo profissional moderno para currículo baseado nisso:
-
-${texto}
-`;
-
-let resumo='Profissional qualificado e dedicado.';
-
-try{
-
-const resposta=await axios.get(
-'https://text.pollinations.ai/' + encodeURIComponent(prompt)
-);
-
-resumo=resposta.data;
-
-}catch(e){
-
-console.log(e);
-
-}
-
-document.getElementById('previewCurriculo').innerHTML=`
-
-<div class="preview-box">
-
-<div class="curriculo-layout">
-
-<div class="sidebar">
-
-<img src="${foto}" class="foto">
-
-<h2 style="margin-bottom:20px;">
-${nome}
-</h2>
-
-<h3>CONTATO</h3>
-
-<p style="margin-top:10px;">
-📞 ${telefone}
-</p>
-
-<p style="margin-top:10px;">
-✉️ ${email}
-</p>
-
-<p style="margin-top:10px;">
-📍 ${cidade}
-</p>
-
-<br>
-
-<h3>HABILIDADES</h3>
-
-<p style="margin-top:10px;">• Comunicação</p>
-
-<p style="margin-top:10px;">• Liderança</p>
-
-<p style="margin-top:10px;">• Trabalho em equipe</p>
-
-</div>
-
-<div class="main">
-
-<h1 style="
-color:#005fcc;
-font-size:36px;
-">
-${nome}
-</h1>
-
-<h3 style="
-margin-top:10px;
-color:#444;
-">
-${cargo}
-</h3>
-
-<h2 style="
-margin-top:30px;
-color:#005fcc;
-">
-RESUMO PROFISSIONAL
-</h2>
-
-<p style="
-margin-top:15px;
-line-height:1.8;
-white-space:pre-line;
-">
-${resumo}
-</p>
-
-</div>
-
-</div>
-
-</div>
-
-<div class="export-btn" onclick="baixarCurriculoPDF()">
-
-<i class="fas fa-file-pdf"></i>
-
-Baixar Currículo PDF
-
-</div>
-
-`;
-
-}
-
-async function baixarCurriculoPDF(){
-
-const { jsPDF } = window.jspdf;
-
-const pdf = new jsPDF({
-orientation:'portrait',
-unit:'mm',
-format:'a4'
-});
-
-const nome=document.getElementById('nome').value;
-const cargo=document.getElementById('cargo').value;
-const telefone=document.getElementById('telefone').value;
-const email=document.getElementById('email').value;
-const cidade=document.getElementById('cidade').value;
-const texto=document.getElementById('textoCurriculo').value;
-
-pdf.setFillColor(0,95,204);
-
-pdf.rect(0,0,60,297,'F');
-
-pdf.setTextColor(255,255,255);
-
-pdf.setFontSize(22);
-
-pdf.text(nome,10,25);
-
-pdf.setFontSize(12);
-
-pdf.text("CONTATO",10,45);
-
-pdf.text("Tel: "+telefone,10,55);
-
-pdf.text(email,10,65,{
-maxWidth:45
-});
-
-pdf.text(cidade,10,75);
-
-pdf.text("HABILIDADES",10,100);
-
-pdf.text("• Comunicação",10,110);
-
-pdf.text("• Liderança",10,120);
-
-pdf.text("• Trabalho em equipe",10,130);
-
-pdf.setTextColor(0,0,0);
-
-pdf.setFontSize(24);
-
-pdf.text(nome,70,30);
-
-pdf.setFontSize(16);
-
-pdf.text(cargo,70,42);
-
-pdf.setTextColor(0,95,204);
-
-pdf.setFontSize(18);
-
-pdf.text("RESUMO PROFISSIONAL",70,60);
-
-pdf.setTextColor(50,50,50);
-
-pdf.setFontSize(12);
-
-const linhas = pdf.splitTextToSize(texto,120);
-
-pdf.text(linhas,70,72);
-
-pdf.save("curriculo-premium.pdf");
-
-}
-
+    function abrirTela(id) {
+        document.getElementById('homeScreen').classList.add('hidden');
+        document.querySelectorAll('.screen').forEach(s => s.classList.add('hidden'));
+        document.getElementById(id).classList.remove('hidden');
+    }
+
+    function voltar() {
+        document.querySelectorAll('.screen').forEach(s => s.classList.add('hidden'));
+        document.getElementById('homeScreen').classList.remove('hidden');
+    }
+
+    function previaCurriculo() {
+        const nome = document.getElementById('nome').value;
+        const cargo = document.getElementById('cargo').value;
+        if(!nome) return alert("Digite ao menos o nome");
+        
+        document.getElementById('areaPreview').classList.remove('hidden');
+        document.getElementById('previewTexto').innerHTML = `<b>${nome}</b><br>${cargo}<br><br>Gerando layout premium...`;
+    }
+
+    async function baixarCurriculoPremium() {
+        const { jsPDF } = window.jspdf;
+        const pdf = new jsPDF({ unit: 'mm', format: 'a4' });
+
+        const nome = document.getElementById('nome').value.toUpperCase();
+        const cargo = document.getElementById('cargo').value;
+        const tel = document.getElementById('telefone').value;
+        const email = document.getElementById('email').value;
+        const cidade = document.getElementById('cidade').value;
+        const texto = document.getElementById('textoCurriculo').value;
+
+        // 1. Barra Lateral Azul
+        pdf.setFillColor(0, 95, 204);
+        pdf.rect(0, 0, 65, 297, 'F');
+
+        // 2. Círculo da Foto
+        pdf.setFillColor(230, 230, 230);
+        pdf.circle(32.5, 30, 18, 'F');
+
+        // 3. Texto Barra Lateral (Branco)
+        pdf.setTextColor(255, 255, 255);
+        pdf.setFont("helvetica", "bold");
+        pdf.setFontSize(10);
+        pdf.text("CONTATO", 10, 65);
+        pdf.setLineWidth(0.3);
+        pdf.setDrawColor(255, 255, 255);
+        pdf.line(10, 67, 55, 67);
+
+        pdf.setFontSize(8);
+        pdf.setFont("helvetica", "normal");
+        pdf.text(`Tel: ${tel}`, 10, 75);
+        pdf.text(email, 10, 82, { maxWidth: 45 });
+        pdf.text(cidade, 10, 95, { maxWidth: 45 });
+
+        pdf.setFont("helvetica", "bold");
+        pdf.text("HABILIDADES", 10, 115);
+        pdf.line(10, 117, 55, 117);
+        pdf.setFont("helvetica", "normal");
+        pdf.text("• Comunicação\n• Liderança\n• Trabalho em Equipe", 10, 125);
+
+        // 4. Lado Direito (Conteúdo)
+        pdf.setTextColor(0, 95, 204);
+        pdf.setFontSize(22);
+        pdf.setFont("helvetica", "bold");
+        pdf.text(nome, 72, 25);
+
+        pdf.setTextColor(100, 100, 100);
+        pdf.setFontSize(14);
+        pdf.text(cargo, 72, 33);
+
+        pdf.setTextColor(0, 95, 204);
+        pdf.setFontSize(12);
+        pdf.text("RESUMO PROFISSIONAL", 72, 55);
+        pdf.setDrawColor(0, 95, 204);
+        pdf.line(72, 57, 200, 57);
+
+        pdf.setTextColor(50, 50, 50);
+        pdf.setFontSize(10);
+        pdf.setFont("helvetica", "normal");
+        const linhas = pdf.splitTextToSize(texto, 120);
+        pdf.text(linhas, 72, 65);
+
+        // 5. Seção Experiência (Simulada para visual)
+        let proximaY = 65 + (linhas.length * 5) + 10;
+        pdf.setTextColor(0, 95, 204);
+        pdf.setFont("helvetica", "bold");
+        pdf.text("EXPERIÊNCIA", 72, proximaY);
+        pdf.line(72, proximaY + 2, 200, proximaY + 2);
+
+        pdf.save("curriculo-premium.pdf");
+    }
 </script>
 
 </body>
