@@ -8,19 +8,19 @@
 <title>Elite Docs AI</title>
 
 <script src="https://accounts.google.com/gsi/client" async defer></script>
+
 <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
 
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Poppins:wght@500;600;700;800&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Poppins:wght@500;600;700;800&display=swap" rel="stylesheet">
 
 <style>
 
 :root{
 --primary:#5b4bff;
 --secondary:#4338ca;
---bg:#05050a;
---glass:rgba(18,20,40,.58);
+--glass:rgba(18,20,40,.55);
 --border:rgba(255,255,255,.08);
 }
 
@@ -42,20 +42,8 @@ padding:20px;
 overflow-x:hidden;
 }
 
-body::before{
-content:'';
-position:fixed;
-width:500px;
-height:500px;
-background:rgba(91,75,255,.15);
-filter:blur(120px);
-top:-200px;
-left:-100px;
-z-index:-1;
-}
-
 .app{
-max-width:1000px;
+max-width:1100px;
 margin:auto;
 }
 
@@ -80,8 +68,8 @@ margin-bottom:25px;
 
 .hero h1{
 font-family:'Poppins';
-font-size:50px;
-margin-bottom:15px;
+font-size:52px;
+margin-bottom:10px;
 }
 
 .gradient{
@@ -91,10 +79,10 @@ background:linear-gradient(90deg,#fff,#9b8cff);
 }
 
 .hero p{
+color:#94a3b8;
 max-width:700px;
 margin:auto;
 line-height:1.8;
-color:#94a3b8;
 }
 
 .glass{
@@ -103,7 +91,7 @@ border:1px solid var(--border);
 backdrop-filter:blur(18px);
 border-radius:30px;
 padding:30px;
-box-shadow:0 20px 60px rgba(0,0,0,.45);
+box-shadow:0 20px 60px rgba(0,0,0,.4);
 }
 
 #login-gate{
@@ -129,18 +117,55 @@ margin-bottom:20px;
 display:none;
 }
 
+.grid{
+display:grid;
+grid-template-columns:repeat(2,1fr);
+gap:18px;
+}
+
+.card{
+background:rgba(255,255,255,.03);
+border:1px solid rgba(255,255,255,.08);
+padding:25px;
+border-radius:24px;
+cursor:pointer;
+transition:.3s;
+}
+
+.card:hover{
+transform:translateY(-5px);
+border:1px solid #5b4bff;
+background:rgba(91,75,255,.08);
+}
+
+.card i{
+font-size:34px;
+margin-bottom:18px;
+}
+
+.card h2{
+font-size:20px;
+margin-bottom:10px;
+font-family:'Poppins';
+}
+
+.card p{
+color:#94a3b8;
+line-height:1.6;
+font-size:14px;
+}
+
 input,
-textarea,
-select{
+textarea{
 width:100%;
 padding:18px;
+margin-bottom:15px;
 background:rgba(255,255,255,.03);
 border:1px solid rgba(255,255,255,.08);
 border-radius:18px;
-outline:none;
 color:white;
 font-family:'Inter';
-margin-bottom:15px;
+outline:none;
 }
 
 textarea{
@@ -157,10 +182,9 @@ background:linear-gradient(135deg,#5b4bff,#4338ca);
 color:white;
 font-family:'Poppins';
 font-weight:600;
-font-size:15px;
 cursor:pointer;
+font-size:15px;
 transition:.3s;
-box-shadow:0 0 40px rgba(91,75,255,.35);
 }
 
 .btn:hover{
@@ -176,11 +200,9 @@ margin-top:20px;
 }
 
 .content h3{
-margin-bottom:15px;
-font-size:14px;
 font-family:'Poppins';
+margin-bottom:15px;
 color:#9b8cff;
-text-transform:uppercase;
 }
 
 .content p{
@@ -196,16 +218,20 @@ gap:10px;
 }
 
 .tag{
-padding:10px 16px;
+padding:10px 15px;
 border-radius:999px;
 background:rgba(91,75,255,.12);
 border:1px solid rgba(91,75,255,.25);
 font-size:13px;
-color:#c7c5ff;
+}
+
+.preview-btn{
+margin-top:15px;
+margin-bottom:10px;
 }
 
 .export{
-margin-top:25px;
+margin-top:15px;
 padding:18px;
 border-radius:18px;
 background:rgba(255,255,255,.03);
@@ -215,11 +241,27 @@ align-items:center;
 justify-content:center;
 gap:10px;
 font-family:'Poppins';
-font-weight:600;
 cursor:pointer;
 }
 
+.hidden{
+display:none;
+}
+
+@media(max-width:800px){
+
+.grid{
+grid-template-columns:1fr;
+}
+
+.hero h1{
+font-size:36px;
+}
+
+}
+
 </style>
+
 </head>
 
 <body>
@@ -237,7 +279,7 @@ Elite <span class="gradient">Docs AI</span>
 </h1>
 
 <p>
-Crie currículos ATS premium com IA.
+Currículos ATS, PDFs, LinkedIn e cartas profissionais com IA.
 </p>
 
 </div>
@@ -248,7 +290,7 @@ Crie currículos ATS premium com IA.
 <i class="fas fa-bolt"></i>
 </div>
 
-<h2 style="font-family:Poppins;margin-bottom:10px;">
+<h2 style="margin-bottom:10px;font-family:Poppins;">
 Entrar
 </h2>
 
@@ -258,15 +300,14 @@ Faça login para continuar.
 
 <div id="g_id_onload"
 data-client_id="593110663863-u9956693jafabtisfm0jnbgsufjd8n1f.apps.googleusercontent.com"
-data-callback="handleCredentialResponse"
-data-auto_prompt="false">
+data-callback="handleCredentialResponse">
 </div>
 
 <div class="g_id_signin"
 data-type="standard"
-data-shape="pill"
 data-theme="filled_blue"
-data-size="large">
+data-size="large"
+data-shape="pill">
 </div>
 
 </div>
@@ -275,35 +316,151 @@ data-size="large">
 
 <div class="glass">
 
-<select id="tipoDocumento">
+<div class="grid">
 
-<option value="curriculo">
-Currículo ATS
-</option>
+<div class="card" onclick="abrirFormulario('curriculo')">
 
-</select>
+<i class="fas fa-user-tie" style="color:#5b4bff;"></i>
 
-<input type="text" id="nomePessoa" placeholder="Nome completo">
+<h2>Currículo ATS</h2>
 
-<input type="text" id="cargoPessoa" placeholder="Cargo profissional">
+<p>
+Currículo premium com foto, cargo e contatos.
+</p>
 
-<input type="text" id="telefonePessoa" placeholder="Telefone">
+</div>
 
-<input type="email" id="emailPessoa" placeholder="Email">
+<div class="card" onclick="abrirFormulario('pdf')">
 
-<input type="text" id="cidadePessoa" placeholder="Cidade">
+<i class="fas fa-file-pdf" style="color:#ef4444;"></i>
 
-<input type="file" id="fotoPessoa" accept="image/*">
+<h2>Documento PDF</h2>
 
-<textarea
-id="rawInput"
-placeholder="Fale sobre experiência, habilidades e formação..."></textarea>
+<p>
+Crie PDFs profissionais automaticamente.
+</p>
 
-<button class="btn" onclick="gerarDocumento()">
-Gerar Currículo Premium
+</div>
+
+<div class="card" onclick="abrirFormulario('linkedin')">
+
+<i class="fab fa-linkedin" style="color:#0a66c2;"></i>
+
+<h2>Perfil LinkedIn</h2>
+
+<p>
+Perfil otimizado para recrutadores.
+</p>
+
+</div>
+
+<div class="card" onclick="abrirFormulario('carta')">
+
+<i class="fas fa-envelope" style="color:#10b981;"></i>
+
+<h2>Carta Profissional</h2>
+
+<p>
+Cartas modernas e profissionais.
+</p>
+
+</div>
+
+</div>
+
+<!-- CURRICULO -->
+
+<div id="form-curriculo" class="hidden">
+
+<div class="content">
+
+<h3>Informações do Currículo</h3>
+
+<input type="text" id="nome" placeholder="Nome completo">
+
+<input type="text" id="cargo" placeholder="Cargo profissional">
+
+<input type="text" id="telefone" placeholder="Telefone">
+
+<input type="email" id="email" placeholder="Email">
+
+<input type="text" id="cidade" placeholder="Cidade">
+
+<input type="file" id="foto" accept="image/*">
+
+<textarea id="textoCurriculo" placeholder="Experiências, habilidades e formação..."></textarea>
+
+<button class="btn preview-btn" onclick="previewCurriculo()">
+Analisar Currículo
 </button>
 
-<div id="dashboard"></div>
+<div id="previewCurriculo"></div>
+
+</div>
+
+</div>
+
+<!-- PDF -->
+
+<div id="form-pdf" class="hidden">
+
+<div class="content">
+
+<h3>Documento PDF</h3>
+
+<input type="text" id="tituloPDF" placeholder="Título">
+
+<textarea id="textoPDF" placeholder="Digite o conteúdo..."></textarea>
+
+<button class="btn preview-btn" onclick="previewPDF()">
+Analisar Documento
+</button>
+
+<div id="previewPDF"></div>
+
+</div>
+
+</div>
+
+<!-- LINKEDIN -->
+
+<div id="form-linkedin" class="hidden">
+
+<div class="content">
+
+<h3>Perfil LinkedIn</h3>
+
+<textarea id="textoLinkedin" placeholder="Digite suas informações profissionais..."></textarea>
+
+<button class="btn preview-btn" onclick="previewLinkedin()">
+Analisar Perfil
+</button>
+
+<div id="previewLinkedin"></div>
+
+</div>
+
+</div>
+
+<!-- CARTA -->
+
+<div id="form-carta" class="hidden">
+
+<div class="content">
+
+<h3>Carta Profissional</h3>
+
+<textarea id="textoCarta" placeholder="Digite o objetivo da carta..."></textarea>
+
+<button class="btn preview-btn" onclick="previewCarta()">
+Analisar Carta
+</button>
+
+<div id="previewCarta"></div>
+
+</div>
+
+</div>
 
 </div>
 
@@ -319,11 +476,9 @@ const user = localStorage.getItem("eliteUser");
 
 if(user){
 
-const data = JSON.parse(user);
+document.getElementById("login-gate").style.display="none";
 
-document.getElementById("login-gate").style.display = "none";
-
-document.getElementById("app-content").style.display = "block";
+document.getElementById("app-content").style.display="block";
 
 }
 
@@ -331,51 +486,42 @@ document.getElementById("app-content").style.display = "block";
 
 function handleCredentialResponse(response){
 
-const data = JSON.parse(
-atob(response.credential.split('.')[1])
-);
+const data = JSON.parse(atob(response.credential.split('.')[1]));
 
-localStorage.setItem("eliteUser", JSON.stringify({
-name:data.name,
-picture:data.picture
-}));
+localStorage.setItem("eliteUser", JSON.stringify(data));
 
-document.getElementById("login-gate").style.display = "none";
+document.getElementById("login-gate").style.display="none";
 
-document.getElementById("app-content").style.display = "block";
+document.getElementById("app-content").style.display="block";
 
 }
 
-async function gerarDocumento(){
+function esconderTodos(){
 
-const input =
-document.getElementById('rawInput').value;
+document.getElementById("form-curriculo").classList.add("hidden");
 
-const nome =
-document.getElementById('nomePessoa').value;
+document.getElementById("form-pdf").classList.add("hidden");
 
-const cargo =
-document.getElementById('cargoPessoa').value;
+document.getElementById("form-linkedin").classList.add("hidden");
 
-const telefone =
-document.getElementById('telefonePessoa').value;
+document.getElementById("form-carta").classList.add("hidden");
 
-const email =
-document.getElementById('emailPessoa').value;
-
-const cidade =
-document.getElementById('cidadePessoa').value;
-
-const foto =
-document.getElementById('fotoPessoa').files[0];
-
-if(!input){
-alert('Digite algo.');
-return;
 }
+
+function abrirFormulario(tipo){
+
+esconderTodos();
+
+document.getElementById("form-"+tipo).classList.remove("hidden");
+
+}
+
+async function previewCurriculo(){
+
+const texto = document.getElementById("textoCurriculo").value;
 
 const prompt = `
-Crie um currículo ATS profissional.
+Crie currículo ATS premium.
 
 RETORNE:
 
@@ -388,21 +534,30 @@ RETORNE:
 [HABILIDADES]
 
 Texto:
-${input}
+${texto}
 `;
 
 const res = await fetch(
 'https://text.pollinations.ai/' + encodeURIComponent(prompt)
 );
 
-const text = await res.text();
+const data = await res.text();
 
-const partes = text.split("|||");
+const partes = data.split("|||");
 
 const resumo = partes[0] || '';
 const experiencia = partes[1] || '';
 const formacao = partes[2] || '';
 const habilidades = partes[3] || '';
+
+window.curriculoFinal = {
+resumo,
+experiencia,
+formacao,
+habilidades
+};
+
+const foto = document.getElementById("foto").files[0];
 
 let fotoURL = '';
 
@@ -410,20 +565,9 @@ if(foto){
 fotoURL = URL.createObjectURL(foto);
 }
 
-window.curriculoData = {
-nome,
-cargo,
-telefone,
-email,
-cidade,
-fotoURL,
-resumo,
-experiencia,
-formacao,
-habilidades
-};
+window.fotoURL = fotoURL;
 
-document.getElementById('dashboard').innerHTML = `
+document.getElementById("previewCurriculo").innerHTML = `
 
 <div class="content">
 
@@ -432,6 +576,7 @@ display:flex;
 gap:25px;
 align-items:center;
 flex-wrap:wrap;
+margin-bottom:25px;
 ">
 
 <img
@@ -446,81 +591,53 @@ border:3px solid #5b4bff;
 
 <div>
 
-<h1 style="
-font-family:Poppins;
-font-size:32px;
-margin-bottom:8px;
-">
-${nome}
+<h1 style="font-size:32px;font-family:Poppins;">
+${document.getElementById("nome").value}
 </h1>
 
 <p style="color:#9b8cff;font-size:18px;">
-${cargo}
+${document.getElementById("cargo").value}
 </p>
 
-<p style="margin-top:10px;">
-📞 ${telefone}
-</p>
+<p>📞 ${document.getElementById("telefone").value}</p>
 
-<p>
-✉️ ${email}
-</p>
+<p>✉️ ${document.getElementById("email").value}</p>
 
-<p>
-📍 ${cidade}
-</p>
+<p>📍 ${document.getElementById("cidade").value}</p>
 
 </div>
 
 </div>
 
-</div>
-
-<div class="content">
-
-<h3>Resumo Profissional</h3>
+<h3>Resumo</h3>
 
 <p>${resumo}</p>
-
-</div>
-
-<div class="content">
 
 <h3>Experiência</h3>
 
 <p>${experiencia}</p>
 
-</div>
-
-<div class="content">
-
 <h3>Formação</h3>
 
 <p>${formacao}</p>
-
-</div>
-
-<div class="content">
 
 <h3>Competências</h3>
 
 <div class="tags">
 
-${habilidades.split(',').map(skill => `
+${habilidades.split(',').map(skill=>`
 <div class="tag">${skill.trim()}</div>
 `).join('')}
 
 </div>
 
-</div>
+<div class="export" onclick="baixarCurriculoPDF()">
 
-<div class="export"
-onclick="baixarCurriculoPremiumPDF()">
-
-<i class="fas fa-file-pdf"
-style="color:#ef4444;"></i>
+<i class="fas fa-file-pdf" style="color:#ef4444;"></i>
 
 Baixar Currículo PDF
+
+</div>
 
 </div>
 
@@ -528,83 +645,133 @@ Baixar Currículo PDF
 
 }
 
-function baixarCurriculoPremiumPDF(){
+function baixarCurriculoPDF(){
 
-const d = window.curriculoData;
+const el = document.getElementById("previewCurriculo");
 
-const el = document.createElement('div');
+html2pdf().from(el).save("curriculo-premium.pdf");
 
-el.innerHTML = `
+}
 
-<div style="
-padding:40px;
-font-family:Arial;
-color:#111827;
-">
+function previewPDF(){
 
-<div style="
-display:flex;
-gap:25px;
-align-items:center;
-margin-bottom:35px;
-">
+const titulo = document.getElementById("tituloPDF").value;
 
-<img
-src="${d.fotoURL}"
-style="
-width:120px;
-height:120px;
-border-radius:20px;
-object-fit:cover;
-">
+const texto = document.getElementById("textoPDF").value;
 
-<div>
+document.getElementById("previewPDF").innerHTML = `
 
-<h1 style="
-font-size:34px;
-margin-bottom:10px;
-color:#4338ca;
-">
-${d.nome}
-</h1>
+<div class="content">
 
-<h2 style="
-font-size:20px;
-font-weight:normal;
-margin-bottom:10px;
-color:#64748b;
-">
-${d.cargo}
-</h2>
+<h3>${titulo}</h3>
 
-<p>📞 ${d.telefone}</p>
+<p>${texto}</p>
 
-<p>✉️ ${d.email}</p>
+<div class="export" onclick="baixarPDF()">
 
-<p>📍 ${d.cidade}</p>
+<i class="fas fa-file-pdf" style="color:#ef4444;"></i>
+
+Baixar PDF
 
 </div>
 
 </div>
 
-<hr>
-
-<h2>Resumo Profissional</h2>
-<p>${d.resumo}</p>
-
-<h2>Experiência</h2>
-<p>${d.experiencia}</p>
-
-<h2>Formação</h2>
-<p>${d.formacao}</p>
-
-<h2>Competências</h2>
-<p>${d.habilidades}</p>
-
-</div>
 `;
 
-html2pdf().from(el).save('curriculo-premium.pdf');
+}
+
+function baixarPDF(){
+
+const el = document.getElementById("previewPDF");
+
+html2pdf().from(el).save("documento.pdf");
+
+}
+
+function previewLinkedin(){
+
+const texto = document.getElementById("textoLinkedin").value;
+
+document.getElementById("previewLinkedin").innerHTML = `
+
+<div class="content">
+
+<h3>Perfil LinkedIn</h3>
+
+<p>${texto}</p>
+
+<div class="export" onclick="baixarLinkedin()">
+
+<i class="fas fa-file-word" style="color:#0a66c2;"></i>
+
+Baixar Perfil
+
+</div>
+
+</div>
+
+`;
+
+}
+
+function baixarLinkedin(){
+
+const blob = new Blob(
+[document.getElementById("previewLinkedin").innerText],
+{type:'text/plain'}
+);
+
+const a = document.createElement('a');
+
+a.href = URL.createObjectURL(blob);
+
+a.download = 'linkedin.txt';
+
+a.click();
+
+}
+
+function previewCarta(){
+
+const texto = document.getElementById("textoCarta").value;
+
+document.getElementById("previewCarta").innerHTML = `
+
+<div class="content">
+
+<h3>Carta Profissional</h3>
+
+<p>${texto}</p>
+
+<div class="export" onclick="baixarCarta()">
+
+<i class="fas fa-file-word" style="color:#10b981;"></i>
+
+Baixar Carta
+
+</div>
+
+</div>
+
+`;
+
+}
+
+function baixarCarta(){
+
+const blob = new Blob(
+[document.getElementById("previewCarta").innerText],
+{type:'text/plain'}
+);
+
+const a = document.createElement('a');
+
+a.href = URL.createObjectURL(blob);
+
+a.download = 'carta-profissional.txt';
+
+a.click();
 
 }
 
