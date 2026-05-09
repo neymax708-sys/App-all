@@ -1,7 +1,7 @@
 {
   "name": "Elite Docs AI",
   "short_name": "EliteDocs",
-  "description": "Criação de currículos, PDFs e documentos profissionais com inteligência artificial.",
+  "description": "Criação de currículos, PDFs e documentos profissionais com inteligência artificial",
   "start_url": "index.html",
   "display": "standalone",
   "background_color": "#050510",
