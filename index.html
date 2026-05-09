@@ -4,7 +4,6 @@
 <head>
 
 <meta charset="UTF-8">
-
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
 <title>Elite Docs AI</title>
@@ -26,18 +25,12 @@ box-sizing:border-box;
 }
 
 body{
-
 font-family:'Inter',sans-serif;
-
 background:#050510;
-
 color:white;
-
 padding:12px;
-
 background-image:
 radial-gradient(circle at top, rgba(91,75,255,.18), transparent 35%);
-
 }
 
 .hidden{
@@ -55,126 +48,74 @@ padding:25px 10px;
 }
 
 .logo-app{
-
 width:100px;
-
 height:100px;
-
 border-radius:24px;
-
 margin-bottom:10px;
-
 }
 
 .grid{
-
 display:grid;
-
 grid-template-columns:repeat(3,1fr);
-
 gap:10px;
-
 margin-top:20px;
-
 }
 
 .card{
-
 background:rgba(255,255,255,.05);
-
 border:1px solid rgba(255,255,255,.1);
-
 padding:18px 5px;
-
 border-radius:22px;
-
 display:flex;
-
 flex-direction:column;
-
 align-items:center;
-
 cursor:pointer;
-
 transition:.2s;
-
 backdrop-filter:blur(10px);
-
 }
 
 .card:active{
-
 transform:scale(.92);
-
 }
 
 .card i{
-
 font-size:26px;
-
 margin-bottom:8px;
-
 }
 
 .card span{
-
 font-size:11px;
-
 font-weight:700;
-
 }
 
 .screen{
-
 margin-top:10px;
-
 background:rgba(255,255,255,.04);
-
 border:1px solid rgba(255,255,255,.1);
-
 padding:20px;
-
 border-radius:24px;
-
 }
 
 .back-btn{
-
 background:none;
-
 border:none;
-
 color:#5b4bff;
-
 font-weight:700;
-
 margin-bottom:15px;
-
 cursor:pointer;
-
 }
 
 .input,
 .textarea{
-
 width:100%;
-
 padding:14px;
-
 margin-bottom:10px;
-
 border-radius:12px;
-
 border:1px solid rgba(255,255,255,.1);
-
 background:rgba(255,255,255,.05);
-
 color:white;
-
 outline:none;
-
 font-size:14px;
-
 }
 
 .textarea{
@@ -183,101 +124,58 @@ resize:none;
 }
 
 .generate-btn{
-
 width:100%;
-
 padding:15px;
-
 border:none;
-
 border-radius:12px;
-
 background:linear-gradient(135deg,#5b4bff,#4338ca);
-
 color:white;
-
 font-weight:700;
-
 cursor:pointer;
-
 margin-top:5px;
-
 }
 
 .preview-box{
-
 background:white;
-
 color:#333;
-
 padding:15px;
-
 border-radius:15px;
-
 margin-top:15px;
-
 }
 
 .login-screen{
-
 height:100vh;
-
 display:flex;
-
 align-items:center;
-
 justify-content:center;
-
 flex-direction:column;
-
 text-align:center;
-
 }
 
 .google-btn{
-
 padding:15px 20px;
-
 border:none;
-
 border-radius:14px;
-
 background:white;
-
 color:black;
-
 font-weight:700;
-
 margin-top:20px;
-
 cursor:pointer;
-
 font-size:15px;
-
 }
 
 .user-box{
-
 display:flex;
-
 align-items:center;
-
 gap:10px;
-
 margin-top:15px;
-
 justify-content:center;
-
 }
 
 .user-box img{
-
 width:45px;
-
 height:45px;
-
 border-radius:50%;
-
 }
 
 </style>
@@ -295,9 +193,7 @@ border-radius:50%;
 <h1>Elite Docs AI</h1>
 
 <p style="margin-top:10px;color:#aaa;">
-
 Entre com Google para continuar
-
 </p>
 
 <button class="google-btn" onclick="loginGoogle()">
@@ -312,7 +208,7 @@ Entrar com Google
 
 <!-- APP -->
 
-<div class="container hidden" id="homeScreen">
+<div class="container" id="homeScreen" style="display:none;">
 
 <div class="hero">
 
@@ -321,9 +217,7 @@ Entrar com Google
 <h1>Elite Docs AI</h1>
 
 <p style="color:#aaa;">
-
 Documentos inteligentes com IA
-
 </p>
 
 <div id="userInfo"></div>
@@ -350,51 +244,33 @@ Sair
 <div class="grid">
 
 <div class="card" onclick="abrirTela('curriculoScreen')">
-
 <i class="fas fa-user-tie" style="color:#5b4bff"></i>
-
 <span>Currículo</span>
-
 </div>
 
 <div class="card" onclick="abrirTela('pdfScreen')">
-
 <i class="fas fa-file-pdf" style="color:#ef4444"></i>
-
 <span>PDF</span>
-
 </div>
 
 <div class="card" onclick="abrirTela('wordScreen')">
-
 <i class="fas fa-file-word" style="color:#2b579a"></i>
-
 <span>Word</span>
-
 </div>
 
 <div class="card" onclick="abrirTela('txtScreen')">
-
 <i class="fas fa-file-lines" style="color:#9ca3af"></i>
-
 <span>TXT</span>
-
 </div>
 
 <div class="card" onclick="abrirTela('linkedinScreen')">
-
 <i class="fab fa-linkedin" style="color:#0a66c2"></i>
-
 <span>LinkedIn</span>
-
 </div>
 
 <div class="card" onclick="abrirTela('assinaturaScreen')">
-
 <i class="fas fa-signature" style="color:#06b6d4"></i>
-
 <span>Assinatura</span>
-
 </div>
 
 </div>
@@ -404,9 +280,7 @@ Sair
 <div id="curriculoScreen" class="screen hidden">
 
 <button class="back-btn" onclick="voltar()">
-
 ← Voltar
-
 </button>
 
 <input class="input" id="nome" placeholder="Nome">
@@ -440,9 +314,7 @@ BAIXAR PDF
 <div id="pdfScreen" class="screen hidden">
 
 <button class="back-btn" onclick="voltar()">
-
 ← Voltar
-
 </button>
 
 <input class="input" id="pdfTitulo" placeholder="Título">
@@ -463,9 +335,7 @@ GERAR PDF
 <div id="wordScreen" class="screen hidden">
 
 <button class="back-btn" onclick="voltar()">
-
 ← Voltar
-
 </button>
 
 <textarea class="textarea" id="wordTexto"></textarea>
@@ -484,9 +354,7 @@ BAIXAR DOC
 <div id="txtScreen" class="screen hidden">
 
 <button class="back-btn" onclick="voltar()">
-
 ← Voltar
-
 </button>
 
 <textarea class="textarea" id="txtTexto"></textarea>
@@ -505,9 +373,7 @@ BAIXAR TXT
 <div id="linkedinScreen" class="screen hidden">
 
 <button class="back-btn" onclick="voltar()">
-
 ← Voltar
-
 </button>
 
 <textarea class="textarea" id="linkedinTexto"></textarea>
@@ -526,9 +392,7 @@ GERAR LINKEDIN
 <div id="assinaturaScreen" class="screen hidden">
 
 <button class="back-btn" onclick="voltar()">
-
 ← Voltar
-
 </button>
 
 <input class="input" id="assinaturaNome" placeholder="Seu nome">
@@ -589,11 +453,8 @@ campo.value =
 try{
 
 const r = await fetch(
-
 'https://text.pollinations.ai/' +
-
 encodeURIComponent(comando + ': ' + original)
-
 );
 
 campo.value =
@@ -618,44 +479,29 @@ const doc = new jsPDF();
 doc.setFontSize(22);
 
 doc.text(
-
 document.getElementById('nome').value,
-
 20,
-
 20
-
 );
 
 doc.setFontSize(14);
 
 doc.text(
-
 document.getElementById('cargo').value,
-
 20,
-
 35
-
 );
 
 doc.text(
-
 document.getElementById('email').value,
-
 20,
-
 45
-
 );
 
 const linhas =
 doc.splitTextToSize(
-
 document.getElementById('resumo').value,
-
 170
-
 );
 
 doc.text(linhas,20,65);
@@ -671,22 +517,15 @@ const { jsPDF } = window.jspdf;
 const doc = new jsPDF();
 
 doc.text(
-
 document.getElementById('pdfTitulo').value,
-
 20,
-
 20
-
 );
 
 const linhas =
 doc.splitTextToSize(
-
 document.getElementById('pdfTexto').value,
-
 170
-
 );
 
 doc.text(linhas,20,40);
@@ -701,11 +540,8 @@ const texto =
 document.getElementById('wordTexto').value;
 
 const blob = new Blob(
-
 [texto],
-
 {type:'application/msword'}
-
 );
 
 const a =
@@ -727,11 +563,8 @@ const texto =
 document.getElementById('txtTexto').value;
 
 const blob = new Blob(
-
 [texto],
-
 {type:'text/plain'}
-
 );
 
 const a =
@@ -761,24 +594,18 @@ document.getElementById(
 
 </script>
 
-<!-- FIREBASE -->
-
 <script type="module">
 
 import { initializeApp }
-
 from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
 
 import {
-
 getAuth,
 GoogleAuthProvider,
 signInWithRedirect,
 getRedirectResult,
 signOut
-
 }
-
 from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
 
 const firebaseConfig = {
@@ -805,7 +632,15 @@ const provider = new GoogleAuthProvider();
 
 window.loginGoogle = async function(){
 
+try{
+
 await signInWithRedirect(auth,provider);
+
+}catch(e){
+
+alert("Erro Login: " + e.message);
+
+}
 
 };
 
@@ -818,15 +653,12 @@ if(result){
 const user = result.user;
 
 localStorage.setItem(
-
 'eliteUser',
 
 JSON.stringify({
 
 nome:user.displayName,
-
 email:user.email,
-
 foto:user.photoURL
 
 })
@@ -837,6 +669,12 @@ location.reload();
 
 }
 
+})
+
+.catch((e)=>{
+
+console.log(e);
+
 });
 
 const salvo =
@@ -844,11 +682,19 @@ localStorage.getItem('eliteUser');
 
 if(salvo){
 
-document.getElementById('loginScreen')
-.classList.add('hidden');
+const login =
+document.getElementById('loginScreen');
 
-document.getElementById('homeScreen')
-.classList.remove('hidden');
+const home =
+document.getElementById('homeScreen');
+
+if(login){
+login.style.display = "none";
+}
+
+if(home){
+home.style.display = "block";
+}
 
 const user =
 JSON.parse(salvo);
