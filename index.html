@@ -74,6 +74,8 @@
         }
         .back-btn { background: none; border: none; color: #5b4bff; font-weight: 700; margin-bottom: 15px; cursor: pointer; }
         .preview-box { background: white; color: #222; padding: 18px; border-radius: 18px; margin-top: 15px; }
+        
+        /* Estilo da tela de login */
         #loginScreen {
             position: fixed;
             inset: 0;
@@ -187,9 +189,9 @@
 </div>
 
 <script>
-    // Configurações corrigidas conforme o seu console Firebase
+    // IMPORTANTE: Use as credenciais do seu console atual (ID 295165899235)
     const firebaseConfig = {
-        apiKey: "AIzaSyAeo58-3X5InMp67M7IyKVFjwoamB_a98k", 
+        apiKey: "AIzaSyDFPrrCSowCuo3QJ6T280zja...", // COLOQUE A CHAVE QUE APARECE NO SEU ERRO
         authDomain: "elite-docsai.firebaseapp.com",
         projectId: "elite-docsai",
         storageBucket: "elite-docsai.appspot.com",
@@ -197,9 +199,11 @@
         appId: "1:1048692395624:web:74fb23e57580b9203ab5dd"
     };
 
-    firebase.initializeApp(firebaseConfig);
+    if (!firebase.apps.length) {
+        firebase.initializeApp(firebaseConfig);
+    }
 
-    // FUNÇÃO DE LOGIN COM REDIRECT (Melhor para mobile)
+    // LOGIN POR REDIRECIONAMENTO (Corrige a tela branca no mobile)
     async function loginGoogle() {
         const provider = new firebase.auth.GoogleAuthProvider();
         provider.setCustomParameters({ prompt: 'select_account' });
@@ -211,7 +215,7 @@
         }
     }
 
-    // CAPTURA O RESULTADO DO REDIRECIONAMENTO
+    // VERIFICA O RETORNO DO LOGIN APÓS O REDIRECT
     firebase.auth().getRedirectResult().then((result) => {
         if (result && result.user) {
             localStorage.setItem("elite_login", "ok");
@@ -220,6 +224,7 @@
         }
     }).catch((error) => {
         console.error("Erro no retorno:", error);
+        alert("Erro de autenticação: " + error.message);
     });
 
     window.onload = function() {
@@ -243,7 +248,7 @@
         const campo = document.getElementById(id);
         const original = campo.value;
         if(!original) return alert("Digite algo primeiro!");
-        campo.value = "IA processando...";
+        campo.value = "Processando...";
         try {
             const resposta = await fetch('https://text.pollinations.ai/' + encodeURIComponent('Melhore profissionalmente para um documento: ' + original));
             campo.value = await resposta.text();
