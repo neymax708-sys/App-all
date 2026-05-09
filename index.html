@@ -4,10 +4,8 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Elite Docs AI</title>
-    <link rel="icon" href="logo.png">
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
     
     <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-auth-compat.js"></script>
@@ -18,290 +16,138 @@
             font-family: 'Inter', sans-serif;
             background: #050510;
             color: white;
-            padding: 12px;
-            background-image: radial-gradient(circle at top, rgba(91, 75, 255, .18), transparent 35%);
+            padding: 15px;
+            background-image: radial-gradient(circle at top, rgba(91, 75, 255, .15), transparent 40%);
+            min-height: 100vh;
         }
         .hidden { display: none; }
-        .container { max-width: 700px; margin: auto; }
-        .hero { text-align: center; padding: 25px 10px; }
-        .logo-app { width: 100px; height: 100px; border-radius: 20px; margin-bottom: 15px; }
-        .grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; margin-top: 20px; }
-        .card {
-            background: rgba(255, 255, 255, .05);
-            border: 1px solid rgba(255, 255, 255, .08);
-            padding: 18px 10px;
-            border-radius: 22px;
+        .container { max-width: 600px; margin: auto; }
+        
+        /* Tela de Login */
+        #loginScreen {
             display: flex;
             flex-direction: column;
             align-items: center;
             justify-content: center;
-            cursor: pointer;
-            transition: .2s;
-            min-height: 100px;
-        }
-        .card:active { transform: scale(.95); }
-        .card i { font-size: 28px; margin-bottom: 8px; }
-        .card span { font-size: 12px; font-weight: 700; }
-        .screen {
-            margin-top: 10px;
-            background: rgba(255, 255, 255, .04);
-            border: 1px solid rgba(255, 255, 255, .08);
-            padding: 20px;
-            border-radius: 24px;
-        }
-        .input, .textarea {
-            width: 100%;
-            padding: 14px;
-            margin-bottom: 12px;
-            border-radius: 14px;
-            border: none;
-            background: rgba(255, 255, 255, .06);
-            color: white;
-            font-size: 14px;
-            outline: none;
-        }
-        .textarea { height: 160px; resize: none; }
-        .generate-btn {
-            width: 100%;
-            padding: 15px;
-            border: none;
-            border-radius: 14px;
-            background: linear-gradient(135deg, #5b4bff, #4338ca);
-            color: white;
-            font-weight: 700;
-            cursor: pointer;
-            margin-top: 5px;
-        }
-        .back-btn { background: none; border: none; color: #5b4bff; font-weight: 700; margin-bottom: 15px; cursor: pointer; }
-        .preview-box { background: white; color: #222; padding: 18px; border-radius: 18px; margin-top: 15px; }
-        
-        /* Estilo da tela de login */
-        #loginScreen {
-            position: fixed;
-            inset: 0;
-            background: #050510;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            z-index: 9999;
-            padding: 20px;
+            height: 80vh;
         }
         .login-box {
-            width: 100%;
-            max-width: 400px;
             background: rgba(255, 255, 255, .05);
-            padding: 25px;
-            border-radius: 25px;
+            padding: 30px;
+            border-radius: 24px;
+            border: 1px solid rgba(255, 255, 255, .1);
+            text-align: center;
+            width: 100%;
+        }
+
+        /* Botões e Inputs */
+        .btn {
+            width: 100%;
+            padding: 16px;
+            border-radius: 14px;
+            border: none;
+            font-weight: 700;
+            cursor: pointer;
+            transition: 0.2s;
+            margin-top: 15px;
+        }
+        .btn-google { background: white; color: #111; display: flex; align-items: center; justify-content: center; gap: 10px; }
+        .btn-primary { background: linear-gradient(135deg, #5b4bff, #4338ca); color: white; }
+        .btn:active { transform: scale(0.97); }
+
+        /* Dashboard */
+        .header { text-align: center; padding: 20px 0; }
+        .grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 15px; }
+        .card {
+            background: rgba(255, 255, 255, .05);
+            padding: 20px;
+            border-radius: 18px;
+            text-align: center;
             border: 1px solid rgba(255, 255, 255, .08);
         }
+        .card i { font-size: 24px; color: #5b4bff; margin-bottom: 10px; }
     </style>
 </head>
 <body>
 
-<div id="loginScreen">
-    <div class="login-box">
-        <h1 style="text-align:center;margin-bottom:10px;">Elite Docs AI</h1>
-        <p style="text-align:center;color:#9ca3af;margin-bottom:20px;">Entre para continuar</p>
-        <button class="generate-btn" style="background:white;color:#111;" onclick="loginGoogle()">
-            <i class="fab fa-google"></i> Entrar com Google
-        </button>
-    </div>
-</div>
-
 <div class="container">
-    <div id="homeScreen">
-        <div class="hero">
-            <img src="logo.png" class="logo-app">
+    <div id="loginScreen">
+        <div class="login-box">
+            <h1 style="margin-bottom: 10px;">Elite Docs AI</h1>
+            <p style="color: #9ca3af; margin-bottom: 25px;">Acesse sua conta para começar</p>
+            <button class="btn btn-google" onclick="loginGoogle()">
+                <i class="fab fa-google"></i> Entrar com Google
+            </button>
+        </div>
+    </div>
+
+    <div id="mainContent" class="hidden">
+        <div class="header">
             <h1>Elite Docs AI</h1>
-            <p style="margin-top:8px;color:#9ca3af;">Crie documentos profissionais</p>
+            <p id="userName" style="color: #5b4bff; font-weight: 600;"></p>
         </div>
+        
         <div class="grid">
-            <div class="card" onclick="irPara('curriculoScreen')">
-                <i class="fas fa-user-tie" style="color:#5b4bff"></i>
-                <span>Currículo</span>
+            <div class="card">
+                <i class="fas fa-file-pdf"></i>
+                <p>Criar PDF</p>
             </div>
-            <div class="card" onclick="irPara('pdfScreen')">
-                <i class="fas fa-file-pdf" style="color:#ef4444"></i>
-                <span>PDF</span>
-            </div>
-            <div class="card" onclick="irPara('wordScreen')">
-                <i class="fas fa-file-word" style="color:#2563eb"></i>
-                <span>Word</span>
-            </div>
-            <div class="card" onclick="irPara('txtScreen')">
-                <i class="fas fa-file-lines" style="color:#9ca3af"></i>
-                <span>TXT</span>
-            </div>
-            <div class="card" onclick="irPara('linkedinScreen')">
-                <i class="fab fa-linkedin" style="color:#0a66c2"></i>
-                <span>LinkedIn</span>
-            </div>
-            <div class="card" onclick="irPara('assinaturaScreen')">
-                <i class="fas fa-signature" style="color:#06b6d4"></i>
-                <span>Assinatura</span>
+            <div class="card">
+                <i class="fas fa-user-tie"></i>
+                <p>Currículos</p>
             </div>
         </div>
-    </div>
-
-    <div id="curriculoScreen" class="screen hidden">
-        <button class="back-btn" onclick="voltar()">← Voltar</button>
-        <input class="input" id="nome" placeholder="Nome">
-        <input class="input" id="cargo" placeholder="Cargo">
-        <input class="input" id="telefone" placeholder="Telefone">
-        <input class="input" id="email" placeholder="E-mail">
-        <textarea class="textarea" id="resumo" placeholder="Resumo profissional..."></textarea>
-        <button class="generate-btn" onclick="melhorarIA('resumo')">✨ Melhorar com IA</button>
-        <button class="generate-btn" onclick="baixarCurriculo()">BAIXAR PDF</button>
-    </div>
-
-    <div id="pdfScreen" class="screen hidden">
-        <button class="back-btn" onclick="voltar()">← Voltar</button>
-        <input class="input" id="tituloPDF" placeholder="Título">
-        <textarea class="textarea" id="textoPDF" placeholder="Texto..."></textarea>
-        <button class="generate-btn" onclick="baixarPDF()">GERAR PDF</button>
-    </div>
-
-    <div id="wordScreen" class="screen hidden">
-        <button class="back-btn" onclick="voltar()">← Voltar</button>
-        <input class="input" id="tituloWord" placeholder="Título">
-        <textarea class="textarea" id="textoWord" placeholder="Texto Word..."></textarea>
-        <button class="generate-btn" onclick="baixarWord()">BAIXAR WORD</button>
-    </div>
-
-    <div id="txtScreen" class="screen hidden">
-        <button class="back-btn" onclick="voltar()">← Voltar</button>
-        <textarea class="textarea" id="textoTXT" placeholder="Digite qualquer texto"></textarea>
-        <button class="generate-btn" onclick="baixarTXT()">BAIXAR TXT</button>
-    </div>
-
-    <div id="linkedinScreen" class="screen hidden">
-        <button class="back-btn" onclick="voltar()">← Voltar</button>
-        <textarea class="textarea" id="linkedinTexto" placeholder="Digite algo profissional"></textarea>
-        <button class="generate-btn" onclick="melhorarIA('linkedinTexto')">✨ GERAR LINKEDIN</button>
-    </div>
-
-    <div id="assinaturaScreen" class="screen hidden">
-        <button class="back-btn" onclick="voltar()">← Voltar</button>
-        <input class="input" id="assinaturaNome" placeholder="Seu nome">
-        <button class="generate-btn" onclick="gerarAssinatura()">GERAR</button>
-        <div id="assinaturaPreview" class="preview-box">Assinatura</div>
+        
+        <button class="btn" style="color: #ef4444;" onclick="logout()">Sair</button>
     </div>
 </div>
 
 <script>
-    // IMPORTANTE: Use as credenciais do seu console atual (ID 295165899235)
+    // Configurações do seu projeto Firebase
     const firebaseConfig = {
-        apiKey: "AIzaSyDFPrrCSowCuo3QJ6T280zja...", // COLOQUE A CHAVE QUE APARECE NO SEU ERRO
+        apiKey: "AIzaSyDFPrrCSowCuo3QJ6T280zja2Wqutlccvo", // Chave corrigida
         authDomain: "elite-docsai.firebaseapp.com",
         projectId: "elite-docsai",
         storageBucket: "elite-docsai.appspot.com",
         messagingSenderId: "1048692395624",
-        appId: "1:1048692395624:web:74fb23e57580b9203ab5dd"
+        appId: "1:1048692395624:web:74fb23e57580b9203ab5dd",
+        measurementId: "G-G63HC1V4FD"
     };
 
-    if (!firebase.apps.length) {
-        firebase.initializeApp(firebaseConfig);
-    }
+    // Inicializar Firebase
+    firebase.initializeApp(firebaseConfig);
 
-    // LOGIN POR REDIRECIONAMENTO (Corrige a tela branca no mobile)
-    async function loginGoogle() {
+    // Função de Login (Otimizada para Celular)
+    function loginGoogle() {
         const provider = new firebase.auth.GoogleAuthProvider();
         provider.setCustomParameters({ prompt: 'select_account' });
-        try {
-            await firebase.auth().signInWithRedirect(provider);
-        } catch (error) {
-            console.error(error);
-            alert("Erro ao iniciar login: " + error.message);
-        }
+        // Usa Redirect para evitar bloqueio de janelas pop-up no mobile
+        firebase.auth().signInWithRedirect(provider);
     }
 
-    // VERIFICA O RETORNO DO LOGIN APÓS O REDIRECT
-    firebase.auth().getRedirectResult().then((result) => {
-        if (result && result.user) {
-            localStorage.setItem("elite_login", "ok");
-            localStorage.setItem("elite_user", result.user.displayName);
-            document.getElementById("loginScreen").style.display = "none";
+    // Gerenciar estado do login ao carregar a página
+    firebase.auth().onAuthStateChanged((user) => {
+        if (user) {
+            document.getElementById("loginScreen").classList.add("hidden");
+            document.getElementById("mainContent").classList.remove("hidden");
+            document.getElementById("userName").innerText = "Olá, " + user.displayName;
+        } else {
+            document.getElementById("loginScreen").classList.remove("hidden");
+            document.getElementById("mainContent").classList.add("hidden");
         }
-    }).catch((error) => {
-        console.error("Erro no retorno:", error);
-        alert("Erro de autenticação: " + error.message);
     });
 
-    window.onload = function() {
-        if (localStorage.getItem("elite_login") === "ok") {
-            document.getElementById("loginScreen").style.display = "none";
+    // Capturar resultado do redirecionamento
+    firebase.auth().getRedirectResult().catch((error) => {
+        if (error.code === 'auth/api-key-not-valid') {
+            alert("Erro: Chave de API inválida. Verifique o console do Firebase.");
+        } else {
+            console.error("Erro no login:", error.message);
         }
-    }
+    });
 
-    function irPara(id) {
-        document.getElementById('homeScreen').classList.add('hidden');
-        document.querySelectorAll('.screen').forEach(s => s.classList.add('hidden'));
-        document.getElementById(id).classList.remove('hidden');
-    }
-
-    function voltar() {
-        document.querySelectorAll('.screen').forEach(s => s.classList.add('hidden'));
-        document.getElementById('homeScreen').classList.remove('hidden');
-    }
-
-    async function melhorarIA(id) {
-        const campo = document.getElementById(id);
-        const original = campo.value;
-        if(!original) return alert("Digite algo primeiro!");
-        campo.value = "Processando...";
-        try {
-            const resposta = await fetch('https://text.pollinations.ai/' + encodeURIComponent('Melhore profissionalmente para um documento: ' + original));
-            campo.value = await resposta.text();
-        } catch (e) {
-            campo.value = original;
-            alert("Erro na IA");
-        }
-    }
-
-    function baixarPDF() {
-        const { jsPDF } = window.jspdf;
-        const doc = new jsPDF();
-        doc.text(document.getElementById('tituloPDF').value, 20, 20);
-        doc.text(doc.splitTextToSize(document.getElementById('textoPDF').value, 170), 20, 40);
-        doc.save("documento.pdf");
-    }
-
-    function baixarWord() {
-        const texto = document.getElementById('textoWord').value;
-        const blob = new Blob([texto], { type: 'application/msword' });
-        const a = document.createElement('a');
-        a.href = URL.createObjectURL(blob);
-        a.download = "arquivo.doc";
-        a.click();
-    }
-
-    function baixarTXT() {
-        const texto = document.getElementById('textoTXT').value;
-        const blob = new Blob([texto], { type: 'text/plain' });
-        const a = document.createElement('a');
-        a.href = URL.createObjectURL(blob);
-        a.download = "arquivo.txt";
-        a.click();
-    }
-
-    function gerarAssinatura() {
-        const nome = document.getElementById('assinaturaNome').value;
-        document.getElementById('assinaturaPreview').innerHTML = `<h1 style="font-family:cursive; font-size:35px; text-align:center; color:#5b4bff;">${nome}</h1>`;
-    }
-
-    async function baixarCurriculo() {
-        const { jsPDF } = window.jspdf;
-        const doc = new jsPDF();
-        doc.setFontSize(22);
-        doc.text(document.getElementById('nome').value, 20, 20);
-        doc.setFontSize(14);
-        doc.text(document.getElementById('cargo').value, 20, 35);
-        doc.setFontSize(11);
-        doc.text(document.getElementById('telefone').value, 20, 50);
-        doc.text(document.getElementById('email').value, 20, 60);
-        const linhas = doc.splitTextToSize(document.getElementById('resumo').value, 170);
-        doc.text(linhas, 20, 80);
-        doc.save("curriculo.pdf");
+    function logout() {
+        firebase.auth().signOut();
     }
 </script>
 
