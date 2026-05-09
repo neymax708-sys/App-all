@@ -187,7 +187,7 @@
 </div>
 
 <script>
-    // CONFIGURAÇÃO ATUALIZADA COM BASE NAS SUAS IMAGENS
+    // Configurações corrigidas conforme o seu console Firebase
     const firebaseConfig = {
         apiKey: "AIzaSyAeo58-3X5InMp67M7IyKVFjwoamB_a98k", 
         authDomain: "elite-docsai.firebaseapp.com",
@@ -199,20 +199,28 @@
 
     firebase.initializeApp(firebaseConfig);
 
+    // FUNÇÃO DE LOGIN COM REDIRECT (Melhor para mobile)
     async function loginGoogle() {
         const provider = new firebase.auth.GoogleAuthProvider();
         provider.setCustomParameters({ prompt: 'select_account' });
-
         try {
-            const result = await firebase.auth().signInWithPopup(provider);
+            await firebase.auth().signInWithRedirect(provider);
+        } catch (error) {
+            console.error(error);
+            alert("Erro ao iniciar login: " + error.message);
+        }
+    }
+
+    // CAPTURA O RESULTADO DO REDIRECIONAMENTO
+    firebase.auth().getRedirectResult().then((result) => {
+        if (result && result.user) {
             localStorage.setItem("elite_login", "ok");
             localStorage.setItem("elite_user", result.user.displayName);
             document.getElementById("loginScreen").style.display = "none";
-        } catch (error) {
-            console.error(error);
-            alert("Erro: Certifique-se de que o Google está ATIVADO no Firebase e o domínio do seu site está autorizado.");
         }
-    }
+    }).catch((error) => {
+        console.error("Erro no retorno:", error);
+    });
 
     window.onload = function() {
         if (localStorage.getItem("elite_login") === "ok") {
@@ -220,7 +228,6 @@
         }
     }
 
-    // NAVEGAÇÃO
     function irPara(id) {
         document.getElementById('homeScreen').classList.add('hidden');
         document.querySelectorAll('.screen').forEach(s => s.classList.add('hidden'));
@@ -232,18 +239,17 @@
         document.getElementById('homeScreen').classList.remove('hidden');
     }
 
-    // IA E DOCUMENTOS
     async function melhorarIA(id) {
         const campo = document.getElementById(id);
         const original = campo.value;
         if(!original) return alert("Digite algo primeiro!");
         campo.value = "IA processando...";
         try {
-            const resposta = await fetch('https://text.pollinations.ai/' + encodeURIComponent('Melhore profissionalmente este texto para um documento: ' + original));
+            const resposta = await fetch('https://text.pollinations.ai/' + encodeURIComponent('Melhore profissionalmente para um documento: ' + original));
             campo.value = await resposta.text();
         } catch (e) {
             campo.value = original;
-            alert("Erro ao conectar com a IA");
+            alert("Erro na IA");
         }
     }
 
