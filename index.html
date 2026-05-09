@@ -33,13 +33,13 @@ background-image:
 radial-gradient(circle at top, rgba(91,75,255,.18), transparent 35%);
 }
 
-.hidden{
-display:none;
-}
-
 .container{
 max-width:700px;
 margin:auto;
+}
+
+.hidden{
+display:none;
 }
 
 .hero{
@@ -89,7 +89,7 @@ font-weight:700;
 }
 
 .screen{
-margin-top:10px;
+margin-top:15px;
 background:rgba(255,255,255,.04);
 border:1px solid rgba(255,255,255,.1);
 padding:20px;
@@ -168,8 +168,8 @@ font-size:15px;
 display:flex;
 align-items:center;
 gap:10px;
-margin-top:15px;
 justify-content:center;
+margin-top:15px;
 }
 
 .user-box img{
@@ -279,9 +279,7 @@ Sair
 
 <div id="curriculoScreen" class="screen hidden">
 
-<button class="back-btn" onclick="voltar()">
-← Voltar
-</button>
+<button class="back-btn" onclick="voltar()">← Voltar</button>
 
 <input class="input" id="nome" placeholder="Nome">
 
@@ -313,9 +311,7 @@ BAIXAR PDF
 
 <div id="pdfScreen" class="screen hidden">
 
-<button class="back-btn" onclick="voltar()">
-← Voltar
-</button>
+<button class="back-btn" onclick="voltar()">← Voltar</button>
 
 <input class="input" id="pdfTitulo" placeholder="Título">
 
@@ -334,9 +330,7 @@ GERAR PDF
 
 <div id="wordScreen" class="screen hidden">
 
-<button class="back-btn" onclick="voltar()">
-← Voltar
-</button>
+<button class="back-btn" onclick="voltar()">← Voltar</button>
 
 <textarea class="textarea" id="wordTexto"></textarea>
 
@@ -353,9 +347,7 @@ BAIXAR DOC
 
 <div id="txtScreen" class="screen hidden">
 
-<button class="back-btn" onclick="voltar()">
-← Voltar
-</button>
+<button class="back-btn" onclick="voltar()">← Voltar</button>
 
 <textarea class="textarea" id="txtTexto"></textarea>
 
@@ -372,9 +364,7 @@ BAIXAR TXT
 
 <div id="linkedinScreen" class="screen hidden">
 
-<button class="back-btn" onclick="voltar()">
-← Voltar
-</button>
+<button class="back-btn" onclick="voltar()">← Voltar</button>
 
 <textarea class="textarea" id="linkedinTexto"></textarea>
 
@@ -391,9 +381,7 @@ GERAR LINKEDIN
 
 <div id="assinaturaScreen" class="screen hidden">
 
-<button class="back-btn" onclick="voltar()">
-← Voltar
-</button>
+<button class="back-btn" onclick="voltar()">← Voltar</button>
 
 <input class="input" id="assinaturaNome" placeholder="Seu nome">
 
@@ -665,7 +653,31 @@ foto:user.photoURL
 
 );
 
-location.reload();
+document.getElementById('loginScreen').style.display = "none";
+
+document.getElementById('homeScreen').style.display = "block";
+
+document.getElementById('userInfo').innerHTML = `
+
+<div class="user-box">
+
+<img src="${user.photoURL}">
+
+<div>
+
+<div style="font-weight:700;">
+${user.displayName}
+</div>
+
+<small style="color:#aaa;">
+${user.email}
+</small>
+
+</div>
+
+</div>
+
+`;
 
 }
 
@@ -682,19 +694,9 @@ localStorage.getItem('eliteUser');
 
 if(salvo){
 
-const login =
-document.getElementById('loginScreen');
+document.getElementById('loginScreen').style.display = "none";
 
-const home =
-document.getElementById('homeScreen');
-
-if(login){
-login.style.display = "none";
-}
-
-if(home){
-home.style.display = "block";
-}
+document.getElementById('homeScreen').style.display = "block";
 
 const user =
 JSON.parse(salvo);
