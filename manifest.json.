@@ -1,12 +1,11 @@
 {
   "name": "Elite Docs AI",
   "short_name": "EliteDocs",
-  "description": "Criação de currículos, PDFs e documentos profissionais com inteligência artificial",
-  "start_url": "index.html",
+  "description": "Criação de currículos e documentos premium com IA",
+  "start_url": "https://neymax708-sys.github.io/App-all/",
   "display": "standalone",
   "background_color": "#050510",
   "theme_color": "#5b4bff",
-  "orientation": "portrait",
   "icons": [
     {
       "src": "logo.png",
