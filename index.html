@@ -1,28 +1,25 @@
 <!DOCTYPE html>
 <html lang="pt-br">
+
 <head>
 
 <meta charset="UTF-8">
+
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
 <title>Elite Docs AI</title>
 
 <link rel="manifest" href="manifest.json">
-<link rel="icon" type="image/png" href="logo.png">
+
+<link rel="icon" href="logo.png">
 
 <meta name="theme-color" content="#5b4bff">
 
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;700;800&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700;800&display=swap" rel="stylesheet">
 
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
-
-<!-- FIREBASE -->
-
-<script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
-
-<script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-auth.js"></script>
 
 <style>
 
@@ -37,7 +34,6 @@ font-family:'Inter',sans-serif;
 background:#050510;
 color:white;
 padding:12px;
-overflow-x:hidden;
 background-image:
 radial-gradient(circle at top,
 rgba(91,75,255,.18),
@@ -61,53 +57,54 @@ padding:25px 10px;
 .logo-app{
 width:95px;
 height:95px;
-border-radius:20px;
+border-radius:24px;
 margin-bottom:15px;
-object-fit:cover;
+}
+
+.login-box,
+.screen{
+background:rgba(255,255,255,.05);
+border:1px solid rgba(255,255,255,.08);
+padding:20px;
+border-radius:25px;
+backdrop-filter:blur(10px);
+margin-top:15px;
 }
 
 .grid{
 display:grid;
 grid-template-columns:repeat(3,1fr);
-gap:12px;
+gap:10px;
 margin-top:20px;
 }
 
 .card{
 background:rgba(255,255,255,.05);
 border:1px solid rgba(255,255,255,.08);
-padding:18px 8px;
-border-radius:22px;
+padding:18px 5px;
+border-radius:20px;
 display:flex;
 flex-direction:column;
 align-items:center;
 justify-content:center;
 cursor:pointer;
 transition:.2s;
-backdrop-filter:blur(10px);
+text-align:center;
+min-height:100px;
 }
 
 .card:active{
-transform:scale(.93);
+transform:scale(.95);
 }
 
 .card i{
-font-size:28px;
+font-size:26px;
 margin-bottom:10px;
 }
 
 .card span{
 font-size:11px;
 font-weight:700;
-}
-
-.screen{
-margin-top:10px;
-background:rgba(255,255,255,.04);
-border:1px solid rgba(255,255,255,.08);
-padding:18px;
-border-radius:24px;
-backdrop-filter:blur(20px);
 }
 
 .back-btn{
@@ -117,14 +114,13 @@ color:#5b4bff;
 font-weight:700;
 margin-bottom:15px;
 cursor:pointer;
-font-size:15px;
 }
 
 .input,
 .textarea{
 width:100%;
 padding:14px;
-margin-bottom:12px;
+margin-bottom:10px;
 border-radius:14px;
 border:1px solid rgba(255,255,255,.08);
 background:rgba(255,255,255,.05);
@@ -134,7 +130,7 @@ font-size:14px;
 }
 
 .textarea{
-min-height:150px;
+min-height:140px;
 resize:none;
 }
 
@@ -147,79 +143,41 @@ background:linear-gradient(135deg,#5b4bff,#4338ca);
 color:white;
 font-weight:700;
 cursor:pointer;
-margin-top:5px;
+margin-top:6px;
 }
 
 .preview-box{
 background:white;
 color:#222;
-padding:18px;
-border-radius:18px;
-margin-top:15px;
-line-height:1.7;
-}
-
-.google-btn{
-width:100%;
 padding:15px;
-border:none;
-border-radius:14px;
-background:white;
-color:#111;
-font-weight:700;
-cursor:pointer;
-font-size:15px;
+border-radius:15px;
 margin-top:15px;
-}
-
-.google-btn i{
-margin-right:10px;
-color:#ea4335;
-}
-
-.login-box{
-max-width:420px;
-margin:80px auto;
-background:rgba(255,255,255,.05);
-padding:30px 20px;
-border-radius:28px;
-border:1px solid rgba(255,255,255,.08);
-text-align:center;
-backdrop-filter:blur(20px);
+line-height:1.6;
 }
 
 .user-box{
 display:flex;
 align-items:center;
 gap:10px;
-margin-top:15px;
 justify-content:center;
+margin-top:10px;
 }
 
 .user-box img{
-width:40px;
-height:40px;
+width:42px;
+height:42px;
 border-radius:50%;
 }
 
 .logout-btn{
-margin-top:15px;
 background:#ef4444;
-padding:12px;
+padding:10px 15px;
 border:none;
 border-radius:12px;
 color:white;
 font-weight:700;
-width:100%;
+margin-top:10px;
 cursor:pointer;
-}
-
-@media(max-width:650px){
-
-.grid{
-grid-template-columns:repeat(3,1fr);
-}
-
 }
 
 </style>
@@ -234,27 +192,26 @@ grid-template-columns:repeat(3,1fr);
 
 <div id="loginScreen">
 
-<div class="login-box">
+<div class="hero">
 
 <img src="logo.png" class="logo-app">
 
-<h1 style="font-size:32px;">
-Elite Docs AI
-</h1>
+<h1>Elite Docs AI</h1>
 
-<p style="
-margin-top:10px;
-color:#9ca3af;
-font-size:14px;
-">
+<p style="margin-top:8px;color:#9ca3af;">
+
 Entre com Google para continuar
+
 </p>
 
-<button class="google-btn"
+</div>
+
+<div class="login-box">
+
+<button class="generate-btn"
 onclick="loginGoogle()">
 
 <i class="fab fa-google"></i>
-
 Entrar com Google
 
 </button>
@@ -271,40 +228,18 @@ Entrar com Google
 
 <img src="logo.png" class="logo-app">
 
-<h1>
-Elite Docs AI
-</h1>
+<h1>Elite Docs AI</h1>
 
-<p style="
-margin-top:8px;
-color:#9ca3af;
-font-size:14px;
-">
-Crie documentos profissionais
+<p style="margin-top:8px;color:#9ca3af;">
+
+Gerador de documentos inteligentes
+
 </p>
 
-<div class="user-box">
-
-<img id="userPhoto"
-src="https://i.imgur.com/6VBx3io.png">
-
-<div>
-
-<div id="userName"></div>
-
-<div id="userEmail"
-style="
-font-size:12px;
-color:#9ca3af;
-">
-</div>
-
-</div>
-
-</div>
+<div id="userInfo"></div>
 
 <button class="logout-btn"
-onclick="logout()">
+onclick="logoutGoogle()">
 
 Sair
 
@@ -340,7 +275,7 @@ onclick="irPara('wordScreen')">
 <i class="fas fa-file-word"
 style="color:#2b579a"></i>
 
-<span>Word</span>
+<span>DOC</span>
 
 </div>
 
@@ -361,16 +296,6 @@ onclick="irPara('linkedinScreen')">
 style="color:#0a66c2"></i>
 
 <span>LinkedIn</span>
-
-</div>
-
-<div class="card"
-onclick="irPara('cartaScreen')">
-
-<i class="fas fa-envelope"
-style="color:#10b981"></i>
-
-<span>Carta</span>
 
 </div>
 
@@ -402,19 +327,19 @@ onclick="voltar()">
 
 <input class="input"
 id="nome"
-placeholder="Nome Completo">
+placeholder="Nome">
 
 <input class="input"
 id="cargo"
 placeholder="Cargo">
 
 <input class="input"
-id="tel"
+id="telefone"
 placeholder="Telefone">
 
 <input class="input"
 id="email"
-placeholder="E-mail">
+placeholder="Email">
 
 <input class="input"
 type="file"
@@ -423,14 +348,13 @@ accept="image/*">
 
 <textarea class="textarea"
 id="resumo"
-placeholder="Resumo profissional..."></textarea>
+placeholder="Resumo profissional"></textarea>
 
 <button class="generate-btn"
-style="background:#8b5cf6;"
-onclick="usarIA('resumo',
-'Melhore profissionalmente esse currículo')">
+style="background:#8b5cf6"
+onclick="usarIA('resumo','Melhore profissionalmente este currículo')">
 
-✨ Melhorar com IA
+✨ Melhorar IA
 
 </button>
 
@@ -456,23 +380,23 @@ onclick="voltar()">
 </button>
 
 <input class="input"
-id="pdfT"
+id="pdfTitulo"
 placeholder="Título">
 
 <textarea class="textarea"
-id="pdfC"
-placeholder="Digite o conteúdo..."></textarea>
+id="pdfTexto"
+placeholder="Digite o conteúdo"></textarea>
 
 <button class="generate-btn"
-onclick="baixarPDF()">
+onclick="gerarPDF()">
 
-Gerar PDF
+GERAR PDF
 
 </button>
 
 </div>
 
-<!-- WORD -->
+<!-- DOC -->
 
 <div id="wordScreen"
 class="screen hidden">
@@ -485,17 +409,17 @@ onclick="voltar()">
 </button>
 
 <input class="input"
-id="wordT"
+id="docTitulo"
 placeholder="Título">
 
 <textarea class="textarea"
-id="wordC"
-placeholder="Digite o conteúdo..."></textarea>
+id="docTexto"
+placeholder="Digite o conteúdo"></textarea>
 
 <button class="generate-btn"
-onclick="baixarWord()">
+onclick="baixarDOC()">
 
-Baixar Word
+BAIXAR DOC
 
 </button>
 
@@ -514,13 +438,13 @@ onclick="voltar()">
 </button>
 
 <textarea class="textarea"
-id="txtConteudo"
+id="txtTexto"
 placeholder="Digite qualquer texto"></textarea>
 
 <button class="generate-btn"
 onclick="baixarTXT()">
 
-Baixar TXT
+BAIXAR TXT
 
 </button>
 
@@ -539,42 +463,13 @@ onclick="voltar()">
 </button>
 
 <textarea class="textarea"
-id="linkIn"
+id="linkedinTexto"
 placeholder="Digite informações profissionais"></textarea>
 
 <button class="generate-btn"
-onclick="usarIA('linkIn',
-'Crie um LinkedIn profissional')">
+onclick="usarIA('linkedinTexto','Crie um perfil profissional para LinkedIn')">
 
-Gerar LinkedIn
-
-</button>
-
-<div id="linkPreview"></div>
-
-</div>
-
-<!-- CARTA -->
-
-<div id="cartaScreen"
-class="screen hidden">
-
-<button class="back-btn"
-onclick="voltar()">
-
-← Voltar
-
-</button>
-
-<textarea class="textarea"
-id="cartaIn"
-placeholder="Digite sua carta"></textarea>
-
-<button class="generate-btn"
-onclick="usarIA('cartaIn',
-'Melhore profissionalmente essa carta')">
-
-Gerar Carta
+GERAR LINKEDIN
 
 </button>
 
@@ -593,10 +488,10 @@ onclick="voltar()">
 </button>
 
 <input class="input"
-id="nomeAss"
+id="assinaturaNome"
 placeholder="Seu nome">
 
-<div id="assPreview"
+<div id="previewAss"
 class="preview-box"
 style="
 font-family:cursive;
@@ -611,7 +506,7 @@ Assinatura
 <button class="generate-btn"
 onclick="gerarAssinatura()">
 
-Gerar Assinatura
+GERAR ASSINATURA
 
 </button>
 
@@ -619,74 +514,90 @@ Gerar Assinatura
 
 </div>
 
-<script>
+<script type="module">
 
-/* FIREBASE */
+import { initializeApp }
+
+from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
+
+import {
+
+getAuth,
+
+GoogleAuthProvider,
+
+signInWithRedirect,
+
+getRedirectResult,
+
+signOut
+
+}
+
+from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
 
 const firebaseConfig = {
 
 apiKey: "SUA_API_KEY",
 
-authDomain: "SEU-PROJETO.firebaseapp.com",
+authDomain: "SEU_AUTH_DOMAIN",
 
-projectId: "SEU-PROJETO",
+projectId: "SEU_PROJECT_ID",
+
+storageBucket: "SEU_BUCKET",
+
+messagingSenderId: "SEU_SENDER_ID",
 
 appId: "SEU_APP_ID"
 
 };
 
-firebase.initializeApp(firebaseConfig);
+const app =
+initializeApp(firebaseConfig);
 
-const auth = firebase.auth();
-
-/* LOGIN GOOGLE */
-
-async function loginGoogle(){
+const auth =
+getAuth(app);
 
 const provider =
-new firebase.auth.GoogleAuthProvider();
+new GoogleAuthProvider();
 
-try{
+window.loginGoogle =
+async function(){
 
-const result =
-await auth.signInWithPopup(provider);
+await signInWithRedirect(auth, provider);
+
+};
+
+getRedirectResult(auth)
+
+.then((result)=>{
+
+if(result){
 
 const user = result.user;
 
 localStorage.setItem(
-'elite_user',
+"eliteUser",
+
 JSON.stringify({
 
 nome:user.displayName,
+
 email:user.email,
+
 foto:user.photoURL
 
 })
+
 );
 
-mostrarHome();
-
-}catch(error){
-
-alert(
-'Erro Login Google:\n' +
-error.message
-);
+mostrarApp();
 
 }
 
-}
+});
 
-/* MOSTRAR HOME */
-
-function mostrarHome(){
-
-const user =
-JSON.parse(
-localStorage.getItem('elite_user')
-);
-
-if(!user) return;
+function mostrarApp(){
 
 document.getElementById('loginScreen')
 .classList.add('hidden');
@@ -694,28 +605,53 @@ document.getElementById('loginScreen')
 document.getElementById('homeScreen')
 .classList.remove('hidden');
 
-document.getElementById('userName')
-.innerText = user.nome;
+const user =
+JSON.parse(localStorage.getItem('eliteUser'));
 
-document.getElementById('userEmail')
-.innerText = user.email;
+document.getElementById('userInfo')
+.innerHTML = `
 
-document.getElementById('userPhoto')
-.src = user.foto;
+<div class="user-box">
+
+<img src="${user.foto}">
+
+<div>
+
+<div>${user.nome}</div>
+
+<small>${user.email}</small>
+
+</div>
+
+</div>
+
+`;
 
 }
 
-/* LOGOUT */
+const userSalvo =
+localStorage.getItem('eliteUser');
 
-function logout(){
+if(userSalvo){
 
-localStorage.removeItem('elite_user');
+mostrarApp();
+
+}
+
+window.logoutGoogle =
+async function(){
+
+await signOut(auth);
+
+localStorage.removeItem('eliteUser');
 
 location.reload();
 
-}
+};
 
-/* TELAS */
+</script>
+
+<script>
 
 function irPara(id){
 
@@ -748,8 +684,6 @@ document.getElementById('homeScreen')
 
 }
 
-/* IA */
-
 async function usarIA(id, comando){
 
 const campo =
@@ -759,178 +693,150 @@ const original =
 campo.value;
 
 campo.value =
-'IA processando...';
+"IA processando...";
 
 try{
 
 const resposta =
 await fetch(
+
 'https://text.pollinations.ai/' +
+
 encodeURIComponent(
-comando + ': ' + original
+comando + ":" + original
 )
+
 );
 
 const resultado =
 await resposta.text();
 
-campo.value = resultado;
+campo.value =
+resultado;
 
-if(id === 'linkIn'){
+}catch(e){
 
-document.getElementById(
-'linkPreview'
-).innerHTML = `
+campo.value =
+original;
 
-<div class="preview-box">
-
-${resultado}
-
-</div>
-
-`;
-
-}
-
-}catch{
-
-campo.value = original;
-
-alert('Erro IA');
+alert("Erro IA");
 
 }
 
 }
 
-/* PDF CURRICULO */
+function gerarAssinatura(){
+
+document.getElementById('previewAss')
+.innerHTML =
+
+document.getElementById('assinaturaNome')
+.value;
+
+}
 
 async function gerarPDFPremium(){
 
 const { jsPDF } =
 window.jspdf;
 
-const doc =
+const pdf =
 new jsPDF();
 
 const nome =
 document.getElementById('nome').value;
 
-doc.setFillColor(0,95,204);
-
-doc.rect(0,0,65,297,'F');
-
-doc.setTextColor(255,255,255);
-
-doc.setFontSize(18);
-
-doc.text(nome || 'Elite User',
-10,
-75);
-
-doc.setTextColor(0,95,204);
-
-doc.setFontSize(22);
-
-doc.text(
-(nome || 'Currículo').toUpperCase(),
-72,
-30
-);
+const cargo =
+document.getElementById('cargo').value;
 
 const resumo =
 document.getElementById('resumo').value;
 
-doc.setFontSize(12);
+pdf.setFillColor(0,95,204);
 
-doc.setTextColor(60,60,60);
+pdf.rect(0,0,65,297,'F');
+
+pdf.setTextColor(255,255,255);
+
+pdf.setFontSize(22);
+
+pdf.text(nome,10,40);
+
+pdf.setFontSize(12);
+
+pdf.text(cargo,10,55);
+
+pdf.setTextColor(0,95,204);
+
+pdf.setFontSize(24);
+
+pdf.text(nome,75,30);
+
+pdf.setTextColor(80,80,80);
+
+pdf.text(cargo,75,45);
+
+pdf.setTextColor(0,0,0);
 
 const linhas =
-doc.splitTextToSize(resumo,110);
+pdf.splitTextToSize(resumo,110);
 
-doc.text(linhas,72,55);
+pdf.text(linhas,75,70);
 
-const foto =
-document.getElementById('fotoInput').files[0];
-
-if(foto){
-
-const reader =
-new FileReader();
-
-reader.readAsDataURL(foto);
-
-reader.onload = function(e){
-
-doc.addImage(
-e.target.result,
-'JPEG',
-12,
-15,
-40,
-40
-);
-
-doc.save(
-'Curriculo_EliteDocs.pdf'
-);
-
-};
-
-}else{
-
-doc.save(
-'Curriculo_EliteDocs.pdf'
-);
+pdf.save("curriculo.pdf");
 
 }
 
-}
-
-/* PDF */
-
-function baixarPDF(){
+function gerarPDF(){
 
 const { jsPDF } =
 window.jspdf;
 
-const doc =
+const pdf =
 new jsPDF();
 
-doc.setFontSize(20);
+pdf.setFontSize(20);
 
-doc.text(
-document.getElementById('pdfT').value,
+pdf.text(
+
+document.getElementById('pdfTitulo').value,
+
 20,
-20
-);
 
-doc.setFontSize(12);
+20
+
+);
 
 const linhas =
-doc.splitTextToSize(
-document.getElementById('pdfC').value,
+pdf.splitTextToSize(
+
+document.getElementById('pdfTexto').value,
+
 170
+
 );
 
-doc.text(linhas,20,40);
+pdf.setFontSize(12);
 
-doc.save('Documento.pdf');
+pdf.text(linhas,20,40);
+
+pdf.save("documento.pdf");
 
 }
 
-/* WORD */
-
-function baixarWord(){
+function baixarDOC(){
 
 const texto =
-document.getElementById('wordC').value;
+
+document.getElementById('docTexto').value;
 
 const blob =
 new Blob(
-['\ufeff',texto],
-{
-type:'application/msword'
-}
+
+[texto],
+
+{type:'application/msword'}
+
 );
 
 const a =
@@ -940,26 +846,25 @@ a.href =
 URL.createObjectURL(blob);
 
 a.download =
-(document.getElementById('wordT').value ||
-'Documento') + '.doc';
+"arquivo.doc";
 
 a.click();
 
 }
-
-/* TXT */
 
 function baixarTXT(){
 
 const texto =
-document.getElementById('txtConteudo').value;
+
+document.getElementById('txtTexto').value;
 
 const blob =
 new Blob(
+
 [texto],
-{
-type:'text/plain'
-}
+
+{type:'text/plain'}
+
 );
 
 const a =
@@ -969,49 +874,9 @@ a.href =
 URL.createObjectURL(blob);
 
 a.download =
-'arquivo.txt';
+"arquivo.txt";
 
 a.click();
-
-}
-
-/* ASSINATURA */
-
-function gerarAssinatura(){
-
-document.getElementById(
-'assPreview'
-).innerText =
-
-document.getElementById(
-'nomeAss'
-).value;
-
-}
-
-/* AUTO LOGIN */
-
-window.onload = ()=>{
-
-const user =
-localStorage.getItem(
-'elite_user'
-);
-
-if(user){
-
-mostrarHome();
-
-}
-
-}
-
-/* SERVICE WORKER */
-
-if('serviceWorker' in navigator){
-
-navigator.serviceWorker
-.register('sw.js');
 
 }
 
