@@ -1,338 +1,1021 @@
 <!DOCTYPE html>
 <html lang="pt-br">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Elite Docs AI | Professional System</title>
-    
-    <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-auth-compat.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore-compat.js"></script>
-    
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;600;800&display=swap" rel="stylesheet">
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
 
-    <style>
-        :root {
-            --primary: #5b4bff;
-            --secondary: #00d2ff;
-            --bg: #030308;
-            --card: rgba(255, 255, 255, 0.05);
-            --border: rgba(255, 255, 255, 0.1);
-            --text-main: #ffffff;
-            --text-dim: #a0a0a0;
-        }
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Plus Jakarta Sans', sans-serif; }
+<title>Elite Docs AI</title>
 
-        body { background-color: var(--bg); color: var(--text-main); overflow-x: hidden; }
+<link rel="manifest" href="manifest.json">
+<link rel="icon" type="image/png" href="logo.png">
 
-        .hidden { display: none !important; }
+<meta name="theme-color" content="#5b4bff">
 
-        /* --- ESTILO TELA DE LOGIN --- */
-        #screen-login {
-            height: 100vh;
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            align-items: center;
-            padding: 20px;
-            background: radial-gradient(circle at top right, #1a1a3a, transparent);
-        }
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;700;800&display=swap" rel="stylesheet">
 
-        .login-box {
-            background: var(--card);
-            padding: 40px 30px;
-            border-radius: 32px;
-            border: 1px solid var(--border);
-            backdrop-filter: blur(20px);
-            text-align: center;
-            width: 100%;
-            max-width: 400px;
-            box-shadow: 0 25px 50px rgba(0,0,0,0.5);
-        }
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 
-        .logo-main {
-            width: 80px;
-            height: 80px;
-            background: var(--primary);
-            border-radius: 22px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            margin: 0 auto 20px;
-            font-size: 35px;
-            box-shadow: 0 0 30px rgba(91, 75, 255, 0.4);
-        }
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
 
-        .btn-google {
-            background: #fff;
-            color: #000;
-            border: none;
-            padding: 18px;
-            border-radius: 16px;
-            font-weight: 800;
-            width: 100%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 12px;
-            cursor: pointer;
-            transition: 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-            margin-top: 30px;
-        }
+<!-- FIREBASE -->
 
-        .btn-google:hover { transform: translateY(-3px); box-shadow: 0 10px 20px rgba(255,255,255,0.1); }
+<script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
 
-        /* --- DASHBOARD COMPLETO --- */
-        #screen-main { padding-bottom: 100px; }
+<script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-auth.js"></script>
 
-        .navbar {
-            padding: 20px;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            position: sticky;
-            top: 0;
-            background: rgba(3, 3, 8, 0.8);
-            backdrop-filter: blur(10px);
-            z-index: 100;
-        }
+<style>
 
-        .profile-section { display: flex; align-items: center; gap: 12px; }
-        .avatar { width: 45px; height: 45px; border-radius: 14px; border: 2px solid var(--primary); }
+*{
+margin:0;
+padding:0;
+box-sizing:border-box;
+}
 
-        .xp-container {
-            padding: 20px;
-            margin: 10px 20px;
-            background: var(--card);
-            border-radius: 24px;
-            border: 1px solid var(--border);
-        }
+body{
+font-family:'Inter',sans-serif;
+background:#050510;
+color:white;
+padding:12px;
+overflow-x:hidden;
+background-image:
+radial-gradient(circle at top,
+rgba(91,75,255,.18),
+transparent 35%);
+}
 
-        .xp-header { display: flex; justify-content: space-between; margin-bottom: 10px; font-weight: 600; }
-        .xp-bar { height: 10px; background: rgba(255,255,255,0.1); border-radius: 5px; overflow: hidden; }
-        .xp-fill { height: 100%; background: linear-gradient(90deg, var(--primary), var(--secondary)); width: 45%; }
+.hidden{
+display:none;
+}
 
-        /* --- BOTÕES DE AÇÃO --- */
-        .grid-tools {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 15px;
-            padding: 20px;
-        }
+.container{
+max-width:700px;
+margin:auto;
+}
 
-        .tool-card {
-            background: var(--card);
-            padding: 25px 20px;
-            border-radius: 24px;
-            border: 1px solid var(--border);
-            text-align: center;
-            transition: 0.3s;
-            cursor: pointer;
-        }
+.hero{
+text-align:center;
+padding:25px 10px;
+}
 
-        .tool-card:active { transform: scale(0.95); }
-        .tool-card i { font-size: 32px; color: var(--primary); margin-bottom: 15px; display: block; }
-        .tool-card h3 { font-size: 15px; font-weight: 700; }
+.logo-app{
+width:95px;
+height:95px;
+border-radius:20px;
+margin-bottom:15px;
+object-fit:cover;
+}
 
-        /* --- AREA DA IA --- */
-        .ia-chat-box {
-            margin: 20px;
-            background: linear-gradient(145deg, rgba(91, 75, 255, 0.1), rgba(0, 210, 255, 0.05));
-            border-radius: 28px;
-            padding: 25px;
-            border: 1px solid rgba(91, 75, 255, 0.2);
-        }
+.grid{
+display:grid;
+grid-template-columns:repeat(3,1fr);
+gap:12px;
+margin-top:20px;
+}
 
-        .ia-input-container {
-            background: rgba(0,0,0,0.3);
-            border-radius: 18px;
-            padding: 5px;
-            display: flex;
-            margin-top: 15px;
-        }
+.card{
+background:rgba(255,255,255,.05);
+border:1px solid rgba(255,255,255,.08);
+padding:18px 8px;
+border-radius:22px;
+display:flex;
+flex-direction:column;
+align-items:center;
+justify-content:center;
+cursor:pointer;
+transition:.2s;
+backdrop-filter:blur(10px);
+}
 
-        .ia-input-container input {
-            background: none;
-            border: none;
-            color: white;
-            padding: 12px;
-            flex: 1;
-            outline: none;
-        }
+.card:active{
+transform:scale(.93);
+}
 
-        .btn-send {
-            background: var(--primary);
-            border: none;
-            color: white;
-            width: 40px;
-            height: 40px;
-            border-radius: 14px;
-            cursor: pointer;
-        }
+.card i{
+font-size:28px;
+margin-bottom:10px;
+}
 
-        /* --- FOOTER MENU --- */
-        .bottom-nav {
-            position: fixed;
-            bottom: 0;
-            left: 0;
-            width: 100%;
-            background: rgba(10, 10, 20, 0.95);
-            padding: 20px;
-            display: flex;
-            justify-content: space-around;
-            border-top: 1px solid var(--border);
-            backdrop-filter: blur(15px);
-        }
+.card span{
+font-size:11px;
+font-weight:700;
+}
 
-        .nav-item { color: var(--text-dim); font-size: 20px; cursor: pointer; transition: 0.3s; }
-        .nav-item.active { color: var(--primary); transform: translateY(-5px); }
+.screen{
+margin-top:10px;
+background:rgba(255,255,255,.04);
+border:1px solid rgba(255,255,255,.08);
+padding:18px;
+border-radius:24px;
+backdrop-filter:blur(20px);
+}
 
-    </style>
+.back-btn{
+background:none;
+border:none;
+color:#5b4bff;
+font-weight:700;
+margin-bottom:15px;
+cursor:pointer;
+font-size:15px;
+}
+
+.input,
+.textarea{
+width:100%;
+padding:14px;
+margin-bottom:12px;
+border-radius:14px;
+border:1px solid rgba(255,255,255,.08);
+background:rgba(255,255,255,.05);
+color:white;
+outline:none;
+font-size:14px;
+}
+
+.textarea{
+min-height:150px;
+resize:none;
+}
+
+.generate-btn{
+width:100%;
+padding:15px;
+border:none;
+border-radius:14px;
+background:linear-gradient(135deg,#5b4bff,#4338ca);
+color:white;
+font-weight:700;
+cursor:pointer;
+margin-top:5px;
+}
+
+.preview-box{
+background:white;
+color:#222;
+padding:18px;
+border-radius:18px;
+margin-top:15px;
+line-height:1.7;
+}
+
+.google-btn{
+width:100%;
+padding:15px;
+border:none;
+border-radius:14px;
+background:white;
+color:#111;
+font-weight:700;
+cursor:pointer;
+font-size:15px;
+margin-top:15px;
+}
+
+.google-btn i{
+margin-right:10px;
+color:#ea4335;
+}
+
+.login-box{
+max-width:420px;
+margin:80px auto;
+background:rgba(255,255,255,.05);
+padding:30px 20px;
+border-radius:28px;
+border:1px solid rgba(255,255,255,.08);
+text-align:center;
+backdrop-filter:blur(20px);
+}
+
+.user-box{
+display:flex;
+align-items:center;
+gap:10px;
+margin-top:15px;
+justify-content:center;
+}
+
+.user-box img{
+width:40px;
+height:40px;
+border-radius:50%;
+}
+
+.logout-btn{
+margin-top:15px;
+background:#ef4444;
+padding:12px;
+border:none;
+border-radius:12px;
+color:white;
+font-weight:700;
+width:100%;
+cursor:pointer;
+}
+
+@media(max-width:650px){
+
+.grid{
+grid-template-columns:repeat(3,1fr);
+}
+
+}
+
+</style>
+
 </head>
+
 <body>
 
-    <section id="screen-login">
-        <div class="login-box">
-            <div class="logo-main"><i class="fas fa-bolt"></i></div>
-            <h1 style="font-size: 28px; font-weight: 800; letter-spacing: -1px;">Elite Docs AI</h1>
-            <p style="color: var(--text-dim); margin-top: 10px; font-size: 14px;">O futuro da documentação profissional com IA</p>
-            
-            <button class="btn-google" onclick="loginGoogle()">
-                <img src="https://www.gstatic.com/images/branding/product/1x/gsa_512dp.png" width="22">
-                Continuar com Google
-            </button>
-            <p style="font-size: 12px; color: var(--text-dim); margin-top: 25px;">Ao entrar você aceita nossos termos de uso.</p>
-        </div>
-    </section>
+<div class="container">
 
-    <section id="screen-main" class="hidden">
-        <nav class="navbar">
-            <div class="profile-section">
-                <img id="user-photo" class="avatar" src="" alt="User">
-                <div>
-                    <p style="font-size: 12px; color: var(--text-dim);">Bem-vindo,</p>
-                    <h2 id="user-name" style="font-size: 18px; font-weight: 700;">Usuário</h2>
-                </div>
-            </div>
-            <i class="fas fa-bell nav-item"></i>
-        </nav>
+<!-- LOGIN -->
 
-        <div class="xp-container">
-            <div class="xp-header">
-                <span>Nível 12 (Pro)</span>
-                <span style="color: var(--primary);">2.450 XP</span>
-            </div>
-            <div class="xp-bar">
-                <div class="xp-fill"></div>
-            </div>
-        </div>
+<div id="loginScreen">
 
-        <div class="ia-chat-box">
-            <h3 style="font-size: 16px; display: flex; align-items: center; gap: 10px;">
-                <i class="fas fa-robot"></i> Assistente Elite IA
-            </h3>
-            <p style="font-size: 13px; color: var(--text-dim); margin-top: 5px;">O que vamos criar profissionalmente hoje?</p>
-            <div class="ia-input-container">
-                <input type="text" placeholder="Ex: Crie um contrato de serviços...">
-                <button class="btn-send"><i class="fas fa-paper-plane"></i></button>
-            </div>
-        </div>
+<div class="login-box">
 
-        <div class="grid-tools">
-            <div class="tool-card" onclick="openTool('pdf')">
-                <i class="fas fa-file-pdf"></i>
-                <h3>Gerador PDF</h3>
-            </div>
-            <div class="tool-card" onclick="openTool('cv')">
-                <i class="fas fa-id-badge"></i>
-                <h3>Currículo IA</h3>
-            </div>
-            <div class="tool-card" onclick="openTool('contract')">
-                <i class="fas fa-file-contract"></i>
-                <h3>Contratos</h3>
-            </div>
-            <div class="tool-card" onclick="openTool('ai')">
-                <i class="fas fa-wand-magic-sparkles"></i>
-                <h3>Doc Writer</h3>
-            </div>
-        </div>
+<img src="logo.png" class="logo-app">
 
-        <div style="padding: 20px;">
-            <button onclick="logout()" style="width:100%; padding:15px; background:none; border:1px solid #ff4b4b; color:#ff4b4b; border-radius:18px; font-weight:700;">
-                Sair da Conta
-            </button>
-        </div>
+<h1 style="font-size:32px;">
+Elite Docs AI
+</h1>
 
-        <div class="bottom-nav">
-            <i class="fas fa-home nav-item active"></i>
-            <i class="fas fa-search nav-item"></i>
-            <i class="fas fa-folder nav-item"></i>
-            <i class="fas fa-user nav-item"></i>
-        </div>
-    </section>
+<p style="
+margin-top:10px;
+color:#9ca3af;
+font-size:14px;
+">
+Entre com Google para continuar
+</p>
 
-    <script>
-        // --- FIREBASE CONFIG ---
-        const firebaseConfig = {
-            apiKey: "AIzaSyDFPrrCSowCuo3QJ6T280zja2Wqutlccvo",
-            authDomain: "elite-docsai.firebaseapp.com",
-            projectId: "elite-docsai",
-            storageBucket: "elite-docsai.appspot.com",
-            messagingSenderId: "1048692395624",
-            appId: "1:1048692395624:web:74fb23e57580b9203ab5dd",
-            measurementId: "G-G63HC1V4FD"
-        };
+<button class="google-btn"
+onclick="loginGoogle()">
 
-        firebase.initializeApp(firebaseConfig);
-        const auth = firebase.auth();
+<i class="fab fa-google"></i>
 
-        // --- LÓGICA DE LOGIN ---
-        function loginGoogle() {
-            const provider = new firebase.auth.GoogleAuthProvider();
-            provider.setCustomParameters({ prompt: 'select_account' });
-            
-            // Usando Redirect (Obrigatório para GitHub Pages no Celular)
-            auth.signInWithRedirect(provider);
-        }
+Entrar com Google
 
-        function logout() {
-            auth.signOut();
-        }
+</button>
 
-        // --- CONTROLE DE TELAS ---
-        auth.onAuthStateChanged((user) => {
-            const loginScreen = document.getElementById('screen-login');
-            const mainScreen = document.getElementById('screen-main');
-            
-            if (user) {
-                loginScreen.classList.add('hidden');
-                mainScreen.classList.remove('hidden');
-                
-                // Preencher dados do usuário
-                document.getElementById('user-name').innerText = user.displayName;
-                document.getElementById('user-photo').src = user.photoURL || 'https://via.placeholder.com/150';
-                console.log("Usuário logado:", user.email);
-            } else {
-                loginScreen.classList.remove('hidden');
-                mainScreen.classList.add('hidden');
-            }
-        });
+</div>
 
-        // Captura o resultado após o redirecionamento
-        auth.getRedirectResult().catch((error) => {
-            if(error.code) {
-                alert("Erro ao autenticar: " + error.message);
-                console.error(error);
-            }
-        });
+</div>
 
-        // Funções auxiliares
-        function openTool(type) {
-            alert("A ferramenta de " + type.toUpperCase() + " está sendo carregada com o motor de IA...");
-        }
-    </script>
+<!-- HOME -->
+
+<div id="homeScreen" class="hidden">
+
+<div class="hero">
+
+<img src="logo.png" class="logo-app">
+
+<h1>
+Elite Docs AI
+</h1>
+
+<p style="
+margin-top:8px;
+color:#9ca3af;
+font-size:14px;
+">
+Crie documentos profissionais
+</p>
+
+<div class="user-box">
+
+<img id="userPhoto"
+src="https://i.imgur.com/6VBx3io.png">
+
+<div>
+
+<div id="userName"></div>
+
+<div id="userEmail"
+style="
+font-size:12px;
+color:#9ca3af;
+">
+</div>
+
+</div>
+
+</div>
+
+<button class="logout-btn"
+onclick="logout()">
+
+Sair
+
+</button>
+
+</div>
+
+<div class="grid">
+
+<div class="card"
+onclick="irPara('curriculoScreen')">
+
+<i class="fas fa-user-tie"
+style="color:#5b4bff"></i>
+
+<span>Currículo</span>
+
+</div>
+
+<div class="card"
+onclick="irPara('pdfScreen')">
+
+<i class="fas fa-file-pdf"
+style="color:#ef4444"></i>
+
+<span>PDF</span>
+
+</div>
+
+<div class="card"
+onclick="irPara('wordScreen')">
+
+<i class="fas fa-file-word"
+style="color:#2b579a"></i>
+
+<span>Word</span>
+
+</div>
+
+<div class="card"
+onclick="irPara('txtScreen')">
+
+<i class="fas fa-file-lines"
+style="color:#9ca3af"></i>
+
+<span>TXT</span>
+
+</div>
+
+<div class="card"
+onclick="irPara('linkedinScreen')">
+
+<i class="fab fa-linkedin"
+style="color:#0a66c2"></i>
+
+<span>LinkedIn</span>
+
+</div>
+
+<div class="card"
+onclick="irPara('cartaScreen')">
+
+<i class="fas fa-envelope"
+style="color:#10b981"></i>
+
+<span>Carta</span>
+
+</div>
+
+<div class="card"
+onclick="irPara('assinaturaScreen')">
+
+<i class="fas fa-signature"
+style="color:#06b6d4"></i>
+
+<span>Assinatura</span>
+
+</div>
+
+</div>
+
+</div>
+
+<!-- CURRICULO -->
+
+<div id="curriculoScreen"
+class="screen hidden">
+
+<button class="back-btn"
+onclick="voltar()">
+
+← Voltar
+
+</button>
+
+<input class="input"
+id="nome"
+placeholder="Nome Completo">
+
+<input class="input"
+id="cargo"
+placeholder="Cargo">
+
+<input class="input"
+id="tel"
+placeholder="Telefone">
+
+<input class="input"
+id="email"
+placeholder="E-mail">
+
+<input class="input"
+type="file"
+id="fotoInput"
+accept="image/*">
+
+<textarea class="textarea"
+id="resumo"
+placeholder="Resumo profissional..."></textarea>
+
+<button class="generate-btn"
+style="background:#8b5cf6;"
+onclick="usarIA('resumo',
+'Melhore profissionalmente esse currículo')">
+
+✨ Melhorar com IA
+
+</button>
+
+<button class="generate-btn"
+onclick="gerarPDFPremium()">
+
+BAIXAR PDF PREMIUM
+
+</button>
+
+</div>
+
+<!-- PDF -->
+
+<div id="pdfScreen"
+class="screen hidden">
+
+<button class="back-btn"
+onclick="voltar()">
+
+← Voltar
+
+</button>
+
+<input class="input"
+id="pdfT"
+placeholder="Título">
+
+<textarea class="textarea"
+id="pdfC"
+placeholder="Digite o conteúdo..."></textarea>
+
+<button class="generate-btn"
+onclick="baixarPDF()">
+
+Gerar PDF
+
+</button>
+
+</div>
+
+<!-- WORD -->
+
+<div id="wordScreen"
+class="screen hidden">
+
+<button class="back-btn"
+onclick="voltar()">
+
+← Voltar
+
+</button>
+
+<input class="input"
+id="wordT"
+placeholder="Título">
+
+<textarea class="textarea"
+id="wordC"
+placeholder="Digite o conteúdo..."></textarea>
+
+<button class="generate-btn"
+onclick="baixarWord()">
+
+Baixar Word
+
+</button>
+
+</div>
+
+<!-- TXT -->
+
+<div id="txtScreen"
+class="screen hidden">
+
+<button class="back-btn"
+onclick="voltar()">
+
+← Voltar
+
+</button>
+
+<textarea class="textarea"
+id="txtConteudo"
+placeholder="Digite qualquer texto"></textarea>
+
+<button class="generate-btn"
+onclick="baixarTXT()">
+
+Baixar TXT
+
+</button>
+
+</div>
+
+<!-- LINKEDIN -->
+
+<div id="linkedinScreen"
+class="screen hidden">
+
+<button class="back-btn"
+onclick="voltar()">
+
+← Voltar
+
+</button>
+
+<textarea class="textarea"
+id="linkIn"
+placeholder="Digite informações profissionais"></textarea>
+
+<button class="generate-btn"
+onclick="usarIA('linkIn',
+'Crie um LinkedIn profissional')">
+
+Gerar LinkedIn
+
+</button>
+
+<div id="linkPreview"></div>
+
+</div>
+
+<!-- CARTA -->
+
+<div id="cartaScreen"
+class="screen hidden">
+
+<button class="back-btn"
+onclick="voltar()">
+
+← Voltar
+
+</button>
+
+<textarea class="textarea"
+id="cartaIn"
+placeholder="Digite sua carta"></textarea>
+
+<button class="generate-btn"
+onclick="usarIA('cartaIn',
+'Melhore profissionalmente essa carta')">
+
+Gerar Carta
+
+</button>
+
+</div>
+
+<!-- ASSINATURA -->
+
+<div id="assinaturaScreen"
+class="screen hidden">
+
+<button class="back-btn"
+onclick="voltar()">
+
+← Voltar
+
+</button>
+
+<input class="input"
+id="nomeAss"
+placeholder="Seu nome">
+
+<div id="assPreview"
+class="preview-box"
+style="
+font-family:cursive;
+font-size:35px;
+text-align:center;
+">
+
+Assinatura
+
+</div>
+
+<button class="generate-btn"
+onclick="gerarAssinatura()">
+
+Gerar Assinatura
+
+</button>
+
+</div>
+
+</div>
+
+<script>
+
+/* FIREBASE */
+
+const firebaseConfig = {
+
+apiKey: "SUA_API_KEY",
+
+authDomain: "SEU-PROJETO.firebaseapp.com",
+
+projectId: "SEU-PROJETO",
+
+appId: "SEU_APP_ID"
+
+};
+
+firebase.initializeApp(firebaseConfig);
+
+const auth = firebase.auth();
+
+/* LOGIN GOOGLE */
+
+async function loginGoogle(){
+
+const provider =
+new firebase.auth.GoogleAuthProvider();
+
+try{
+
+const result =
+await auth.signInWithPopup(provider);
+
+const user = result.user;
+
+localStorage.setItem(
+'elite_user',
+JSON.stringify({
+
+nome:user.displayName,
+email:user.email,
+foto:user.photoURL
+
+})
+);
+
+mostrarHome();
+
+}catch(error){
+
+alert(
+'Erro Login Google:\n' +
+error.message
+);
+
+}
+
+}
+
+/* MOSTRAR HOME */
+
+function mostrarHome(){
+
+const user =
+JSON.parse(
+localStorage.getItem('elite_user')
+);
+
+if(!user) return;
+
+document.getElementById('loginScreen')
+.classList.add('hidden');
+
+document.getElementById('homeScreen')
+.classList.remove('hidden');
+
+document.getElementById('userName')
+.innerText = user.nome;
+
+document.getElementById('userEmail')
+.innerText = user.email;
+
+document.getElementById('userPhoto')
+.src = user.foto;
+
+}
+
+/* LOGOUT */
+
+function logout(){
+
+localStorage.removeItem('elite_user');
+
+location.reload();
+
+}
+
+/* TELAS */
+
+function irPara(id){
+
+document.getElementById('homeScreen')
+.classList.add('hidden');
+
+document.querySelectorAll('.screen')
+.forEach(s=>{
+
+s.classList.add('hidden');
+
+});
+
+document.getElementById(id)
+.classList.remove('hidden');
+
+}
+
+function voltar(){
+
+document.querySelectorAll('.screen')
+.forEach(s=>{
+
+s.classList.add('hidden');
+
+});
+
+document.getElementById('homeScreen')
+.classList.remove('hidden');
+
+}
+
+/* IA */
+
+async function usarIA(id, comando){
+
+const campo =
+document.getElementById(id);
+
+const original =
+campo.value;
+
+campo.value =
+'IA processando...';
+
+try{
+
+const resposta =
+await fetch(
+'https://text.pollinations.ai/' +
+encodeURIComponent(
+comando + ': ' + original
+)
+);
+
+const resultado =
+await resposta.text();
+
+campo.value = resultado;
+
+if(id === 'linkIn'){
+
+document.getElementById(
+'linkPreview'
+).innerHTML = `
+
+<div class="preview-box">
+
+${resultado}
+
+</div>
+
+`;
+
+}
+
+}catch{
+
+campo.value = original;
+
+alert('Erro IA');
+
+}
+
+}
+
+/* PDF CURRICULO */
+
+async function gerarPDFPremium(){
+
+const { jsPDF } =
+window.jspdf;
+
+const doc =
+new jsPDF();
+
+const nome =
+document.getElementById('nome').value;
+
+doc.setFillColor(0,95,204);
+
+doc.rect(0,0,65,297,'F');
+
+doc.setTextColor(255,255,255);
+
+doc.setFontSize(18);
+
+doc.text(nome || 'Elite User',
+10,
+75);
+
+doc.setTextColor(0,95,204);
+
+doc.setFontSize(22);
+
+doc.text(
+(nome || 'Currículo').toUpperCase(),
+72,
+30
+);
+
+const resumo =
+document.getElementById('resumo').value;
+
+doc.setFontSize(12);
+
+doc.setTextColor(60,60,60);
+
+const linhas =
+doc.splitTextToSize(resumo,110);
+
+doc.text(linhas,72,55);
+
+const foto =
+document.getElementById('fotoInput').files[0];
+
+if(foto){
+
+const reader =
+new FileReader();
+
+reader.readAsDataURL(foto);
+
+reader.onload = function(e){
+
+doc.addImage(
+e.target.result,
+'JPEG',
+12,
+15,
+40,
+40
+);
+
+doc.save(
+'Curriculo_EliteDocs.pdf'
+);
+
+};
+
+}else{
+
+doc.save(
+'Curriculo_EliteDocs.pdf'
+);
+
+}
+
+}
+
+/* PDF */
+
+function baixarPDF(){
+
+const { jsPDF } =
+window.jspdf;
+
+const doc =
+new jsPDF();
+
+doc.setFontSize(20);
+
+doc.text(
+document.getElementById('pdfT').value,
+20,
+20
+);
+
+doc.setFontSize(12);
+
+const linhas =
+doc.splitTextToSize(
+document.getElementById('pdfC').value,
+170
+);
+
+doc.text(linhas,20,40);
+
+doc.save('Documento.pdf');
+
+}
+
+/* WORD */
+
+function baixarWord(){
+
+const texto =
+document.getElementById('wordC').value;
+
+const blob =
+new Blob(
+['\ufeff',texto],
+{
+type:'application/msword'
+}
+);
+
+const a =
+document.createElement('a');
+
+a.href =
+URL.createObjectURL(blob);
+
+a.download =
+(document.getElementById('wordT').value ||
+'Documento') + '.doc';
+
+a.click();
+
+}
+
+/* TXT */
+
+function baixarTXT(){
+
+const texto =
+document.getElementById('txtConteudo').value;
+
+const blob =
+new Blob(
+[texto],
+{
+type:'text/plain'
+}
+);
+
+const a =
+document.createElement('a');
+
+a.href =
+URL.createObjectURL(blob);
+
+a.download =
+'arquivo.txt';
+
+a.click();
+
+}
+
+/* ASSINATURA */
+
+function gerarAssinatura(){
+
+document.getElementById(
+'assPreview'
+).innerText =
+
+document.getElementById(
+'nomeAss'
+).value;
+
+}
+
+/* AUTO LOGIN */
+
+window.onload = ()=>{
+
+const user =
+localStorage.getItem(
+'elite_user'
+);
+
+if(user){
+
+mostrarHome();
+
+}
+
+}
+
+/* SERVICE WORKER */
+
+if('serviceWorker' in navigator){
+
+navigator.serviceWorker
+.register('sw.js');
+
+}
+
+</script>
+
 </body>
 </html>
