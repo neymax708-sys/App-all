@@ -4,108 +4,36 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Elite Docs AI</title>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     
     <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-auth-compat.js"></script>
 
     <style>
-        * { margin: 0; padding: 0; box-sizing: border-box; }
-        body {
-            font-family: 'Inter', sans-serif;
-            background: #050510;
-            color: white;
-            padding: 15px;
-            background-image: radial-gradient(circle at top, rgba(91, 75, 255, .15), transparent 40%);
-            min-height: 100vh;
-        }
+        body { font-family: sans-serif; background: #050510; color: white; display: flex; justify-content: center; align-items: center; height: 100vh; margin: 0; }
+        .container { text-align: center; background: rgba(255,255,255,0.05); padding: 40px; border-radius: 20px; border: 1px solid rgba(255,255,255,0.1); }
+        .btn-google { background: white; color: black; padding: 15px 25px; border: none; border-radius: 10px; font-weight: bold; cursor: pointer; font-size: 16px; }
         .hidden { display: none; }
-        .container { max-width: 600px; margin: auto; }
-        
-        /* Tela de Login */
-        #loginScreen {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            height: 80vh;
-        }
-        .login-box {
-            background: rgba(255, 255, 255, .05);
-            padding: 30px;
-            border-radius: 24px;
-            border: 1px solid rgba(255, 255, 255, .1);
-            text-align: center;
-            width: 100%;
-        }
-
-        /* Botões e Inputs */
-        .btn {
-            width: 100%;
-            padding: 16px;
-            border-radius: 14px;
-            border: none;
-            font-weight: 700;
-            cursor: pointer;
-            transition: 0.2s;
-            margin-top: 15px;
-        }
-        .btn-google { background: white; color: #111; display: flex; align-items: center; justify-content: center; gap: 10px; }
-        .btn-primary { background: linear-gradient(135deg, #5b4bff, #4338ca); color: white; }
-        .btn:active { transform: scale(0.97); }
-
-        /* Dashboard */
-        .header { text-align: center; padding: 20px 0; }
-        .grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 15px; }
-        .card {
-            background: rgba(255, 255, 255, .05);
-            padding: 20px;
-            border-radius: 18px;
-            text-align: center;
-            border: 1px solid rgba(255, 255, 255, .08);
-        }
-        .card i { font-size: 24px; color: #5b4bff; margin-bottom: 10px; }
     </style>
 </head>
 <body>
 
 <div class="container">
-    <div id="loginScreen">
-        <div class="login-box">
-            <h1 style="margin-bottom: 10px;">Elite Docs AI</h1>
-            <p style="color: #9ca3af; margin-bottom: 25px;">Acesse sua conta para começar</p>
-            <button class="btn btn-google" onclick="loginGoogle()">
-                <i class="fab fa-google"></i> Entrar com Google
-            </button>
-        </div>
+    <div id="loginArea">
+        <h1>Elite Docs AI</h1>
+        <p style="margin-bottom: 20px;">Entre para continuar</p>
+        <button class="btn-google" onclick="loginGoogle()">Entrar com Google</button>
     </div>
 
-    <div id="mainContent" class="hidden">
-        <div class="header">
-            <h1>Elite Docs AI</h1>
-            <p id="userName" style="color: #5b4bff; font-weight: 600;"></p>
-        </div>
-        
-        <div class="grid">
-            <div class="card">
-                <i class="fas fa-file-pdf"></i>
-                <p>Criar PDF</p>
-            </div>
-            <div class="card">
-                <i class="fas fa-user-tie"></i>
-                <p>Currículos</p>
-            </div>
-        </div>
-        
-        <button class="btn" style="color: #ef4444;" onclick="logout()">Sair</button>
+    <div id="dashboard" class="hidden">
+        <h1 id="welcomeText"></h1>
+        <button onclick="logout()" style="background: none; border: 1px solid red; color: red; padding: 10px; cursor: pointer; margin-top: 20px;">Sair</button>
     </div>
 </div>
 
 <script>
-    // Configurações do seu projeto Firebase
+    // Configurações do seu projeto
     const firebaseConfig = {
-        apiKey: "AIzaSyDFPrrCSowCuo3QJ6T280zja2Wqutlccvo", // Chave corrigida
+        apiKey: "AIzaSyDFPrrCSowCuo3QJ6T280zja2Wqutlccvo", // Chave corrigida da imagem
         authDomain: "elite-docsai.firebaseapp.com",
         projectId: "elite-docsai",
         storageBucket: "elite-docsai.appspot.com",
@@ -117,32 +45,24 @@
     // Inicializar Firebase
     firebase.initializeApp(firebaseConfig);
 
-    // Função de Login (Otimizada para Celular)
+    // Função de Login
     function loginGoogle() {
         const provider = new firebase.auth.GoogleAuthProvider();
+        // Força a escolha da conta
         provider.setCustomParameters({ prompt: 'select_account' });
-        // Usa Redirect para evitar bloqueio de janelas pop-up no mobile
+        // Redireciona para evitar bloqueio de popup
         firebase.auth().signInWithRedirect(provider);
     }
 
-    // Gerenciar estado do login ao carregar a página
+    // Monitorar se o usuário está logado
     firebase.auth().onAuthStateChanged((user) => {
         if (user) {
-            document.getElementById("loginScreen").classList.add("hidden");
-            document.getElementById("mainContent").classList.remove("hidden");
-            document.getElementById("userName").innerText = "Olá, " + user.displayName;
+            document.getElementById('loginArea').classList.add('hidden');
+            document.getElementById('dashboard').classList.remove('hidden');
+            document.getElementById('welcomeText').innerText = "Bem-vindo, " + user.displayName;
         } else {
-            document.getElementById("loginScreen").classList.remove("hidden");
-            document.getElementById("mainContent").classList.add("hidden");
-        }
-    });
-
-    // Capturar resultado do redirecionamento
-    firebase.auth().getRedirectResult().catch((error) => {
-        if (error.code === 'auth/api-key-not-valid') {
-            alert("Erro: Chave de API inválida. Verifique o console do Firebase.");
-        } else {
-            console.error("Erro no login:", error.message);
+            document.getElementById('loginArea').classList.remove('hidden');
+            document.getElementById('dashboard').classList.add('hidden');
         }
     });
 
