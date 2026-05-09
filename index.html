@@ -3,111 +3,253 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Elite Docs AI - Login</title>
+    <title>Elite Docs AI</title>
     
     <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-auth-compat.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;800&display=swap" rel="stylesheet">
 
     <style>
+        :root {
+            --primary: #5b4bff;
+            --primary-hover: #4839eb;
+            --bg: #050510;
+            --card-bg: rgba(255, 255, 255, 0.05);
+            --card-border: rgba(255, 255, 255, 0.1);
+        }
+
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+
         body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background-color: #050510;
-            color: white;
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            background-color: var(--bg);
+            color: #fff;
             display: flex;
             justify-content: center;
-            align-items: center;
-            height: 100vh;
-            margin: 0;
+            min-height: 100vh;
+            overflow-x: hidden;
         }
+
+        .container {
+            width: 100%;
+            max-width: 450px;
+            padding: 20px;
+        }
+
+        /* --- TELA DE LOGIN --- */
         .login-card {
-            background: rgba(255, 255, 255, 0.05);
-            padding: 40px;
-            border-radius: 20px;
-            border: 1px solid rgba(255, 255, 255, 0.1);
+            background: var(--card-bg);
+            padding: 50px 25px;
+            border-radius: 30px;
+            border: 1px solid var(--card-border);
+            backdrop-filter: blur(15px);
             text-align: center;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+            margin-top: 60px;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.4);
         }
+
+        .logo-icon {
+            width: 70px;
+            height: 70px;
+            background: var(--primary);
+            border-radius: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 20px;
+            font-size: 30px;
+            box-shadow: 0 0 20px rgba(91, 75, 255, 0.4);
+        }
+
         .btn-google {
-            background: white;
+            background: #fff;
             color: #000;
             border: none;
-            padding: 15px 30px;
-            border-radius: 10px;
-            font-weight: bold;
+            padding: 18px;
+            border-radius: 15px;
+            font-weight: 800;
             font-size: 16px;
+            cursor: pointer;
+            width: 100%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 12px;
+            transition: 0.3s;
+            margin-top: 30px;
+        }
+
+        .btn-google:active { transform: scale(0.98); }
+
+        /* --- DASHBOARD --- */
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 20px 0;
+            margin-bottom: 20px;
+        }
+
+        .welcome-text h2 { font-size: 24px; font-weight: 800; }
+        .welcome-text p { font-size: 14px; color: var(--primary); font-weight: 600; }
+
+        .xp-bar-container {
+            background: rgba(255,255,255,0.1);
+            height: 8px;
+            border-radius: 10px;
+            margin: 15px 0 30px;
+            overflow: hidden;
+        }
+
+        .xp-progress {
+            background: var(--primary);
+            width: 35%; /* Exemplo de progresso */
+            height: 100%;
+            border-radius: 10px;
+            box-shadow: 0 0 10px var(--primary);
+        }
+
+        .menu-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 15px;
+        }
+
+        .action-card {
+            background: var(--card-bg);
+            padding: 25px 15px;
+            border-radius: 24px;
+            border: 1px solid var(--card-border);
+            text-align: center;
             cursor: pointer;
             transition: 0.3s;
         }
-        .btn-google:hover { background: #e0e0e0; }
-        .hidden { display: none; }
+
+        .action-card:hover { border-color: var(--primary); background: rgba(91, 75, 255, 0.05); }
+        .action-card i { font-size: 30px; color: var(--primary); margin-bottom: 15px; display: block; }
+        .action-card span { font-weight: 600; font-size: 15px; }
+
+        .logout-btn {
+            background: transparent;
+            color: #ff4b4b;
+            border: 1px solid #ff4b4b;
+            padding: 12px;
+            width: 100%;
+            border-radius: 12px;
+            margin-top: 40px;
+            cursor: pointer;
+            font-weight: 600;
+        }
+
+        .hidden { display: none !important; }
     </style>
 </head>
 <body>
 
-    <div class="login-card">
-        <div id="auth-area">
-            <h1>Elite Docs AI</h1>
-            <p style="opacity: 0.7; margin-bottom: 20px;">Faça login para continuar</p>
-            <button class="btn-google" onclick="loginGoogle()">
-                Entrar com Google
-            </button>
-        </div>
-
-        <div id="user-area" class="hidden">
-            <h1 id="welcome-msg"></h1>
-            <p>Você está conectado!</p>
-            <button onclick="logout()" style="margin-top:20px; background:none; color:red; border:1px solid red; padding:10px; cursor:pointer;">Sair</button>
-        </div>
+<div class="container">
+    <div id="screen-login" class="login-card">
+        <div class="logo-icon"><i class="fas fa-robot"></i></div>
+        <h1>Elite Docs AI</h1>
+        <p style="opacity: 0.6; font-size: 14px; margin-top: 8px;">Criação Profissional com Inteligência Artificial</p>
+        
+        <button class="btn-google" onclick="loginGoogle()">
+            <img src="https://www.gstatic.com/images/branding/product/1x/gsa_512dp.png" width="22">
+            Acessar com Google
+        </button>
     </div>
 
-    <script>
-        // 2. SUA CONFIGURAÇÃO (Verificada pelas fotos)
-        const firebaseConfig = {
-            apiKey: "AIzaSyDFPrrCSowCuo3QJ6T280zja2Wqutlccvo",
-            authDomain: "elite-docsai.firebaseapp.com",
-            projectId: "elite-docsai",
-            storageBucket: "elite-docsai.appspot.com",
-            messagingSenderId: "1048692395624",
-            appId: "1:1048692395624:web:74fb23e57580b9203ab5dd",
-            measurementId: "G-G63HC1V4FD"
-        };
+    <div id="screen-main" class="hidden">
+        <div class="header">
+            <div class="welcome-text">
+                <p>BEM-VINDO DE VOLTA</p>
+                <h2 id="display-name">Usuário</h2>
+            </div>
+            <div style="background: var(--card-bg); padding: 10px; border-radius: 12px; border: 1px solid var(--card-border);">
+                <i class="fas fa-bolt" style="color: #ffcc00;"></i> 120 XP
+            </div>
+        </div>
 
-        // Inicializa o Firebase
-        firebase.initializeApp(firebaseConfig);
+        <div class="xp-bar-container">
+            <div class="xp-progress"></div>
+        </div>
 
-        // 3. FUNÇÃO DE LOGIN (Com alerta para teste)
-        function loginGoogle() {
-            alert("Botão clicado! Verificando permissão..."); 
-            const provider = new firebase.auth.GoogleAuthProvider();
-            provider.setCustomParameters({ prompt: 'select_account' });
-            
-            // signInWithRedirect é o mais estável para GitHub Pages no celular
-            firebase.auth().signInWithRedirect(provider);
+        <div class="menu-grid">
+            <div class="action-card" onclick="alert('Iniciando IA para PDF...')">
+                <i class="fas fa-file-pdf"></i>
+                <span>Gerar PDF</span>
+            </div>
+            <div class="action-card" onclick="alert('Criador de Currículos Ativado')">
+                <i class="fas fa-user-tie"></i>
+                <span>Currículos</span>
+            </div>
+            <div class="action-card" onclick="alert('Acessando Documentos')">
+                <i class="fas fa-folder-open"></i>
+                <span>Meus Docs</span>
+            </div>
+            <div class="action-card" onclick="alert('Configurações')">
+                <i class="fas fa-sliders-h"></i>
+                <span>Ajustes</span>
+            </div>
+        </div>
+
+        <button class="logout-btn" onclick="logout()">Sair da Conta</button>
+    </div>
+</div>
+
+<script>
+    // --- CONFIGURAÇÃO FIREBASE ---
+    const firebaseConfig = {
+        apiKey: "AIzaSyDFPrrCSowCuo3QJ6T280zja2Wqutlccvo",
+        authDomain: "elite-docsai.firebaseapp.com",
+        projectId: "elite-docsai",
+        storageBucket: "elite-docsai.appspot.com",
+        messagingSenderId: "1048692395624",
+        appId: "1:1048692395624:web:74fb23e57580b9203ab5dd",
+        measurementId: "G-G63HC1V4FD"
+    };
+
+    firebase.initializeApp(firebaseConfig);
+
+    // --- FUNÇÕES DE AUTENTICAÇÃO ---
+    function loginGoogle() {
+        // Alerta para confirmar que o clique funcionou (depois você pode remover)
+        console.log("Iniciando login...");
+        
+        const provider = new firebase.auth.GoogleAuthProvider();
+        provider.setCustomParameters({ prompt: 'select_account' });
+        
+        // Usamos Redirect para evitar bloqueio de janelas no celular
+        firebase.auth().signInWithRedirect(provider);
+    }
+
+    function logout() {
+        firebase.auth().signOut();
+    }
+
+    // --- MONITOR DE ESTADO ---
+    firebase.auth().onAuthStateChanged((user) => {
+        const loginScreen = document.getElementById('screen-login');
+        const mainScreen = document.getElementById('screen-main');
+        const userName = document.getElementById('display-name');
+
+        if (user) {
+            loginScreen.classList.add('hidden');
+            mainScreen.classList.remove('hidden');
+            userName.innerText = user.displayName.split(' ')[0];
+        } else {
+            loginScreen.classList.remove('hidden');
+            mainScreen.classList.add('hidden');
         }
+    });
 
-        // 4. MONITOR DE LOGIN
-        firebase.auth().onAuthStateChanged((user) => {
-            if (user) {
-                document.getElementById('auth-area').classList.add('hidden');
-                document.getElementById('user-area').classList.remove('hidden');
-                document.getElementById('welcome-msg').innerText = "Olá, " + user.displayName;
-            } else {
-                document.getElementById('auth-area').classList.remove('hidden');
-                document.getElementById('user-area').classList.add('hidden');
-            }
-        });
-
-        // Captura erros de redirecionamento (caso o Firebase bloqueie)
-        firebase.auth().getRedirectResult().catch((error) => {
-            if(error.code) {
-                alert("Erro do Firebase: " + error.message);
-                console.error(error);
-            }
-        });
-
-        function logout() {
-            firebase.auth().signOut();
+    // Captura erros de autenticação (caso o domínio não esteja autorizado, etc)
+    firebase.auth().getRedirectResult().catch((error) => {
+        if(error.code) {
+            alert("Erro no Login: " + error.message);
         }
-    </script>
+    });
+</script>
+
 </body>
 </html>
