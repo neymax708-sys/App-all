@@ -3,63 +3,67 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Elite Docs AI</title>
+    <title>Elite Docs AI | Professional System</title>
     
     <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-auth-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore-compat.js"></script>
+    
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;800&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;600;800&display=swap" rel="stylesheet">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
 
     <style>
         :root {
             --primary: #5b4bff;
-            --primary-hover: #4839eb;
-            --bg: #050510;
-            --card-bg: rgba(255, 255, 255, 0.05);
-            --card-border: rgba(255, 255, 255, 0.1);
+            --secondary: #00d2ff;
+            --bg: #030308;
+            --card: rgba(255, 255, 255, 0.05);
+            --border: rgba(255, 255, 255, 0.1);
+            --text-main: #ffffff;
+            --text-dim: #a0a0a0;
         }
 
-        * { box-sizing: border-box; margin: 0; padding: 0; }
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Plus Jakarta Sans', sans-serif; }
 
-        body {
-            font-family: 'Plus Jakarta Sans', sans-serif;
-            background-color: var(--bg);
-            color: #fff;
+        body { background-color: var(--bg); color: var(--text-main); overflow-x: hidden; }
+
+        .hidden { display: none !important; }
+
+        /* --- ESTILO TELA DE LOGIN --- */
+        #screen-login {
+            height: 100vh;
             display: flex;
+            flex-direction: column;
             justify-content: center;
-            min-height: 100vh;
-            overflow-x: hidden;
-        }
-
-        .container {
-            width: 100%;
-            max-width: 450px;
+            align-items: center;
             padding: 20px;
+            background: radial-gradient(circle at top right, #1a1a3a, transparent);
         }
 
-        /* --- TELA DE LOGIN --- */
-        .login-card {
-            background: var(--card-bg);
-            padding: 50px 25px;
-            border-radius: 30px;
-            border: 1px solid var(--card-border);
-            backdrop-filter: blur(15px);
+        .login-box {
+            background: var(--card);
+            padding: 40px 30px;
+            border-radius: 32px;
+            border: 1px solid var(--border);
+            backdrop-filter: blur(20px);
             text-align: center;
-            margin-top: 60px;
-            box-shadow: 0 20px 40px rgba(0,0,0,0.4);
+            width: 100%;
+            max-width: 400px;
+            box-shadow: 0 25px 50px rgba(0,0,0,0.5);
         }
 
-        .logo-icon {
-            width: 70px;
-            height: 70px;
+        .logo-main {
+            width: 80px;
+            height: 80px;
             background: var(--primary);
-            border-radius: 20px;
+            border-radius: 22px;
             display: flex;
             align-items: center;
             justify-content: center;
             margin: 0 auto 20px;
-            font-size: 30px;
-            box-shadow: 0 0 20px rgba(91, 75, 255, 0.4);
+            font-size: 35px;
+            box-shadow: 0 0 30px rgba(91, 75, 255, 0.4);
         }
 
         .btn-google {
@@ -67,189 +71,268 @@
             color: #000;
             border: none;
             padding: 18px;
-            border-radius: 15px;
+            border-radius: 16px;
             font-weight: 800;
-            font-size: 16px;
-            cursor: pointer;
             width: 100%;
             display: flex;
             align-items: center;
             justify-content: center;
             gap: 12px;
-            transition: 0.3s;
+            cursor: pointer;
+            transition: 0.3s cubic-bezier(0.4, 0, 0.2, 1);
             margin-top: 30px;
         }
 
-        .btn-google:active { transform: scale(0.98); }
+        .btn-google:hover { transform: translateY(-3px); box-shadow: 0 10px 20px rgba(255,255,255,0.1); }
 
-        /* --- DASHBOARD --- */
-        .header {
+        /* --- DASHBOARD COMPLETO --- */
+        #screen-main { padding-bottom: 100px; }
+
+        .navbar {
+            padding: 20px;
             display: flex;
             justify-content: space-between;
             align-items: center;
-            padding: 20px 0;
-            margin-bottom: 20px;
+            position: sticky;
+            top: 0;
+            background: rgba(3, 3, 8, 0.8);
+            backdrop-filter: blur(10px);
+            z-index: 100;
         }
 
-        .welcome-text h2 { font-size: 24px; font-weight: 800; }
-        .welcome-text p { font-size: 14px; color: var(--primary); font-weight: 600; }
+        .profile-section { display: flex; align-items: center; gap: 12px; }
+        .avatar { width: 45px; height: 45px; border-radius: 14px; border: 2px solid var(--primary); }
 
-        .xp-bar-container {
-            background: rgba(255,255,255,0.1);
-            height: 8px;
-            border-radius: 10px;
-            margin: 15px 0 30px;
-            overflow: hidden;
+        .xp-container {
+            padding: 20px;
+            margin: 10px 20px;
+            background: var(--card);
+            border-radius: 24px;
+            border: 1px solid var(--border);
         }
 
-        .xp-progress {
-            background: var(--primary);
-            width: 35%; /* Exemplo de progresso */
-            height: 100%;
-            border-radius: 10px;
-            box-shadow: 0 0 10px var(--primary);
-        }
+        .xp-header { display: flex; justify-content: space-between; margin-bottom: 10px; font-weight: 600; }
+        .xp-bar { height: 10px; background: rgba(255,255,255,0.1); border-radius: 5px; overflow: hidden; }
+        .xp-fill { height: 100%; background: linear-gradient(90deg, var(--primary), var(--secondary)); width: 45%; }
 
-        .menu-grid {
+        /* --- BOTÕES DE AÇÃO --- */
+        .grid-tools {
             display: grid;
             grid-template-columns: 1fr 1fr;
             gap: 15px;
+            padding: 20px;
         }
 
-        .action-card {
-            background: var(--card-bg);
-            padding: 25px 15px;
+        .tool-card {
+            background: var(--card);
+            padding: 25px 20px;
             border-radius: 24px;
-            border: 1px solid var(--card-border);
+            border: 1px solid var(--border);
             text-align: center;
-            cursor: pointer;
             transition: 0.3s;
-        }
-
-        .action-card:hover { border-color: var(--primary); background: rgba(91, 75, 255, 0.05); }
-        .action-card i { font-size: 30px; color: var(--primary); margin-bottom: 15px; display: block; }
-        .action-card span { font-weight: 600; font-size: 15px; }
-
-        .logout-btn {
-            background: transparent;
-            color: #ff4b4b;
-            border: 1px solid #ff4b4b;
-            padding: 12px;
-            width: 100%;
-            border-radius: 12px;
-            margin-top: 40px;
             cursor: pointer;
-            font-weight: 600;
         }
 
-        .hidden { display: none !important; }
+        .tool-card:active { transform: scale(0.95); }
+        .tool-card i { font-size: 32px; color: var(--primary); margin-bottom: 15px; display: block; }
+        .tool-card h3 { font-size: 15px; font-weight: 700; }
+
+        /* --- AREA DA IA --- */
+        .ia-chat-box {
+            margin: 20px;
+            background: linear-gradient(145deg, rgba(91, 75, 255, 0.1), rgba(0, 210, 255, 0.05));
+            border-radius: 28px;
+            padding: 25px;
+            border: 1px solid rgba(91, 75, 255, 0.2);
+        }
+
+        .ia-input-container {
+            background: rgba(0,0,0,0.3);
+            border-radius: 18px;
+            padding: 5px;
+            display: flex;
+            margin-top: 15px;
+        }
+
+        .ia-input-container input {
+            background: none;
+            border: none;
+            color: white;
+            padding: 12px;
+            flex: 1;
+            outline: none;
+        }
+
+        .btn-send {
+            background: var(--primary);
+            border: none;
+            color: white;
+            width: 40px;
+            height: 40px;
+            border-radius: 14px;
+            cursor: pointer;
+        }
+
+        /* --- FOOTER MENU --- */
+        .bottom-nav {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            background: rgba(10, 10, 20, 0.95);
+            padding: 20px;
+            display: flex;
+            justify-content: space-around;
+            border-top: 1px solid var(--border);
+            backdrop-filter: blur(15px);
+        }
+
+        .nav-item { color: var(--text-dim); font-size: 20px; cursor: pointer; transition: 0.3s; }
+        .nav-item.active { color: var(--primary); transform: translateY(-5px); }
+
     </style>
 </head>
 <body>
 
-<div class="container">
-    <div id="screen-login" class="login-card">
-        <div class="logo-icon"><i class="fas fa-robot"></i></div>
-        <h1>Elite Docs AI</h1>
-        <p style="opacity: 0.6; font-size: 14px; margin-top: 8px;">Criação Profissional com Inteligência Artificial</p>
-        
-        <button class="btn-google" onclick="loginGoogle()">
-            <img src="https://www.gstatic.com/images/branding/product/1x/gsa_512dp.png" width="22">
-            Acessar com Google
-        </button>
-    </div>
+    <section id="screen-login">
+        <div class="login-box">
+            <div class="logo-main"><i class="fas fa-bolt"></i></div>
+            <h1 style="font-size: 28px; font-weight: 800; letter-spacing: -1px;">Elite Docs AI</h1>
+            <p style="color: var(--text-dim); margin-top: 10px; font-size: 14px;">O futuro da documentação profissional com IA</p>
+            
+            <button class="btn-google" onclick="loginGoogle()">
+                <img src="https://www.gstatic.com/images/branding/product/1x/gsa_512dp.png" width="22">
+                Continuar com Google
+            </button>
+            <p style="font-size: 12px; color: var(--text-dim); margin-top: 25px;">Ao entrar você aceita nossos termos de uso.</p>
+        </div>
+    </section>
 
-    <div id="screen-main" class="hidden">
-        <div class="header">
-            <div class="welcome-text">
-                <p>BEM-VINDO DE VOLTA</p>
-                <h2 id="display-name">Usuário</h2>
+    <section id="screen-main" class="hidden">
+        <nav class="navbar">
+            <div class="profile-section">
+                <img id="user-photo" class="avatar" src="" alt="User">
+                <div>
+                    <p style="font-size: 12px; color: var(--text-dim);">Bem-vindo,</p>
+                    <h2 id="user-name" style="font-size: 18px; font-weight: 700;">Usuário</h2>
+                </div>
             </div>
-            <div style="background: var(--card-bg); padding: 10px; border-radius: 12px; border: 1px solid var(--card-border);">
-                <i class="fas fa-bolt" style="color: #ffcc00;"></i> 120 XP
+            <i class="fas fa-bell nav-item"></i>
+        </nav>
+
+        <div class="xp-container">
+            <div class="xp-header">
+                <span>Nível 12 (Pro)</span>
+                <span style="color: var(--primary);">2.450 XP</span>
+            </div>
+            <div class="xp-bar">
+                <div class="xp-fill"></div>
             </div>
         </div>
 
-        <div class="xp-bar-container">
-            <div class="xp-progress"></div>
+        <div class="ia-chat-box">
+            <h3 style="font-size: 16px; display: flex; align-items: center; gap: 10px;">
+                <i class="fas fa-robot"></i> Assistente Elite IA
+            </h3>
+            <p style="font-size: 13px; color: var(--text-dim); margin-top: 5px;">O que vamos criar profissionalmente hoje?</p>
+            <div class="ia-input-container">
+                <input type="text" placeholder="Ex: Crie um contrato de serviços...">
+                <button class="btn-send"><i class="fas fa-paper-plane"></i></button>
+            </div>
         </div>
 
-        <div class="menu-grid">
-            <div class="action-card" onclick="alert('Iniciando IA para PDF...')">
+        <div class="grid-tools">
+            <div class="tool-card" onclick="openTool('pdf')">
                 <i class="fas fa-file-pdf"></i>
-                <span>Gerar PDF</span>
+                <h3>Gerador PDF</h3>
             </div>
-            <div class="action-card" onclick="alert('Criador de Currículos Ativado')">
-                <i class="fas fa-user-tie"></i>
-                <span>Currículos</span>
+            <div class="tool-card" onclick="openTool('cv')">
+                <i class="fas fa-id-badge"></i>
+                <h3>Currículo IA</h3>
             </div>
-            <div class="action-card" onclick="alert('Acessando Documentos')">
-                <i class="fas fa-folder-open"></i>
-                <span>Meus Docs</span>
+            <div class="tool-card" onclick="openTool('contract')">
+                <i class="fas fa-file-contract"></i>
+                <h3>Contratos</h3>
             </div>
-            <div class="action-card" onclick="alert('Configurações')">
-                <i class="fas fa-sliders-h"></i>
-                <span>Ajustes</span>
+            <div class="tool-card" onclick="openTool('ai')">
+                <i class="fas fa-wand-magic-sparkles"></i>
+                <h3>Doc Writer</h3>
             </div>
         </div>
 
-        <button class="logout-btn" onclick="logout()">Sair da Conta</button>
-    </div>
-</div>
+        <div style="padding: 20px;">
+            <button onclick="logout()" style="width:100%; padding:15px; background:none; border:1px solid #ff4b4b; color:#ff4b4b; border-radius:18px; font-weight:700;">
+                Sair da Conta
+            </button>
+        </div>
 
-<script>
-    // --- CONFIGURAÇÃO FIREBASE ---
-    const firebaseConfig = {
-        apiKey: "AIzaSyDFPrrCSowCuo3QJ6T280zja2Wqutlccvo",
-        authDomain: "elite-docsai.firebaseapp.com",
-        projectId: "elite-docsai",
-        storageBucket: "elite-docsai.appspot.com",
-        messagingSenderId: "1048692395624",
-        appId: "1:1048692395624:web:74fb23e57580b9203ab5dd",
-        measurementId: "G-G63HC1V4FD"
-    };
+        <div class="bottom-nav">
+            <i class="fas fa-home nav-item active"></i>
+            <i class="fas fa-search nav-item"></i>
+            <i class="fas fa-folder nav-item"></i>
+            <i class="fas fa-user nav-item"></i>
+        </div>
+    </section>
 
-    firebase.initializeApp(firebaseConfig);
+    <script>
+        // --- FIREBASE CONFIG ---
+        const firebaseConfig = {
+            apiKey: "AIzaSyDFPrrCSowCuo3QJ6T280zja2Wqutlccvo",
+            authDomain: "elite-docsai.firebaseapp.com",
+            projectId: "elite-docsai",
+            storageBucket: "elite-docsai.appspot.com",
+            messagingSenderId: "1048692395624",
+            appId: "1:1048692395624:web:74fb23e57580b9203ab5dd",
+            measurementId: "G-G63HC1V4FD"
+        };
 
-    // --- FUNÇÕES DE AUTENTICAÇÃO ---
-    function loginGoogle() {
-        // Alerta para confirmar que o clique funcionou (depois você pode remover)
-        console.log("Iniciando login...");
-        
-        const provider = new firebase.auth.GoogleAuthProvider();
-        provider.setCustomParameters({ prompt: 'select_account' });
-        
-        // Usamos Redirect para evitar bloqueio de janelas no celular
-        firebase.auth().signInWithRedirect(provider);
-    }
+        firebase.initializeApp(firebaseConfig);
+        const auth = firebase.auth();
 
-    function logout() {
-        firebase.auth().signOut();
-    }
-
-    // --- MONITOR DE ESTADO ---
-    firebase.auth().onAuthStateChanged((user) => {
-        const loginScreen = document.getElementById('screen-login');
-        const mainScreen = document.getElementById('screen-main');
-        const userName = document.getElementById('display-name');
-
-        if (user) {
-            loginScreen.classList.add('hidden');
-            mainScreen.classList.remove('hidden');
-            userName.innerText = user.displayName.split(' ')[0];
-        } else {
-            loginScreen.classList.remove('hidden');
-            mainScreen.classList.add('hidden');
+        // --- LÓGICA DE LOGIN ---
+        function loginGoogle() {
+            const provider = new firebase.auth.GoogleAuthProvider();
+            provider.setCustomParameters({ prompt: 'select_account' });
+            
+            // Usando Redirect (Obrigatório para GitHub Pages no Celular)
+            auth.signInWithRedirect(provider);
         }
-    });
 
-    // Captura erros de autenticação (caso o domínio não esteja autorizado, etc)
-    firebase.auth().getRedirectResult().catch((error) => {
-        if(error.code) {
-            alert("Erro no Login: " + error.message);
+        function logout() {
+            auth.signOut();
         }
-    });
-</script>
 
+        // --- CONTROLE DE TELAS ---
+        auth.onAuthStateChanged((user) => {
+            const loginScreen = document.getElementById('screen-login');
+            const mainScreen = document.getElementById('screen-main');
+            
+            if (user) {
+                loginScreen.classList.add('hidden');
+                mainScreen.classList.remove('hidden');
+                
+                // Preencher dados do usuário
+                document.getElementById('user-name').innerText = user.displayName;
+                document.getElementById('user-photo').src = user.photoURL || 'https://via.placeholder.com/150';
+                console.log("Usuário logado:", user.email);
+            } else {
+                loginScreen.classList.remove('hidden');
+                mainScreen.classList.add('hidden');
+            }
+        });
+
+        // Captura o resultado após o redirecionamento
+        auth.getRedirectResult().catch((error) => {
+            if(error.code) {
+                alert("Erro ao autenticar: " + error.message);
+                console.error(error);
+            }
+        });
+
+        // Funções auxiliares
+        function openTool(type) {
+            alert("A ferramenta de " + type.toUpperCase() + " está sendo carregada com o motor de IA...");
+        }
+    </script>
 </body>
 </html>
