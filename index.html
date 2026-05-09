@@ -3,73 +3,111 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Elite Docs AI</title>
+    <title>Elite Docs AI - Login</title>
     
     <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-auth-compat.js"></script>
 
     <style>
-        body { font-family: sans-serif; background: #050510; color: white; display: flex; justify-content: center; align-items: center; height: 100vh; margin: 0; }
-        .container { text-align: center; background: rgba(255,255,255,0.05); padding: 40px; border-radius: 20px; border: 1px solid rgba(255,255,255,0.1); }
-        .btn-google { background: white; color: black; padding: 15px 25px; border: none; border-radius: 10px; font-weight: bold; cursor: pointer; font-size: 16px; }
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #050510;
+            color: white;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+        }
+        .login-card {
+            background: rgba(255, 255, 255, 0.05);
+            padding: 40px;
+            border-radius: 20px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            text-align: center;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+        }
+        .btn-google {
+            background: white;
+            color: #000;
+            border: none;
+            padding: 15px 30px;
+            border-radius: 10px;
+            font-weight: bold;
+            font-size: 16px;
+            cursor: pointer;
+            transition: 0.3s;
+        }
+        .btn-google:hover { background: #e0e0e0; }
         .hidden { display: none; }
     </style>
 </head>
 <body>
 
-<div class="container">
-    <div id="loginArea">
-        <h1>Elite Docs AI</h1>
-        <p style="margin-bottom: 20px;">Entre para continuar</p>
-        <button class="btn-google" onclick="loginGoogle()">Entrar com Google</button>
+    <div class="login-card">
+        <div id="auth-area">
+            <h1>Elite Docs AI</h1>
+            <p style="opacity: 0.7; margin-bottom: 20px;">Faça login para continuar</p>
+            <button class="btn-google" onclick="loginGoogle()">
+                Entrar com Google
+            </button>
+        </div>
+
+        <div id="user-area" class="hidden">
+            <h1 id="welcome-msg"></h1>
+            <p>Você está conectado!</p>
+            <button onclick="logout()" style="margin-top:20px; background:none; color:red; border:1px solid red; padding:10px; cursor:pointer;">Sair</button>
+        </div>
     </div>
 
-    <div id="dashboard" class="hidden">
-        <h1 id="welcomeText"></h1>
-        <button onclick="logout()" style="background: none; border: 1px solid red; color: red; padding: 10px; cursor: pointer; margin-top: 20px;">Sair</button>
-    </div>
-</div>
+    <script>
+        // 2. SUA CONFIGURAÇÃO (Verificada pelas fotos)
+        const firebaseConfig = {
+            apiKey: "AIzaSyDFPrrCSowCuo3QJ6T280zja2Wqutlccvo",
+            authDomain: "elite-docsai.firebaseapp.com",
+            projectId: "elite-docsai",
+            storageBucket: "elite-docsai.appspot.com",
+            messagingSenderId: "1048692395624",
+            appId: "1:1048692395624:web:74fb23e57580b9203ab5dd",
+            measurementId: "G-G63HC1V4FD"
+        };
 
-<script>
-    // Configurações do seu projeto
-    const firebaseConfig = {
-        apiKey: "AIzaSyDFPrrCSowCuo3QJ6T280zja2Wqutlccvo", // Chave corrigida da imagem
-        authDomain: "elite-docsai.firebaseapp.com",
-        projectId: "elite-docsai",
-        storageBucket: "elite-docsai.appspot.com",
-        messagingSenderId: "1048692395624",
-        appId: "1:1048692395624:web:74fb23e57580b9203ab5dd",
-        measurementId: "G-G63HC1V4FD"
-    };
+        // Inicializa o Firebase
+        firebase.initializeApp(firebaseConfig);
 
-    // Inicializar Firebase
-    firebase.initializeApp(firebaseConfig);
-
-    // Função de Login
-    function loginGoogle() {
-        const provider = new firebase.auth.GoogleAuthProvider();
-        // Força a escolha da conta
-        provider.setCustomParameters({ prompt: 'select_account' });
-        // Redireciona para evitar bloqueio de popup
-        firebase.auth().signInWithRedirect(provider);
-    }
-
-    // Monitorar se o usuário está logado
-    firebase.auth().onAuthStateChanged((user) => {
-        if (user) {
-            document.getElementById('loginArea').classList.add('hidden');
-            document.getElementById('dashboard').classList.remove('hidden');
-            document.getElementById('welcomeText').innerText = "Bem-vindo, " + user.displayName;
-        } else {
-            document.getElementById('loginArea').classList.remove('hidden');
-            document.getElementById('dashboard').classList.add('hidden');
+        // 3. FUNÇÃO DE LOGIN (Com alerta para teste)
+        function loginGoogle() {
+            alert("Botão clicado! Verificando permissão..."); 
+            const provider = new firebase.auth.GoogleAuthProvider();
+            provider.setCustomParameters({ prompt: 'select_account' });
+            
+            // signInWithRedirect é o mais estável para GitHub Pages no celular
+            firebase.auth().signInWithRedirect(provider);
         }
-    });
 
-    function logout() {
-        firebase.auth().signOut();
-    }
-</script>
+        // 4. MONITOR DE LOGIN
+        firebase.auth().onAuthStateChanged((user) => {
+            if (user) {
+                document.getElementById('auth-area').classList.add('hidden');
+                document.getElementById('user-area').classList.remove('hidden');
+                document.getElementById('welcome-msg').innerText = "Olá, " + user.displayName;
+            } else {
+                document.getElementById('auth-area').classList.remove('hidden');
+                document.getElementById('user-area').classList.add('hidden');
+            }
+        });
 
+        // Captura erros de redirecionamento (caso o Firebase bloqueie)
+        firebase.auth().getRedirectResult().catch((error) => {
+            if(error.code) {
+                alert("Erro do Firebase: " + error.message);
+                console.error(error);
+            }
+        });
+
+        function logout() {
+            firebase.auth().signOut();
+        }
+    </script>
 </body>
 </html>
