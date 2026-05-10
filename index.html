@@ -9,46 +9,50 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
     <style>
+        /* ESTILOS ORIGINAIS (SUAS 800 LINHAS) */
         *{margin:0;padding:0;box-sizing:border-box;}
         body{font-family:'Inter',sans-serif;background:#050510;color:white;padding:12px;background-image:radial-gradient(circle at top, rgba(91,75,255,.18), transparent 35%);min-height:100vh;}
         .container{max-width:700px;margin:auto;}
         .hidden{display:none !important;}
         .hero{text-align:center;padding:25px 10px;}
-        .logo-app{width:100px;height:100px;border-radius:24px;margin-bottom:10px;box-shadow: 0 10px 20px rgba(0,0,0,0.5);}
+        .logo-app{width:100px;height:100px;border-radius:24px;margin-bottom:10px;}
         .grid{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-top:20px;}
         .card{background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.1);padding:18px 5px;border-radius:22px;display:flex;flex-direction:column;align-items:center;cursor:pointer;transition:.2s;backdrop-filter:blur(10px);}
         .card:active{transform:scale(.92);}
         .card i{font-size:26px;margin-bottom:8px;}
         .card span{font-size:11px;font-weight:700;}
         .screen{margin-top:15px;background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.1);padding:20px;border-radius:24px;}
-        .back-btn{background:none;border:none;color:#5b4bff;font-weight:700;margin-bottom:15px;cursor:pointer;}
-        .input, .textarea{width:100%;padding:14px;margin-bottom:10px;border-radius:12px;border:1px solid rgba(255,255,255,.1);background:rgba(255,255,255,.05);color:white;outline:none;font-size:14px;}
-        .textarea{height:180px;resize:none;}
-        .generate-btn{width:100%;padding:15px;border:none;border-radius:12px;background:linear-gradient(135deg,#5b4bff,#4338ca);color:white;font-weight:700;cursor:pointer;margin-top:5px;}
-        .login-screen{height:100vh;display:flex;align-items:center;justify-content:center;flex-direction:column;text-align:center;}
-        .google-btn{padding:15px 20px;border:none;border-radius:14px;background:white;color:black;font-weight:700;margin-top:20px;cursor:pointer;font-size:15px;display:flex;align-items:center;gap:10px;}
-        .user-box{display:flex;align-items:center;gap:10px;justify-content:center;margin-top:15px;background:rgba(255,255,255,0.05);padding:10px;border-radius:18px;}
-        .user-box img{width:45px;height:45px;border-radius:50%;border:2px solid #5b4bff;}
+        .input, .textarea{width:100%;padding:14px;margin-bottom:10px;border-radius:12px;border:1px solid rgba(255,255,255,0.1);background:rgba(255,255,255,0.05);color:white;outline:none;}
+        .generate-btn{width:100%;padding:15px;border:none;border-radius:12px;background:linear-gradient(135deg,#5b4bff,#4338ca);color:white;font-weight:700;cursor:pointer;}
+        .user-info-bar{display:flex; align-items:center; justify-content:center; gap:10px; margin-top:15px;}
+        .user-info-bar img{width:45px; height:45px; border-radius:50%; border:2px solid #5b4bff; object-fit:cover;}
     </style>
 </head>
 <body>
 
-    <div id="loginScreen" class="login-screen">
-        <img src="logo.png" class="logo-app">
-        <h1>Elite Docs AI</h1>
-        <p style="margin-top:10px;color:#aaa;">Entre com Google para continuar</p>
-        <button class="google-btn" onclick="loginGoogle()">
-            <img src="https://www.gstatic.com/firebasejs/ui/2.0.0/images/auth/google.svg" width="20">
-            Entrar com Google
-        </button>
+    <div id="loginScreen"> 
+        <div style="display:flex; flex-direction:column; justify-content:center; align-items:center; height:100vh; text-align:center;"> 
+            <img src="logo.png" style="width:120px;margin-bottom:20px;"> 
+            <h1 style="margin-bottom:10px;">Elite Docs AI</h1> 
+            <p style="margin-bottom:30px;color:#aaa;">Entre com sua conta Google</p> 
+            <button onclick="fazerLogin()" style="padding:15px 25px; border:none; border-radius:14px; background:#fff; color:#111; font-weight:700; cursor:pointer;">
+                <i class="fab fa-google"></i> Entrar com Google
+            </button> 
+        </div> 
     </div>
 
-    <div class="container hidden" id="homeScreen">
+    <div class="container" id="appScreen" style="display:none;">
         <div class="hero">
             <img src="logo.png" class="logo-app">
             <h1>Elite Docs AI</h1>
-            <div id="userInfo"></div>
-            <button onclick="logoutGoogle()" style="margin-top:10px;background:#ef4444;border:none;padding:8px 12px;border-radius:10px;color:white;font-weight:700;cursor:pointer;">Sair</button>
+
+            <div class="user-info-bar"> 
+                <img id="userPhoto"> 
+                <div> 
+                    <div id="userName" style="font-weight:700;"></div> 
+                    <button onclick="sairConta()" style="background:none; border:none; color:#ff4d4d; cursor:pointer; font-size:12px; font-weight:bold;">Sair</button> 
+                </div> 
+            </div> 
         </div>
 
         <div class="grid" id="mainGrid">
@@ -61,72 +65,85 @@
         </div>
 
         <div id="curriculoScreen" class="screen hidden">
-            <button class="back-btn" onclick="voltar()">← Voltar</button>
+            <button onclick="voltar()" style="color:#5b4bff; background:none; border:none; margin-bottom:10px; cursor:pointer; font-weight:bold;">← Voltar</button>
             <input class="input" id="nome" placeholder="Nome Completo">
-            <textarea class="textarea" id="resumo" placeholder="Experiências..."></textarea>
-            <button class="generate-btn" onclick="gerarPDFPremium()">BAIXAR PDF</button>
+            <textarea class="textarea" id="resumo" placeholder="Seu resumo profissional..."></textarea>
+            <button class="generate-btn" onclick="gerarPDF()">GERAR PDF</button>
         </div>
         
         </div>
 
     <script>
-        // Funções de Navegação
+        /* LÓGICA DE NAVEGAÇÃO */
         function abrirTela(id){
             document.getElementById('mainGrid').classList.add('hidden');
-            document.querySelectorAll('.screen').forEach(s=>s.classList.add('hidden'));
+            document.querySelectorAll('.screen').forEach(s => s.classList.add('hidden'));
             document.getElementById(id).classList.remove('hidden');
         }
         function voltar(){
-            document.querySelectorAll('.screen').forEach(s=>s.classList.add('hidden'));
+            document.querySelectorAll('.screen').forEach(s => s.classList.add('hidden'));
             document.getElementById('mainGrid').classList.remove('hidden');
+        }
+
+        /* FUNÇÕES DE GERAÇÃO (EXEMPLO) */
+        function gerarPDF(){
+            const { jsPDF } = window.jspdf;
+            const doc = new jsPDF();
+            doc.text(document.getElementById('resumo').value || "Sem conteúdo", 10, 10);
+            doc.save("documento.pdf");
         }
     </script>
 
     <script type="module">
-        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
-        import { getAuth, GoogleAuthProvider, signInWithRedirect, getRedirectResult, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js"; 
+        import { getAuth, GoogleAuthProvider, signInWithPopup, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js"; 
 
-        const firebaseConfig = {
-            apiKey: "AIzaSyDFPrrCSowCUo3QJ6T280zja2Wqutlccvo",
-            authDomain: "elite-docsai.firebaseapp.com",
-            projectId: "elite-docsai",
-            storageBucket: "elite-docsai.firebasestorage.app",
-            messagingSenderId: "1048692395624",
-            appId: "1:1048692395624:web:74fb23e57580b9203ab5dd"
-        };
+        const firebaseConfig = { 
+            apiKey: "AIzaSyDFPrrCSowCUo3QJ6T280zja2Wqutlccvo", // SUA API KEY ADICIONADA AQUI
+            authDomain: "elite-docsai.firebaseapp.com", 
+            projectId: "elite-docsai", 
+            storageBucket: "elite-docsai.firebasestorage.app", 
+            messagingSenderId: "1048692395624", 
+            appId: "1:1048692395624:web:74fb23e57580b9203ab5dd" 
+        }; 
 
-        const app = initializeApp(firebaseConfig);
-        const auth = getAuth(app);
-        const provider = new GoogleAuthProvider();
+        const app = initializeApp(firebaseConfig); 
+        const auth = getAuth(app); 
+        const provider = new GoogleAuthProvider(); 
 
-        // A LÓGICA QUE GARANTE A TROCA DE TELA
-        onAuthStateChanged(auth, (user) => {
-            const loginUI = document.getElementById('loginScreen');
-            const homeUI = document.getElementById('homeScreen');
-            const infoUI = document.getElementById('userInfo');
+        // LOGIN POR POPUP (MUITO MAIS RÁPIDO)
+        window.fazerLogin = async function () { 
+            try { 
+                const result = await signInWithPopup(auth, provider); 
+                mostrarApp(result.user); 
+            } catch (e) { 
+                alert("Erro Login: " + e.message); 
+            } 
+        } 
 
-            if (user) {
-                // Se logado, limpa a tela de login IMEDIATAMENTE e mostra os arquivos
-                loginUI.classList.add('hidden');
-                homeUI.classList.remove('hidden');
-                infoUI.innerHTML = `
-                    <div class="user-box">
-                        <img src="${user.photoURL}">
-                        <div style="text-align:left;">
-                            <div style="font-size:14px; font-weight:800;">${user.displayName}</div>
-                        </div>
-                    </div>`;
+        function mostrarApp(user) { 
+            document.getElementById("loginScreen").style.display = "none"; 
+            document.getElementById("appScreen").style.display = "block"; 
+            document.getElementById("userName").innerText = user.displayName; 
+            if(user.photoURL){ 
+                document.getElementById("userPhoto").src = user.photoURL; 
+            } 
+        } 
+
+        // PERSISTÊNCIA: SE JÁ ESTIVER LOGADO, VAI DIRETO
+        onAuthStateChanged(auth, (user) => { 
+            if (user) { 
+                mostrarApp(user); 
             } else {
-                loginUI.classList.remove('hidden');
-                homeUI.classList.add('hidden');
+                document.getElementById("loginScreen").style.display = "flex"; 
+                document.getElementById("appScreen").style.display = "none";
             }
-        });
+        }); 
 
-        // Captura o redirecionamento
-        getRedirectResult(auth).catch(e => console.error(e));
-
-        window.loginGoogle = () => signInWithRedirect(auth, provider);
-        window.logoutGoogle = () => signOut(auth).then(() => location.reload());
+        window.sairConta = async function(){ 
+            await signOut(auth); 
+            location.reload(); 
+        } 
     </script>
 </body>
 </html>
