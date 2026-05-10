@@ -582,151 +582,80 @@ document.getElementById(
 
 </script>
 
+
 <script type="module">
-
-import { initializeApp }
-from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
-
-import {
-getAuth,
-GoogleAuthProvider,
-signInWithRedirect,
-getRedirectResult,
-signOut
-}
-from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
+import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
+import { 
+    getAuth, 
+    GoogleAuthProvider, 
+    signInWithRedirect, 
+    getRedirectResult, 
+    signOut,
+    onAuthStateChanged 
+} from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
 
 const firebaseConfig = {
-
-apiKey: "AIzaSyDFPrrCSowCUo3QJ6T280zja2Wqutlccvo",
-
-authDomain: "elite-docsai.firebaseapp.com",
-
-projectId: "elite-docsai",
-
-storageBucket: "elite-docsai.firebasestorage.app",
-
-messagingSenderId: "1048692395624",
-
-appId: "1:1048692395624:web:74fb23e57580b9203ab5dd"
-
+    apiKey: "AIzaSyDFPrrCSowCUo3QJ6T280zja2Wqutlccvo",
+    authDomain: "elite-docsai.firebaseapp.com",
+    projectId: "elite-docsai",
+    storageBucket: "elite-docsai.firebasestorage.app",
+    messagingSenderId: "1048692395624",
+    appId: "1:1048692395624:web:74fb23e57580b9203ab5dd"
 };
 
 const app = initializeApp(firebaseConfig);
-
 const auth = getAuth(app);
-
 const provider = new GoogleAuthProvider();
 
-window.loginGoogle = async function(){
+// 1. O VIGIA: Essa função troca as telas sozinha assim que o Firebase confirma quem é você
+onAuthStateChanged(auth, (user) => {
+    const loginScreen = document.getElementById('loginScreen');
+    const homeScreen = document.getElementById('homeScreen');
+    const userInfo = document.getElementById('userInfo');
 
-try{
-
-await signInWithRedirect(auth,provider);
-
-}catch(e){
-
-alert("Erro Login: " + e.message);
-
-}
-
-};
-
-getRedirectResult(auth)
-
-.then((result)=>{
-
-if(result){
-
-const user = result.user;
-
-localStorage.setItem(
-'eliteUser',
-
-JSON.stringify({
-
-nome:user.displayName,
-email:user.email,
-foto:user.photoURL
-
-})
-
-);
-
-document.getElementById('loginScreen').style.display = "none";
-
-document.getElementById('homeScreen').style.display = "block";
-
-document.getElementById('userInfo').innerHTML = `
-
-<div class="user-box">
-
-<img src="${user.photoURL}">
-
-<div>
-
-<div style="font-weight:700;">
-${user.displayName}
-</div>
-
-<small style="color:#aaa;">
-${user.email}
-</small>
-
-</div>
-
-</div>
-
-`;
-
-}
-
-})
-
-.catch((e)=>{
-
-console.log(e);
-
+    if (user) {
+        // Se estiver logado, mostra o App e esconde o Login
+        loginScreen.style.display = "none";
+        homeScreen.style.display = "block";
+        userInfo.innerHTML = `
+            <div class="user-box">
+                <img src="${user.photoURL}" style="width:45px; border-radius:50%;">
+                <div>
+                    <div style="font-weight:700;">${user.displayName}</div>
+                    <small style="color:#aaa;">${user.email}</small>
+                </div>
+            </div>
+        `;
+    } else {
+        // Se deslogar, volta para a tela de Login
+        loginScreen.style.display = "flex";
+        homeScreen.style.display = "none";
+    }
 });
 
-const salvo =
-localStorage.getItem('eliteUser');
+// 2. FUNÇÃO DE LOGIN
+window.loginGoogle = async function() {
+    try {
+        await signInWithRedirect(auth, provider);
+    } catch (e) {
+        alert("Erro Login: " + e.message);
+    }
+};
 
-if(salvo){
+// 3. CAPTURA O RESULTADO (Necessário para o Redirect funcionar)
+getRedirectResult(auth).catch((e) => {
+    console.error("Erro no redirect:", e);
+});
 
-document.getElementById('loginScreen').style.display = "none";
-
-document.getElementById('homeScreen').style.display = "block";
-
-const user =
-JSON.parse(salvo);
-
-document.getElementById('userInfo')
-.innerHTML = `
-
-<div class="user-box">
-
-<img src="${user.foto}">
-
-<div>
-
-<div style="font-weight:700;">
-${user.nome}
-</div>
-
-<small style="color:#aaa;">
-${user.email}
-</small>
-
-</div>
-
-</div>
-
-`;
-
-}
-
-window.logoutGoogle = async function(){
+// 4. FUNÇÃO DE LOGOUT
+window.logoutGoogle = async function() {
+    try {
+        await signOut(auth);
+    } catch (e) {
+        alert("Erro ao sair");
+    }
+};
+</script>
 
 await signOut(auth);
 
