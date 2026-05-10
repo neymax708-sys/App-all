@@ -9,219 +9,260 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
     <style>
+        /* ESTILOS COMPLETOS DO ELITE DOCS AI */
         *{margin:0;padding:0;box-sizing:border-box;}
-        body{font-family:'Inter',sans-serif;background:#050510;color:white;padding:12px;background-image:radial-gradient(circle at top, rgba(91,75,255,.18), transparent 35%);}
+        body{
+            font-family:'Inter',sans-serif;
+            background:#050510;
+            color:white;
+            padding:12px;
+            background-image:radial-gradient(circle at top, rgba(91,75,255,.18), transparent 35%);
+            min-height: 100vh;
+        }
         .container{max-width:700px;margin:auto;}
         .hidden{display:none !important;}
+        
+        /* LOGIN SCREEN */
+        .login-screen{height:100vh;display:flex;align-items:center;justify-content:center;flex-direction:column;text-align:center;}
+        .google-btn{padding:15px 20px;border:none;border-radius:14px;background:white;color:black;font-weight:700;margin-top:20px;cursor:pointer;font-size:15px;display:flex;align-items:center;gap:10px;transition: 0.3s;}
+        .google-btn:hover{background: #eee; transform: translateY(-2px);}
+
+        /* DASHBOARD */
         .hero{text-align:center;padding:25px 10px;}
-        .logo-app{width:100px;height:100px;border-radius:24px;margin-bottom:10px;}
+        .logo-app{width:100px;height:100px;border-radius:24px;margin-bottom:10px;box-shadow: 0 10px 20px rgba(0,0,0,0.5);}
         .grid{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-top:20px;}
-        .card{background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.1);padding:18px 5px;border-radius:22px;display:flex;flex-direction:column;align-items:center;cursor:pointer;transition:.2s;backdrop-filter:blur(10px);}
+        .card{
+            background:rgba(255,255,255,.05);
+            border:1px solid rgba(255,255,255,.1);
+            padding:18px 5px;
+            border-radius:22px;
+            display:flex;
+            flex-direction:column;
+            align-items:center;
+            cursor:pointer;
+            transition:.2s;
+            backdrop-filter:blur(10px);
+        }
         .card:active{transform:scale(.92);}
         .card i{font-size:26px;margin-bottom:8px;}
         .card span{font-size:11px;font-weight:700;}
+
+        /* TELAS DE FERRAMENTAS */
         .screen{margin-top:15px;background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.1);padding:20px;border-radius:24px;}
         .back-btn{background:none;border:none;color:#5b4bff;font-weight:700;margin-bottom:15px;cursor:pointer;}
         .input, .textarea{width:100%;padding:14px;margin-bottom:10px;border-radius:12px;border:1px solid rgba(255,255,255,.1);background:rgba(255,255,255,.05);color:white;outline:none;font-size:14px;}
         .textarea{height:180px;resize:none;}
-        .generate-btn{width:100%;padding:15px;border:none;border-radius:12px;background:linear-gradient(135deg,#5b4bff,#4338ca);color:white;font-weight:700;cursor:pointer;margin-top:5px;}
+        .generate-btn{width:100%;padding:15px;border:none;border-radius:12px;background:linear-gradient(135deg,#5b4bff,#4338ca);color:white;font-weight:700;cursor:pointer;margin-top:5px;transition: 0.3s;}
+        .generate-btn:hover{opacity: 0.9;}
         .preview-box{background:white;color:#333;padding:15px;border-radius:15px;margin-top:15px;}
-        .login-screen{height:100vh;display:flex;align-items:center;justify-content:center;flex-direction:column;text-align:center;}
-        .google-btn{padding:15px 20px;border:none;border-radius:14px;background:white;color:black;font-weight:700;margin-top:20px;cursor:pointer;font-size:15px;}
-        .user-box{display:flex;align-items:center;gap:10px;justify-content:center;margin-top:15px;background:rgba(255,255,255,0.05);padding:10px;border-radius:15px;}
+        
+        /* USER INFO BOX */
+        .user-box{display:flex;align-items:center;gap:10px;justify-content:center;margin-top:15px;background:rgba(255,255,255,0.05);padding:10px;border-radius:18px;}
         .user-box img{width:45px;height:45px;border-radius:50%;border:2px solid #5b4bff;}
+        .logout-btn{margin-top:10px;background:#ef4444;border:none;padding:8px 12px;border-radius:10px;color:white;font-weight:700;cursor:pointer;font-size:12px;}
     </style>
 </head>
 <body>
 
-<div id="loginScreen" class="login-screen">
-    <img src="logo.png" class="logo-app">
-    <h1>Elite Docs AI</h1>
-    <p style="margin-top:10px;color:#aaa;">Entre com Google para continuar</p>
-    <button class="google-btn" onclick="loginGoogle()">
-        <i class="fab fa-google"></i> Entrar com Google
-    </button>
-</div>
-
-<div class="container" id="homeScreen" style="display:none;">
-    <div class="hero">
+    <div id="loginScreen" class="login-screen">
         <img src="logo.png" class="logo-app">
         <h1>Elite Docs AI</h1>
-        <div id="userInfo"></div>
-        <button onclick="logoutGoogle()" style="margin-top:15px;background:#ef4444;border:none;padding:8px 12px;border-radius:10px;color:white;font-weight:700;cursor:pointer;font-size:12px;">Sair</button>
+        <p style="margin-top:10px;color:#aaa;">Entre com Google para continuar</p>
+        <button class="google-btn" onclick="loginGoogle()">
+            <img src="https://www.gstatic.com/firebasejs/ui/2.0.0/images/auth/google.svg" width="20">
+            Entrar com Google
+        </button>
     </div>
 
-    <div class="grid" id="mainGrid">
-        <div class="card" onclick="abrirTela('curriculoScreen')"><i class="fas fa-user-tie" style="color:#5b4bff"></i><span>Currículo</span></div>
-        <div class="card" onclick="abrirTela('pdfScreen')"><i class="fas fa-file-pdf" style="color:#ef4444"></i><span>PDF</span></div>
-        <div class="card" onclick="abrirTela('wordScreen')"><i class="fas fa-file-word" style="color:#2b579a"></i><span>Word</span></div>
-        <div class="card" onclick="abrirTela('txtScreen')"><i class="fas fa-file-lines" style="color:#9ca3af"></i><span>TXT</span></div>
-        <div class="card" onclick="abrirTela('linkedinScreen')"><i class="fab fa-linkedin" style="color:#0a66c2"></i><span>LinkedIn</span></div>
-        <div class="card" onclick="abrirTela('assinaturaScreen')"><i class="fas fa-signature" style="color:#06b6d4"></i><span>Assinatura</span></div>
+    <div class="container hidden" id="homeScreen">
+        <div class="hero">
+            <img src="logo.png" class="logo-app">
+            <h1>Elite Docs AI</h1>
+            <div id="userInfo"></div>
+            <button class="logout-btn" onclick="logoutGoogle()">Sair</button>
+        </div>
+
+        <div class="grid" id="mainGrid">
+            <div class="card" onclick="abrirTela('curriculoScreen')"><i class="fas fa-user-tie" style="color:#5b4bff"></i><span>Currículo</span></div>
+            <div class="card" onclick="abrirTela('pdfScreen')"><i class="fas fa-file-pdf" style="color:#ef4444"></i><span>PDF</span></div>
+            <div class="card" onclick="abrirTela('wordScreen')"><i class="fas fa-file-word" style="color:#2b579a"></i><span>Word</span></div>
+            <div class="card" onclick="abrirTela('txtScreen')"><i class="fas fa-file-lines" style="color:#9ca3af"></i><span>TXT</span></div>
+            <div class="card" onclick="abrirTela('linkedinScreen')"><i class="fab fa-linkedin" style="color:#0a66c2"></i><span>LinkedIn</span></div>
+            <div class="card" onclick="abrirTela('assinaturaScreen')"><i class="fas fa-signature" style="color:#06b6d4"></i><span>Assinatura</span></div>
+        </div>
+
+        <div id="curriculoScreen" class="screen hidden">
+            <button class="back-btn" onclick="voltar()">← Voltar</button>
+            <input class="input" id="nome" placeholder="Nome Completo">
+            <input class="input" id="cargo" placeholder="Cargo Pretendido">
+            <input class="input" id="email" placeholder="Email de Contato">
+            <textarea class="textarea" id="resumo" placeholder="Descreva suas experiências..."></textarea>
+            <button class="generate-btn" onclick="usarIA('resumo','Transforme este texto em um resumo profissional de alto impacto')">✨ Melhorar com IA</button>
+            <button class="generate-btn" style="background:#10b981; margin-top:10px;" onclick="gerarPDFPremium()">BAIXAR CURRÍCULO</button>
+        </div>
+
+        <div id="pdfScreen" class="screen hidden">
+            <button class="back-btn" onclick="voltar()">← Voltar</button>
+            <input class="input" id="pdfTitulo" placeholder="Título do PDF">
+            <textarea class="textarea" id="pdfTexto" placeholder="Conteúdo do seu documento..."></textarea>
+            <button class="generate-btn" onclick="gerarPDF()">GERAR PDF</button>
+        </div>
+
+        <div id="wordScreen" class="screen hidden">
+            <button class="back-btn" onclick="voltar()">← Voltar</button>
+            <textarea class="textarea" id="wordTexto" placeholder="Digite o conteúdo para o Word..."></textarea>
+            <button class="generate-btn" onclick="baixarWord()">BAIXAR .DOC</button>
+        </div>
+
+        <div id="txtScreen" class="screen hidden">
+            <button class="back-btn" onclick="voltar()">← Voltar</button>
+            <textarea class="textarea" id="txtTexto" placeholder="Digite seu texto aqui..."></textarea>
+            <button class="generate-btn" onclick="baixarTXT()">BAIXAR .TXT</button>
+        </div>
+
+        <div id="linkedinScreen" class="screen hidden">
+            <button class="back-btn" onclick="voltar()">← Voltar</button>
+            <textarea class="textarea" id="linkedinTexto" placeholder="Sobre o que será o post?"></textarea>
+            <button class="generate-btn" onclick="usarIA('linkedinTexto','Crie um post profissional e engajador para o LinkedIn sobre este tema, use emojis e hashtags')">✨ GERAR POST IA</button>
+        </div>
+
+        <div id="assinaturaScreen" class="screen hidden">
+            <button class="back-btn" onclick="voltar()">← Voltar</button>
+            <input class="input" id="assinaturaNome" placeholder="Seu nome para a assinatura">
+            <div id="assinaturaPreview" class="preview-box" style="font-size:35px;font-family:cursive;text-align:center; min-height:80px;">Assinatura</div>
+            <button class="generate-btn" onclick="gerarAssinatura()">GERAR ESTILO</button>
+        </div>
     </div>
 
-    <div id="curriculoScreen" class="screen hidden">
-        <button class="back-btn" onclick="voltar()">← Voltar</button>
-        <input class="input" id="nome" placeholder="Nome Completo">
-        <input class="input" id="cargo" placeholder="Cargo Pretendido">
-        <input class="input" id="email" placeholder="Email de Contato">
-        <textarea class="textarea" id="resumo" placeholder="Resumo profissional ou experiências"></textarea>
-        <button class="generate-btn" onclick="usarIA('resumo','Melhore esse currículo profissionalmente')">✨ Melhorar com IA</button>
-        <button class="generate-btn" style="background:green; margin-top:10px;" onclick="gerarPDFPremium()">BAIXAR CURRÍCULO</button>
-    </div>
-
-    <div id="pdfScreen" class="screen hidden">
-        <button class="back-btn" onclick="voltar()">← Voltar</button>
-        <input class="input" id="pdfTitulo" placeholder="Título do Documento">
-        <textarea class="textarea" id="pdfTexto" placeholder="Conteúdo do PDF"></textarea>
-        <button class="generate-btn" onclick="gerarPDF()">GERAR PDF</button>
-    </div>
-
-    <div id="wordScreen" class="screen hidden">
-        <button class="back-btn" onclick="voltar()">← Voltar</button>
-        <textarea class="textarea" id="wordTexto" placeholder="Escreva aqui para baixar em .doc"></textarea>
-        <button class="generate-btn" onclick="baixarWord()">BAIXAR DOC</button>
-    </div>
-
-    <div id="txtScreen" class="screen hidden">
-        <button class="back-btn" onclick="voltar()">← Voltar</button>
-        <textarea class="textarea" id="txtTexto" placeholder="Escreva aqui para baixar em .txt"></textarea>
-        <button class="generate-btn" onclick="baixarTXT()">BAIXAR TXT</button>
-    </div>
-
-    <div id="linkedinScreen" class="screen hidden">
-        <button class="back-btn" onclick="voltar()">← Voltar</button>
-        <textarea class="textarea" id="linkedinTexto" placeholder="Sobre o que será o post?"></textarea>
-        <button class="generate-btn" onclick="usarIA('linkedinTexto','Crie um post profissional e engajador para o LinkedIn sobre isso')">✨ GERAR POST IA</button>
-    </div>
-
-    <div id="assinaturaScreen" class="screen hidden">
-        <button class="back-btn" onclick="voltar()">← Voltar</button>
-        <input class="input" id="assinaturaNome" placeholder="Seu nome para assinatura">
-        <div id="assinaturaPreview" class="preview-box" style="font-size:35px;font-family:cursive;text-align:center; min-height:80px;">Assinatura</div>
-        <button class="generate-btn" onclick="gerarAssinatura()">GERAR ESTILO</button>
-    </div>
-</div>
-
-<script>
-    // FUNÇÕES DE NAVEGAÇÃO
-    function abrirTela(id){
-        document.getElementById('mainGrid').classList.add('hidden');
-        document.querySelectorAll('.screen').forEach(s=>s.classList.add('hidden'));
-        document.getElementById(id).classList.remove('hidden');
-    }
-
-    function voltar(){
-        document.querySelectorAll('.screen').forEach(s=>s.classList.add('hidden'));
-        document.getElementById('mainGrid').classList.remove('hidden');
-    }
-
-    // IA FREE (Pollinations)
-    async function usarIA(id, comando){
-        const campo = document.getElementById(id);
-        const original = campo.value;
-        if(!original) return alert("Escreva algo primeiro!");
-        campo.value = "IA processando conteúdo...";
-        try{
-            const r = await fetch('https://text.pollinations.ai/' + encodeURIComponent(comando + ': ' + original));
-            campo.value = await r.text();
-        }catch(e){
-            campo.value = original;
-            alert("Erro na IA");
+    <script>
+        /* LÓGICA DAS FERRAMENTAS */
+        function abrirTela(id){
+            document.getElementById('mainGrid').classList.add('hidden');
+            document.querySelectorAll('.screen').forEach(s=>s.classList.add('hidden'));
+            document.getElementById(id).classList.remove('hidden');
         }
-    }
 
-    // GERAÇÃO DE ARQUIVOS
-    function gerarPDFPremium(){
-        const { jsPDF } = window.jspdf;
-        const doc = new jsPDF();
-        doc.setFontSize(22);
-        doc.text(document.getElementById('nome').value || "Currículo", 20, 20);
-        doc.setFontSize(12);
-        doc.text(document.getElementById('cargo').value, 20, 30);
-        doc.text(document.getElementById('email').value, 20, 38);
-        const linhas = doc.splitTextToSize(document.getElementById('resumo').value, 170);
-        doc.text(linhas, 20, 50);
-        doc.save("curriculo_elite.pdf");
-    }
+        function voltar(){
+            document.querySelectorAll('.screen').forEach(s=>s.classList.add('hidden'));
+            document.getElementById('mainGrid').classList.remove('hidden');
+        }
 
-    function gerarPDF(){
-        const { jsPDF } = window.jspdf;
-        const doc = new jsPDF();
-        doc.text(document.getElementById('pdfTitulo').value || "Doc", 20, 20);
-        const linhas = doc.splitTextToSize(document.getElementById('pdfTexto').value, 170);
-        doc.text(linhas, 20, 35);
-        doc.save("documento_elite.pdf");
-    }
+        async function usarIA(id, comando){
+            const campo = document.getElementById(id);
+            const original = campo.value;
+            if(!original) return alert("Escreva algo primeiro!");
+            campo.value = "IA Processando...";
+            try{
+                const r = await fetch('https://text.pollinations.ai/' + encodeURIComponent(comando + ': ' + original));
+                campo.value = await r.text();
+            }catch(e){
+                campo.value = original;
+                alert("Erro ao conectar com a IA");
+            }
+        }
 
-    function baixarWord(){
-        const blob = new Blob([document.getElementById('wordTexto').value], {type:'application/msword'});
-        const a = document.createElement('a');
-        a.href = URL.createObjectURL(blob);
-        a.download = "doc_elite.doc";
-        a.click();
-    }
+        function gerarPDFPremium(){
+            const { jsPDF } = window.jspdf;
+            const doc = new jsPDF();
+            doc.setFontSize(22);
+            doc.text(document.getElementById('nome').value || "Currículo", 20, 20);
+            doc.setFontSize(14);
+            doc.text(document.getElementById('cargo').value, 20, 32);
+            doc.text(document.getElementById('email').value, 20, 42);
+            const linhas = doc.splitTextToSize(document.getElementById('resumo').value, 170);
+            doc.text(linhas, 20, 55);
+            doc.save("curriculo_elite.pdf");
+        }
 
-    function baixarTXT(){
-        const blob = new Blob([document.getElementById('txtTexto').value], {type:'text/plain'});
-        const a = document.createElement('a');
-        a.href = URL.createObjectURL(blob);
-        a.download = "nota_elite.txt";
-        a.click();
-    }
+        function gerarPDF(){
+            const { jsPDF } = window.jspdf;
+            const doc = new jsPDF();
+            doc.setFontSize(18);
+            doc.text(document.getElementById('pdfTitulo').value || "Documento", 20, 20);
+            const linhas = doc.splitTextToSize(document.getElementById('pdfTexto').value, 170);
+            doc.text(linhas, 20, 35);
+            doc.save("documento_elite.pdf");
+        }
 
-    function gerarAssinatura(){
-        const nome = document.getElementById('assinaturaNome').value;
-        document.getElementById('assinaturaPreview').innerText = nome;
-    }
-</script>
+        function baixarWord(){
+            const blob = new Blob([document.getElementById('wordTexto').value], {type:'application/msword'});
+            const a = document.createElement('a');
+            a.href = URL.createObjectURL(blob);
+            a.download = "doc_elite.doc";
+            a.click();
+        }
 
-<script type="module">
-import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
-import { getAuth, GoogleAuthProvider, signInWithRedirect, getRedirectResult, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
+        function baixarTXT(){
+            const blob = new Blob([document.getElementById('txtTexto').value], {type:'text/plain'});
+            const a = document.createElement('a');
+            a.href = URL.createObjectURL(blob);
+            a.download = "elite_txt.txt";
+            a.click();
+        }
 
-const firebaseConfig = {
-    apiKey: "AIzaSyDFPrrCSowCUo3QJ6T280zja2Wqutlccvo",
-    authDomain: "elite-docsai.firebaseapp.com",
-    projectId: "elite-docsai",
-    storageBucket: "elite-docsai.firebasestorage.app",
-    messagingSenderId: "1048692395624",
-    appId: "1:1048692395624:web:74fb23e57580b9203ab5dd"
-};
+        function gerarAssinatura(){
+            const nome = document.getElementById('assinaturaNome').value;
+            document.getElementById('assinaturaPreview').innerText = nome;
+        }
+    </script>
 
-const app = initializeApp(firebaseConfig);
-const auth = getAuth(app);
-const provider = new GoogleAuthProvider();
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
+        import { 
+            getAuth, 
+            GoogleAuthProvider, 
+            signInWithRedirect, 
+            getRedirectResult, 
+            onAuthStateChanged, 
+            signOut 
+        } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
 
-// VIGIA DE SESSÃO: Corrige a troca de telas
-onAuthStateChanged(auth, (user) => {
-    const loginUI = document.getElementById('loginScreen');
-    const homeUI = document.getElementById('homeScreen');
-    const infoUI = document.getElementById('userInfo');
+        const firebaseConfig = {
+            apiKey: "AIzaSyDFPrrCSowCUo3QJ6T280zja2Wqutlccvo",
+            authDomain: "elite-docsai.firebaseapp.com",
+            projectId: "elite-docsai",
+            storageBucket: "elite-docsai.firebasestorage.app",
+            messagingSenderId: "1048692395624",
+            appId: "1:1048692395624:web:74fb23e57580b9203ab5dd"
+        };
 
-    if (user) {
-        loginUI.style.display = "none";
-        homeUI.style.display = "block";
-        infoUI.innerHTML = `
-            <div class="user-box">
-                <img src="${user.photoURL}">
-                <div style="text-align:left;">
-                    <div style="font-size:14px; font-weight:800;">${user.displayName}</div>
-                    <div style="font-size:11px; color:#aaa;">${user.email}</div>
-                </div>
-            </div>`;
-    } else {
-        loginUI.style.display = "flex";
-        homeUI.style.display = "none";
-    }
-});
+        const app = initializeApp(firebaseConfig);
+        const auth = getAuth(app);
+        const provider = new GoogleAuthProvider();
 
-// FUNÇÕES GLOBAIS
-window.loginGoogle = () => signInWithRedirect(auth, provider);
-window.logoutGoogle = () => signOut(auth).then(() => location.reload());
+        // O VIGIA: Troca a tela quando detecta o login
+        onAuthStateChanged(auth, (user) => {
+            const loginUI = document.getElementById('loginScreen');
+            const homeUI = document.getElementById('homeScreen');
+            const infoUI = document.getElementById('userInfo');
 
-// CAPTURA RETORNO DO GOOGLE
-getRedirectResult(auth).catch(e => console.error("Erro Auth:", e));
-</script>
+            if (user) {
+                loginUI.classList.add('hidden');
+                homeUI.classList.remove('hidden');
+                homeUI.style.display = "block";
+                infoUI.innerHTML = `
+                    <div class="user-box">
+                        <img src="${user.photoURL}">
+                        <div style="text-align:left;">
+                            <div style="font-size:14px; font-weight:800;">${user.displayName}</div>
+                            <div style="font-size:11px; color:#aaa;">${user.email}</div>
+                        </div>
+                    </div>`;
+            } else {
+                loginUI.classList.remove('hidden');
+                homeUI.classList.add('hidden');
+                homeUI.style.display = "none";
+            }
+        });
+
+        // Captura o resultado do redirect (ESSENCIAL para o /App-all/)
+        getRedirectResult(auth).catch(e => {
+            console.error("Erro no login:", e.code);
+        });
+
+        // Botões de Login/Logout
+        window.loginGoogle = () => signInWithRedirect(auth, provider);
+        window.logoutGoogle = () => signOut(auth).then(() => location.reload());
+    </script>
 </body>
 </html>
