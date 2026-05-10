@@ -12,7 +12,7 @@
         *{margin:0;padding:0;box-sizing:border-box;}
         body{font-family:'Inter',sans-serif;background:#050510;color:white;padding:12px;background-image:radial-gradient(circle at top, rgba(91,75,255,.18), transparent 35%);}
         .container{max-width:700px;margin:auto;}
-        .hidden{display:none;}
+        .hidden{display:none !important;}
         .hero{text-align:center;padding:25px 10px;}
         .logo-app{width:100px;height:100px;border-radius:24px;margin-bottom:10px;}
         .grid{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-top:20px;}
@@ -48,12 +48,10 @@
         <img src="logo.png" class="logo-app">
         <h1>Elite Docs AI</h1>
         <div id="userInfo"></div>
-        <button onclick="logoutGoogle()" style="margin-top:15px;background:#ef4444;border:none;padding:8px 12px;border-radius:10px;color:white;font-weight:700;cursor:pointer;font-size:12px;">
-            Sair da Conta
-        </button>
+        <button onclick="logoutGoogle()" style="margin-top:15px;background:#ef4444;border:none;padding:8px 12px;border-radius:10px;color:white;font-weight:700;cursor:pointer;font-size:12px;">Sair</button>
     </div>
 
-    <div class="grid">
+    <div class="grid" id="mainGrid">
         <div class="card" onclick="abrirTela('curriculoScreen')"><i class="fas fa-user-tie" style="color:#5b4bff"></i><span>Currículo</span></div>
         <div class="card" onclick="abrirTela('pdfScreen')"><i class="fas fa-file-pdf" style="color:#ef4444"></i><span>PDF</span></div>
         <div class="card" onclick="abrirTela('wordScreen')"><i class="fas fa-file-word" style="color:#2b579a"></i><span>Word</span></div>
@@ -78,39 +76,58 @@
         <textarea class="textarea" id="pdfTexto" placeholder="Conteúdo do PDF"></textarea>
         <button class="generate-btn" onclick="gerarPDF()">GERAR PDF</button>
     </div>
-    
-    <div id="wordScreen" class="screen hidden"><button class="back-btn" onclick="voltar()">← Voltar</button><textarea class="textarea" id="wordTexto"></textarea><button class="generate-btn" onclick="baixarWord()">BAIXAR DOC</button></div>
-    <div id="txtScreen" class="screen hidden"><button class="back-btn" onclick="voltar()">← Voltar</button><textarea class="textarea" id="txtTexto"></textarea><button class="generate-btn" onclick="baixarTXT()">BAIXAR TXT</button></div>
-    <div id="linkedinScreen" class="screen hidden"><button class="back-btn" onclick="voltar()">← Voltar</button><textarea class="textarea" id="linkedinTexto"></textarea><button class="generate-btn" onclick="usarIA('linkedinTexto','Crie um post para LinkedIn profissional')">GERAR POST</button></div>
+
+    <div id="wordScreen" class="screen hidden">
+        <button class="back-btn" onclick="voltar()">← Voltar</button>
+        <textarea class="textarea" id="wordTexto" placeholder="Escreva aqui para baixar em .doc"></textarea>
+        <button class="generate-btn" onclick="baixarWord()">BAIXAR DOC</button>
+    </div>
+
+    <div id="txtScreen" class="screen hidden">
+        <button class="back-btn" onclick="voltar()">← Voltar</button>
+        <textarea class="textarea" id="txtTexto" placeholder="Escreva aqui para baixar em .txt"></textarea>
+        <button class="generate-btn" onclick="baixarTXT()">BAIXAR TXT</button>
+    </div>
+
+    <div id="linkedinScreen" class="screen hidden">
+        <button class="back-btn" onclick="voltar()">← Voltar</button>
+        <textarea class="textarea" id="linkedinTexto" placeholder="Sobre o que será o post?"></textarea>
+        <button class="generate-btn" onclick="usarIA('linkedinTexto','Crie um post profissional e engajador para o LinkedIn sobre isso')">✨ GERAR POST IA</button>
+    </div>
+
     <div id="assinaturaScreen" class="screen hidden">
         <button class="back-btn" onclick="voltar()">← Voltar</button>
-        <input class="input" id="assinaturaNome" placeholder="Seu nome">
-        <div id="assinaturaPreview" class="preview-box" style="font-size:35px;font-family:cursive;text-align:center;">Assinatura</div>
-        <button class="generate-btn" onclick="gerarAssinatura()">GERAR ASSINATURA</button>
+        <input class="input" id="assinaturaNome" placeholder="Seu nome para assinatura">
+        <div id="assinaturaPreview" class="preview-box" style="font-size:35px;font-family:cursive;text-align:center; min-height:80px;">Assinatura</div>
+        <button class="generate-btn" onclick="gerarAssinatura()">GERAR ESTILO</button>
     </div>
 </div>
 
 <script>
-    // LÓGICA DE NAVEGAÇÃO
+    // FUNÇÕES DE NAVEGAÇÃO
     function abrirTela(id){
+        document.getElementById('mainGrid').classList.add('hidden');
         document.querySelectorAll('.screen').forEach(s=>s.classList.add('hidden'));
         document.getElementById(id).classList.remove('hidden');
     }
+
     function voltar(){
         document.querySelectorAll('.screen').forEach(s=>s.classList.add('hidden'));
+        document.getElementById('mainGrid').classList.remove('hidden');
     }
 
-    // INTEGRAÇÃO COM IA FREE (Pollinations)
+    // IA FREE (Pollinations)
     async function usarIA(id, comando){
         const campo = document.getElementById(id);
         const original = campo.value;
+        if(!original) return alert("Escreva algo primeiro!");
         campo.value = "IA processando conteúdo...";
         try{
             const r = await fetch('https://text.pollinations.ai/' + encodeURIComponent(comando + ': ' + original));
             campo.value = await r.text();
         }catch(e){
             campo.value = original;
-            alert("Erro ao conectar com a IA");
+            alert("Erro na IA");
         }
     }
 
@@ -120,20 +137,20 @@
         const doc = new jsPDF();
         doc.setFontSize(22);
         doc.text(document.getElementById('nome').value || "Currículo", 20, 20);
-        doc.setFontSize(14);
+        doc.setFontSize(12);
         doc.text(document.getElementById('cargo').value, 20, 30);
-        doc.text(document.getElementById('email').value, 20, 40);
+        doc.text(document.getElementById('email').value, 20, 38);
         const linhas = doc.splitTextToSize(document.getElementById('resumo').value, 170);
-        doc.text(linhas, 20, 55);
+        doc.text(linhas, 20, 50);
         doc.save("curriculo_elite.pdf");
     }
 
     function gerarPDF(){
         const { jsPDF } = window.jspdf;
         const doc = new jsPDF();
-        doc.text(document.getElementById('pdfTitulo').value || "Documento", 20, 20);
+        doc.text(document.getElementById('pdfTitulo').value || "Doc", 20, 20);
         const linhas = doc.splitTextToSize(document.getElementById('pdfTexto').value, 170);
-        doc.text(linhas, 20, 40);
+        doc.text(linhas, 20, 35);
         doc.save("documento_elite.pdf");
     }
 
@@ -154,7 +171,8 @@
     }
 
     function gerarAssinatura(){
-        document.getElementById('assinaturaPreview').innerText = document.getElementById('assinaturaNome').value;
+        const nome = document.getElementById('assinaturaNome').value;
+        document.getElementById('assinaturaPreview').innerText = nome;
     }
 </script>
 
@@ -175,7 +193,7 @@ const app = initializeApp(firebaseConfig);
 const auth = getAuth(app);
 const provider = new GoogleAuthProvider();
 
-// O VIGIA DA SESSÃO
+// VIGIA DE SESSÃO: Corrige a troca de telas
 onAuthStateChanged(auth, (user) => {
     const loginUI = document.getElementById('loginScreen');
     const homeUI = document.getElementById('homeScreen');
@@ -198,13 +216,12 @@ onAuthStateChanged(auth, (user) => {
     }
 });
 
-// FUNÇÕES DE BOTÃO
+// FUNÇÕES GLOBAIS
 window.loginGoogle = () => signInWithRedirect(auth, provider);
 window.logoutGoogle = () => signOut(auth).then(() => location.reload());
 
-// CAPTURA RETORNO DO REDIRECT
+// CAPTURA RETORNO DO GOOGLE
 getRedirectResult(auth).catch(e => console.error("Erro Auth:", e));
 </script>
-
 </body>
 </html>
