@@ -3,7 +3,6 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
 <title>Elite Docs AI</title>
 
 <link rel="icon" href="logo.png">
@@ -68,7 +67,7 @@ box-shadow:0 0 35px rgba(91,75,255,.5);
 
 .grid{
 display:grid;
-grid-template-columns:repeat(3,1fr);
+grid-template-columns:repeat(2,1fr);
 gap:12px;
 margin-top:20px;
 }
@@ -86,6 +85,10 @@ transition:.3s;
 backdrop-filter:blur(14px);
 }
 
+.card:hover{
+transform:translateY(-6px);
+}
+
 .card i{
 font-size:34px;
 margin-bottom:12px;
@@ -94,10 +97,6 @@ margin-bottom:12px;
 .card span{
 font-size:13px;
 font-weight:800;
-}
-
-.card:hover{
-transform:translateY(-6px);
 }
 
 .screen{
@@ -218,7 +217,6 @@ Entrar com Google
 </button>
 
 </div>
-
 </div>
 
 <!-- APP -->
@@ -269,11 +267,6 @@ Gerador inteligente de documentos com IA.
 <div class="card" onclick="abrirTela('pdfScreen')">
 <i class="fas fa-file-pdf" style="color:#ef4444"></i>
 <span>PDF</span>
-</div>
-
-<div class="card" onclick="abrirTela('pdfFotoScreen')">
-<i class="fas fa-image" style="color:#10b981"></i>
-<span>PDF Foto</span>
 </div>
 
 <div class="card" onclick="abrirTela('wordScreen')">
@@ -330,7 +323,7 @@ Currículo Profissional
 </button>
 
 <button class="generate-btn" onclick="gerarCurriculoPDF()">
-GERAR PDF PROFISSIONAL
+GERAR CURRÍCULO PDF
 </button>
 
 </div>
@@ -347,36 +340,28 @@ GERAR PDF PROFISSIONAL
 Criador PDF
 </h2>
 
-<input class="input" id="pdfTitulo" placeholder="Título">
+<input class="input" id="pdfTitulo" placeholder="Título do PDF">
 
-<textarea class="textarea" id="pdfTexto" placeholder="Digite o conteúdo"></textarea>
+<textarea class="textarea" id="pdfTexto" placeholder="Digite o conteúdo do PDF"></textarea>
 
 <button class="generate-btn" onclick="gerarPDFTexto()">
-BAIXAR PDF
+📄 GERAR PDF NORMAL
 </button>
 
-</div>
-
-<!-- PDF FOTO -->
-
-<div id="pdfFotoScreen" class="screen hidden">
-
-<button onclick="voltar()" class="back-btn">
-← Voltar
-</button>
+<div style="height:1px;background:rgba(255,255,255,.08);margin:30px 0;"></div>
 
 <h2 style="margin-bottom:15px;">
 PDF com Foto
 </h2>
 
-<input class="input" id="fotoTitulo" placeholder="Título">
+<input class="input" id="fotoTitulo" placeholder="Título do PDF com foto">
 
 <input class="input" type="file" id="fotoPDF" accept="image/*">
 
-<textarea class="textarea" id="fotoTexto" placeholder="Texto do PDF"></textarea>
+<textarea class="textarea" id="fotoTexto" placeholder="Texto do PDF com foto"></textarea>
 
 <button class="generate-btn" onclick="gerarPDFFoto()">
-GERAR PDF COM FOTO
+🖼️ GERAR PDF COM FOTO
 </button>
 
 </div>
