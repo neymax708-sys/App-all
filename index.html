@@ -75,10 +75,6 @@ transition:.25s;
 backdrop-filter:blur(10px);
 }
 
-.card:hover{
-transform:translateY(-4px);
-}
-
 .card:active{
 transform:scale(.95);
 }
@@ -99,21 +95,9 @@ background:rgba(255,255,255,.04);
 border:1px solid rgba(255,255,255,.08);
 padding:20px;
 border-radius:24px;
-animation:aparecer .3s ease;
 }
 
-@keyframes aparecer{
-from{
-opacity:0;
-transform:translateY(20px);
-}
-to{
-opacity:1;
-transform:translateY(0);
-}
-}
-
-.input,.textarea{
+.input,.textarea,select{
 width:100%;
 padding:15px;
 margin-bottom:12px;
@@ -140,7 +124,6 @@ color:white;
 font-weight:700;
 cursor:pointer;
 margin-top:5px;
-box-shadow:0 0 20px rgba(91,75,255,.3);
 }
 
 .back-btn{
@@ -197,19 +180,12 @@ border-radius:18px;
 margin-top:15px;
 }
 
-.section-label{
-font-size:11px;
-color:#7c6cff;
-font-weight:800;
-text-transform:uppercase;
-margin-bottom:8px;
-display:block;
-}
-
 </style>
 </head>
 
 <body>
+
+<!-- LOGIN -->
 
 <div id="loginScreen">
 
@@ -231,7 +207,10 @@ Entrar com Google
 </button>
 
 </div>
+
 </div>
+
+<!-- APP -->
 
 <div class="container" id="appScreen" style="display:none;">
 
@@ -249,13 +228,25 @@ Entrar com Google
 
 <div id="userName" style="font-weight:700;"></div>
 
-<button onclick="sairConta()" style="background:none;border:none;color:#ff4d4d;cursor:pointer;font-size:13px;font-weight:bold;">
+<button onclick="sairConta()"
+style="
+background:none;
+border:none;
+color:#ff4d4d;
+cursor:pointer;
+font-size:13px;
+font-weight:bold;
+">
 Sair
 </button>
 
 </div>
+
 </div>
+
 </div>
+
+<!-- MENU -->
 
 <div class="grid" id="mainGrid">
 
@@ -291,7 +282,7 @@ Sair
 
 </div>
 
-<!-- CURRÍCULO -->
+<!-- CURRICULO -->
 
 <div id="curriculoScreen" class="screen hidden">
 
@@ -303,34 +294,21 @@ Sair
 Criar Currículo
 </h2>
 
-<span class="section-label">
-Identificação
-</span>
-
 <input class="input" id="nome" placeholder="Nome completo">
 
 <input class="input" id="cargo" placeholder="Cargo pretendido">
-
-<span class="section-label">
-Contato
-</span>
-
-<div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;">
 
 <input class="input" id="whatsapp" placeholder="WhatsApp">
 
 <input class="input" id="email" placeholder="E-mail">
 
-</div>
+<textarea class="textarea"
+id="resumo"
+placeholder="Resumo profissional"></textarea>
 
-<span class="section-label">
-Resumo Profissional
-</span>
-
-<textarea class="textarea" id="resumo" placeholder="Fale sobre suas experiências, habilidades e objetivos profissionais..."></textarea>
-
-<button class="generate-btn" onclick="gerarPDF()">
-GERAR CURRÍCULO PROFISSIONAL
+<button class="generate-btn"
+onclick="gerarCurriculo()">
+GERAR CURRÍCULO
 </button>
 
 </div>
@@ -343,17 +321,69 @@ GERAR CURRÍCULO PROFISSIONAL
 ← Voltar
 </button>
 
-<h2 style="margin-bottom:15px;">
+<h2 style="margin-bottom:20px;">
 Criador PDF
 </h2>
 
-<input class="input" id="pdfTitulo" placeholder="Título">
+<div style="
+display:grid;
+grid-template-columns:1fr 1fr;
+gap:10px;
+margin-bottom:15px;
+">
 
-<textarea class="textarea" id="pdfTexto" placeholder="Digite o conteúdo"></textarea>
-
-<button class="generate-btn" onclick="gerarPDFTexto()">
-BAIXAR PDF
+<button class="generate-btn"
+onclick="mostrarPDFTexto()">
+PDF TEXTO
 </button>
+
+<button class="generate-btn"
+style="background:linear-gradient(135deg,#06b6d4,#2563eb);"
+onclick="mostrarPDFFoto()">
+PDF FOTO
+</button>
+
+</div>
+
+<!-- TEXTO -->
+
+<div id="pdfTextoArea">
+
+<input class="input"
+id="pdfTitulo"
+placeholder="Título">
+
+<textarea class="textarea"
+id="pdfTexto"
+placeholder="Digite o conteúdo"></textarea>
+
+<button class="generate-btn"
+onclick="abrirConfigPDF('texto')">
+GERAR PDF
+</button>
+
+</div>
+
+<!-- FOTO -->
+
+<div id="pdfFotoArea" class="hidden">
+
+<input class="input"
+id="pdfFotoTitulo"
+placeholder="Nome do PDF">
+
+<input class="input"
+type="file"
+id="pdfImagem"
+accept="image/*">
+
+<button class="generate-btn"
+style="background:linear-gradient(135deg,#06b6d4,#2563eb);"
+onclick="abrirConfigPDF('foto')">
+GERAR PDF COM FOTO
+</button>
+
+</div>
 
 </div>
 
@@ -365,13 +395,12 @@ BAIXAR PDF
 ← Voltar
 </button>
 
-<h2 style="margin-bottom:15px;">
-Arquivo Word
-</h2>
+<input class="input"
+id="wordTexto"
+placeholder="Texto Word">
 
-<textarea class="textarea" id="wordTexto" placeholder="Digite o texto"></textarea>
-
-<button class="generate-btn" onclick="baixarWord()">
+<button class="generate-btn"
+onclick="baixarWord()">
 BAIXAR DOC
 </button>
 
@@ -385,13 +414,12 @@ BAIXAR DOC
 ← Voltar
 </button>
 
-<h2 style="margin-bottom:15px;">
-Arquivo TXT
-</h2>
+<textarea class="textarea"
+id="txtTexto"
+placeholder="Digite seu texto"></textarea>
 
-<textarea class="textarea" id="txtTexto" placeholder="Digite qualquer texto"></textarea>
-
-<button class="generate-btn" onclick="baixarTXT()">
+<button class="generate-btn"
+onclick="baixarTXT()">
 BAIXAR TXT
 </button>
 
@@ -405,13 +433,12 @@ BAIXAR TXT
 ← Voltar
 </button>
 
-<h2 style="margin-bottom:15px;">
-LinkedIn IA
-</h2>
+<textarea class="textarea"
+id="linkedinTexto"
+placeholder="Fale sobre você"></textarea>
 
-<textarea class="textarea" id="linkedinTexto" placeholder="Fale sobre você"></textarea>
-
-<button class="generate-btn" onclick="gerarLinkedin()">
+<button class="generate-btn"
+onclick="gerarLinkedin()">
 GERAR TEXTO
 </button>
 
@@ -425,17 +452,22 @@ GERAR TEXTO
 ← Voltar
 </button>
 
-<h2 style="margin-bottom:15px;">
-Assinatura
-</h2>
+<input class="input"
+id="assinaturaNome"
+placeholder="Seu nome">
 
-<input class="input" id="assinaturaNome" placeholder="Digite seu nome">
-
-<div id="assinaturaPreview" class="preview" style="font-family:cursive;font-size:35px;text-align:center;">
+<div id="assinaturaPreview"
+class="preview"
+style="
+font-family:cursive;
+font-size:35px;
+text-align:center;
+">
 Sua Assinatura
 </div>
 
-<button class="generate-btn" onclick="gerarAssinatura()">
+<button class="generate-btn"
+onclick="gerarAssinatura()">
 GERAR ASSINATURA
 </button>
 
@@ -443,151 +475,191 @@ GERAR ASSINATURA
 
 </div>
 
+<!-- MODAL PDF -->
+
+<div id="configPDFModal"
+class="hidden"
+style="
+position:fixed;
+top:0;
+left:0;
+width:100%;
+height:100%;
+background:rgba(0,0,0,.75);
+display:flex;
+justify-content:center;
+align-items:flex-end;
+z-index:999;
+">
+
+<div style="
+background:white;
+width:100%;
+max-width:700px;
+border-radius:30px 30px 0 0;
+padding:25px;
+color:#111;
+">
+
+<div style="
+display:flex;
+justify-content:space-between;
+align-items:center;
+margin-bottom:20px;
+">
+
+<h1>
+Converter para PDF
+</h1>
+
+<button onclick="fecharConfigPDF()"
+style="
+background:none;
+border:none;
+font-size:35px;
+cursor:pointer;
+">
+×
+</button>
+
+</div>
+
+<input id="nomePDFFinal"
+placeholder="Nome PDF"
+style="
+width:100%;
+padding:15px;
+border-radius:14px;
+border:1px solid #ddd;
+margin-bottom:15px;
+">
+
+<select id="tamanhoPDF">
+
+<option value="a4">A4</option>
+
+<option value="letter">Letter</option>
+
+</select>
+
+<select id="orientacaoPDF">
+
+<option value="portrait">Retrato</option>
+
+<option value="landscape">Paisagem</option>
+
+</select>
+
+<div style="
+display:flex;
+gap:10px;
+margin-top:20px;
+">
+
+<button onclick="fecharConfigPDF()"
+style="
+flex:1;
+padding:15px;
+border-radius:14px;
+border:2px solid #5b4bff;
+background:white;
+color:#5b4bff;
+font-weight:700;
+">
+
+PRÉVIA
+
+</button>
+
+<button onclick="confirmarGeracaoPDF()"
+style="
+flex:1;
+padding:15px;
+border:none;
+border-radius:14px;
+background:linear-gradient(135deg,#5b4bff,#4338ca);
+color:white;
+font-weight:700;
+">
+
+CONVERTER
+
+</button>
+
+</div>
+
+</div>
+
+</div>
+
+<!-- SCRIPTS -->
+
 <script>
 
 function abrirTela(id){
-
 document.getElementById('mainGrid').classList.add('hidden');
-
-document.querySelectorAll('.screen').forEach(s=>
-s.classList.add('hidden'));
-
+document.querySelectorAll('.screen').forEach(s=>s.classList.add('hidden'));
 document.getElementById(id).classList.remove('hidden');
-
 }
 
 function voltar(){
-
-document.querySelectorAll('.screen').forEach(s=>
-s.classList.add('hidden'));
-
+document.querySelectorAll('.screen').forEach(s=>s.classList.add('hidden'));
 document.getElementById('mainGrid').classList.remove('hidden');
-
 }
 
-// CURRÍCULO TOP
-
-function gerarPDF(){
+function gerarCurriculo(){
 
 const { jsPDF } = window.jspdf;
 
 const doc = new jsPDF();
 
 const nome =
-document.getElementById("nome").value || "Seu Nome";
+document.getElementById("nome").value;
 
 const cargo =
-document.getElementById("cargo").value || "Cargo";
+document.getElementById("cargo").value;
 
 const whats =
-document.getElementById("whatsapp").value || "";
+document.getElementById("whatsapp").value;
 
 const email =
-document.getElementById("email").value || "";
+document.getElementById("email").value;
 
 const resumo =
-document.getElementById("resumo").value || "";
+document.getElementById("resumo").value;
 
-// FUNDO
-doc.setFillColor(248,248,248);
-doc.rect(0,0,210,297,"F");
-
-// HEADER
 doc.setFillColor(91,75,255);
-doc.rect(0,0,210,50,"F");
+
+doc.rect(0,0,210,45,'F');
 
 doc.setTextColor(255,255,255);
-
-doc.setFont("helvetica","bold");
 
 doc.setFontSize(24);
 
 doc.text(nome,20,22);
 
-doc.setFont("helvetica","normal");
-
 doc.setFontSize(14);
 
-doc.text(cargo,20,34);
+doc.text(cargo,20,35);
 
-// CONTATO
-doc.setFillColor(255,255,255);
-
-doc.roundedRect(15,58,180,22,5,5,"F");
-
-doc.setTextColor(80,80,80);
-
-doc.setFontSize(11);
-
-doc.text("WhatsApp: " + whats,25,71);
-
-doc.text("E-mail: " + email,110,71);
-
-// RESUMO
-
-doc.setTextColor(91,75,255);
-
-doc.setFont("helvetica","bold");
-
-doc.setFontSize(16);
-
-doc.text("Resumo Profissional",20,100);
-
-doc.setDrawColor(91,75,255);
-
-doc.line(20,105,90,105);
-
-doc.setTextColor(40,40,40);
-
-doc.setFont("helvetica","normal");
-
-doc.setFontSize(12);
-
-const textoFormatado =
-doc.splitTextToSize(resumo,170);
-
-doc.text(textoFormatado,20,118,{
-maxWidth:170,
-lineHeightFactor:1.7
-});
-
-// RODAPÉ
+doc.setTextColor(100);
 
 doc.setFontSize(10);
 
-doc.setTextColor(120,120,120);
+doc.text(`${whats} | ${email}`,20,55);
 
-doc.text("Criado por Elite Docs AI",70,285);
+doc.line(20,60,190,60);
 
-doc.save("Curriculo_Elite.pdf");
-
-}
-
-function gerarPDFTexto(){
-
-const { jsPDF } = window.jspdf;
-
-const doc = new jsPDF();
-
-const titulo =
-document.getElementById("pdfTitulo").value;
-
-const texto =
-document.getElementById("pdfTexto").value;
-
-doc.setFontSize(20);
-
-doc.text(titulo,20,20);
+doc.setTextColor(0);
 
 doc.setFontSize(12);
 
-doc.text(
-doc.splitTextToSize(texto,170),
-20,
-40
-);
+const linhas =
+doc.splitTextToSize(resumo,170);
 
-doc.save("arquivo.pdf");
+doc.text(linhas,20,80);
+
+doc.save("curriculo.pdf");
 
 }
 
@@ -597,9 +669,8 @@ const texto =
 document.getElementById("wordTexto").value;
 
 const blob =
-new Blob([texto],{
-type:"application/msword"
-});
+new Blob([texto],
+{type:"application/msword"});
 
 const link =
 document.createElement("a");
@@ -620,9 +691,8 @@ const texto =
 document.getElementById("txtTexto").value;
 
 const blob =
-new Blob([texto],{
-type:"text/plain"
-});
+new Blob([texto],
+{type:"text/plain"});
 
 const link =
 document.createElement("a");
@@ -664,7 +734,7 @@ await r.text();
 }catch(e){
 
 campo.value =
-"Erro na IA";
+"Erro IA";
 
 }
 
@@ -680,7 +750,124 @@ nome;
 
 }
 
+let tipoPDFAtual = "texto";
+
+function mostrarPDFTexto(){
+document.getElementById("pdfTextoArea").classList.remove("hidden");
+document.getElementById("pdfFotoArea").classList.add("hidden");
+}
+
+function mostrarPDFFoto(){
+document.getElementById("pdfTextoArea").classList.add("hidden");
+document.getElementById("pdfFotoArea").classList.remove("hidden");
+}
+
+function abrirConfigPDF(tipo){
+tipoPDFAtual = tipo;
+document.getElementById("configPDFModal").classList.remove("hidden");
+}
+
+function fecharConfigPDF(){
+document.getElementById("configPDFModal").classList.add("hidden");
+}
+
+async function confirmarGeracaoPDF(){
+
+const { jsPDF } = window.jspdf;
+
+const orientacao =
+document.getElementById("orientacaoPDF").value;
+
+const formato =
+document.getElementById("tamanhoPDF").value;
+
+const nome =
+document.getElementById("nomePDFFinal").value || "EliteDocsPDF";
+
+const doc = new jsPDF({
+orientation: orientacao,
+format: formato
+});
+
+if(tipoPDFAtual === "texto"){
+
+const titulo =
+document.getElementById("pdfTitulo").value;
+
+const texto =
+document.getElementById("pdfTexto").value;
+
+doc.setFillColor(91,75,255);
+doc.rect(0,0,220,35,'F');
+
+doc.setTextColor(255,255,255);
+doc.setFontSize(24);
+doc.text(titulo || "Documento",20,22);
+
+doc.setTextColor(0,0,0);
+doc.setFontSize(13);
+
+const linhas =
+doc.splitTextToSize(texto,170);
+
+doc.text(linhas,20,55);
+
+doc.save(nome + ".pdf");
+
+}
+
+if(tipoPDFAtual === "foto"){
+
+const file =
+document.getElementById("pdfImagem").files[0];
+
+if(!file){
+alert("Escolha uma imagem");
+return;
+}
+
+const reader = new FileReader();
+
+reader.readAsDataURL(file);
+
+reader.onload = function(e){
+
+const img = new Image();
+
+img.src = e.target.result;
+
+img.onload = function(){
+
+const largura =
+doc.internal.pageSize.getWidth();
+
+const altura =
+doc.internal.pageSize.getHeight();
+
+doc.addImage(
+img,
+'JPEG',
+0,
+0,
+largura,
+altura
+);
+
+doc.save(nome + ".pdf");
+
+}
+
+}
+
+}
+
+fecharConfigPDF();
+
+}
+
 </script>
+
+<!-- FIREBASE -->
 
 <script type="module">
 
@@ -699,23 +886,17 @@ signOut
 
 const firebaseConfig = {
 
-apiKey:
-"AIzaSyDFPrrCSowCUo3QJ6T280zja2Wqutlccvo",
+apiKey:"AIzaSyDFPrrCSowCUo3QJ6T280zja2Wqutlccvo",
 
-authDomain:
-"elite-docsai.firebaseapp.com",
+authDomain:"elite-docsai.firebaseapp.com",
 
-projectId:
-"elite-docsai",
+projectId:"elite-docsai",
 
-storageBucket:
-"elite-docsai.firebasestorage.app",
+storageBucket:"elite-docsai.firebasestorage.app",
 
-messagingSenderId:
-"1048692395624",
+messagingSenderId:"1048692395624",
 
-appId:
-"1:1048692395624:web:74fb23e57580b9203ab5dd"
+appId:"1:1048692395624:web:74fb23e57580b9203ab5dd"
 
 };
 
@@ -743,11 +924,6 @@ if(result?.user){
 mostrarApp(result.user);
 
 }
-
-})
-.catch((e)=>{
-
-console.log(e);
 
 });
 
