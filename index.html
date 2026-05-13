@@ -1,1 +1,1156 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
 
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Elite Docs AI</title>
+
+<link rel="icon" href="logo.png">
+
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"/>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+
+<style>
+
+*{
+margin:0;
+padding:0;
+box-sizing:border-box;
+-webkit-tap-highlight-color:transparent;
+}
+
+:root{
+--blue:#5b8cff;
+--purple:#8b5cff;
+--pink:#ff4fd8;
+--cyan:#00d9ff;
+}
+
+body{
+font-family:'Inter',sans-serif;
+background:
+radial-gradient(circle at top left,#3920ff55,transparent 30%),
+radial-gradient(circle at top right,#ff00d455,transparent 30%),
+linear-gradient(145deg,#050510,#09091c,#111133,#1c1450);
+background-attachment:fixed;
+min-height:100vh;
+overflow-x:hidden;
+color:white;
+padding-bottom:110px;
+}
+
+.hidden{
+display:none !important;
+}
+
+.container{
+max-width:850px;
+margin:auto;
+padding:12px;
+}
+
+.glass{
+background:rgba(255,255,255,.05);
+backdrop-filter:blur(16px);
+border:1px solid rgba(255,255,255,.08);
+box-shadow:0 0 20px rgba(91,140,255,.12);
+}
+
+.login-screen{
+display:flex;
+justify-content:center;
+align-items:center;
+min-height:100vh;
+padding:20px;
+}
+
+.login-card{
+width:100%;
+max-width:400px;
+padding:30px 20px;
+border-radius:30px;
+text-align:center;
+}
+
+.login-logo{
+width:100px;
+height:100px;
+border-radius:28px;
+margin-bottom:20px;
+box-shadow:0 0 30px #5b8cff;
+}
+
+.login-btn{
+width:100%;
+padding:16px;
+border:none;
+border-radius:20px;
+font-weight:800;
+font-size:14px;
+cursor:pointer;
+color:white;
+background:linear-gradient(135deg,#5b8cff,#8b5cff,#ff4fd8);
+}
+
+.topbar{
+display:flex;
+justify-content:space-between;
+align-items:center;
+margin-bottom:15px;
+gap:10px;
+}
+
+.user-box{
+display:flex;
+align-items:center;
+gap:10px;
+}
+
+.user-box img{
+width:50px;
+height:50px;
+border-radius:50%;
+object-fit:cover;
+border:3px solid #6d5dff;
+}
+
+.username{
+font-size:18px;
+font-weight:800;
+}
+
+.subtitle{
+color:#bbb;
+font-size:11px;
+margin-top:3px;
+}
+
+.vip-btn{
+padding:10px 14px;
+border-radius:16px;
+border:none;
+color:white;
+font-weight:700;
+background:linear-gradient(135deg,#4f7cff,#8b5cff);
+}
+
+.hero{
+padding:16px;
+border-radius:26px;
+margin-bottom:20px;
+}
+
+.hero-banner{
+display:flex;
+align-items:center;
+gap:12px;
+padding:16px;
+border-radius:22px;
+background:linear-gradient(135deg,#4f7cff33,#ff4fd822);
+}
+
+.hero-banner i{
+font-size:38px;
+background:linear-gradient(135deg,#5b8cff,#ff4fd8);
+-webkit-background-clip:text;
+-webkit-text-fill-color:transparent;
+}
+
+.hero-title{
+font-size:20px;
+font-weight:900;
+margin-bottom:6px;
+}
+
+.hero-text{
+font-size:12px;
+color:#ddd;
+}
+
+.stats{
+display:grid;
+grid-template-columns:repeat(3,1fr);
+gap:8px;
+margin-top:14px;
+}
+
+.stat-card{
+padding:12px;
+border-radius:18px;
+text-align:center;
+}
+
+.stat-card h3{
+font-size:16px;
+margin-bottom:4px;
+}
+
+.stat-card p{
+font-size:10px;
+color:#bbb;
+}
+
+.section-title{
+margin:22px 0 12px;
+font-size:22px;
+font-weight:800;
+}
+
+.grid{
+display:grid;
+grid-template-columns:1fr 1fr;
+gap:10px;
+}
+
+.card{
+padding:16px;
+border-radius:22px;
+min-height:110px;
+cursor:pointer;
+}
+
+.card i{
+font-size:24px;
+margin-bottom:10px;
+}
+
+.card h3{
+font-size:15px;
+margin-bottom:5px;
+}
+
+.card p{
+font-size:11px;
+color:#ddd;
+}
+
+.blue{
+background:linear-gradient(135deg,#4f7cff44,#4f7cff11);
+}
+
+.purple{
+background:linear-gradient(135deg,#8b5cff44,#8b5cff11);
+}
+
+.pink{
+background:linear-gradient(135deg,#ff4fd844,#ff4fd811);
+}
+
+.cyan{
+background:linear-gradient(135deg,#00d9ff44,#00d9ff11);
+}
+
+.screen{
+margin-top:10px;
+padding:18px;
+border-radius:24px;
+}
+
+.back-btn{
+border:none;
+background:none;
+color:#c6c6ff;
+font-size:14px;
+font-weight:700;
+margin-bottom:15px;
+cursor:pointer;
+}
+
+.input,
+.textarea{
+width:100%;
+padding:15px;
+margin-bottom:14px;
+border-radius:18px;
+background:rgba(255,255,255,.06);
+border:1px solid rgba(255,255,255,.08);
+outline:none;
+color:white;
+font-size:13px;
+}
+
+.textarea{
+min-height:130px;
+resize:none;
+}
+
+.generate-btn{
+width:100%;
+padding:15px;
+border:none;
+border-radius:18px;
+font-weight:800;
+cursor:pointer;
+font-size:13px;
+margin-top:8px;
+color:white;
+background:linear-gradient(135deg,#4f7cff,#8b5cff,#ff4fd8);
+}
+
+.preview{
+width:100%;
+border-radius:20px;
+margin-top:10px;
+display:none;
+max-height:250px;
+object-fit:contain;
+}
+
+.bottom-nav{
+position:fixed;
+left:50%;
+transform:translateX(-50%);
+bottom:10px;
+width:94%;
+max-width:700px;
+padding:12px 5px;
+border-radius:24px;
+display:flex;
+justify-content:space-around;
+z-index:999;
+}
+
+.nav-item{
+display:flex;
+flex-direction:column;
+align-items:center;
+gap:4px;
+font-size:10px;
+color:#ddd;
+cursor:pointer;
+}
+
+.nav-item i{
+font-size:18px;
+}
+
+.logout-btn{
+background:none;
+border:none;
+color:#ff7272;
+font-weight:700;
+cursor:pointer;
+margin-top:4px;
+font-size:11px;
+}
+
+.divider{
+height:1px;
+background:rgba(255,255,255,.08);
+margin:25px 0;
+}
+
+</style>
+</head>
+
+<body>
+
+<div id="loginScreen" class="login-screen">
+
+<div class="login-card glass">
+
+<img src="logo.png" class="login-logo">
+
+<h1 style="font-size:32px;margin-bottom:10px;">
+Elite Docs AI
+</h1>
+
+<p style="margin-bottom:25px;color:#ccc;">
+Entre com sua conta Google
+</p>
+
+<button onclick="fazerLogin()" class="login-btn">
+<i class="fab fa-google"></i>
+Entrar com Google
+</button>
+
+</div>
+
+</div>
+
+<div id="appScreen" class="container hidden">
+
+<div class="topbar">
+
+<div class="user-box">
+
+<img id="userPhoto">
+
+<div>
+
+<div class="username" id="userName"></div>
+
+<div class="subtitle">
+Crie documentos profissionais com IA
+</div>
+
+<button onclick="sairConta()" class="logout-btn">
+Sair
+</button>
+
+</div>
+
+</div>
+
+<button class="vip-btn">
+👑 VIP
+</button>
+
+</div>
+
+<div class="hero glass">
+
+<div class="hero-banner">
+
+<i class="fas fa-file-signature"></i>
+
+<div>
+
+<div class="hero-title">
+Crie qualquer documento com IA
+</div>
+
+<div class="hero-text">
+Currículos, PDFs, Word, TXT e LinkedIn IA.
+</div>
+
+</div>
+
+</div>
+
+<div class="stats">
+
+<div class="stat-card glass">
+<h3>99%</h3>
+<p>IA</p>
+</div>
+
+<div class="stat-card glass">
+<h3>24h</h3>
+<p>Online</p>
+</div>
+
+<div class="stat-card glass">
+<h3>PRO</h3>
+<p>Premium</p>
+</div>
+
+</div>
+
+</div>
+
+<div id="mainGrid">
+
+<div class="section-title">
+Ferramentas
+</div>
+
+<div class="grid">
+
+<div class="card glass blue" onclick="abrirTela('curriculoScreen')">
+<i class="fas fa-user-tie"></i>
+<h3>Currículo</h3>
+<p>Currículo premium</p>
+</div>
+
+<div class="card glass pink" onclick="abrirTela('pdfScreen')">
+<i class="fas fa-file-pdf"></i>
+<h3>PDF</h3>
+<p>Gerador PDF</p>
+</div>
+
+<div class="card glass cyan" onclick="abrirTela('wordScreen')">
+<i class="fas fa-file-word"></i>
+<h3>Word</h3>
+<p>Arquivo DOC</p>
+</div>
+
+<div class="card glass purple" onclick="abrirTela('txtScreen')">
+<i class="fas fa-file-lines"></i>
+<h3>TXT</h3>
+<p>Anotações</p>
+</div>
+
+<div class="card glass blue" onclick="abrirTela('linkedinScreen')">
+<i class="fab fa-linkedin"></i>
+<h3>LinkedIn IA</h3>
+<p>Bio profissional</p>
+</div>
+
+<div class="card glass pink" onclick="gerarAssinatura()">
+<i class="fas fa-signature"></i>
+<h3>Assinatura</h3>
+<p>Gerador assinatura</p>
+</div>
+
+<div class="card glass cyan" onclick="converterTXTparaPDF()">
+<i class="fas fa-repeat"></i>
+<h3>Conversor</h3>
+<p>TXT para PDF</p>
+</div>
+
+<div class="card glass purple" onclick="abrirTela('notasScreen')">
+<i class="fas fa-note-sticky"></i>
+<h3>Notas</h3>
+<p>Notas rápidas</p>
+</div>
+
+</div>
+
+</div>
+
+<!-- CURRICULO -->
+
+<div id="curriculoScreen" class="screen glass hidden">
+
+<button onclick="voltar()" class="back-btn">
+← Voltar
+</button>
+
+<input class="input" id="nome" placeholder="Nome completo">
+
+<input class="input" id="cargo" placeholder="Cargo">
+
+<input class="input" id="cidade" placeholder="Cidade">
+
+<input class="input" id="whatsapp" placeholder="WhatsApp">
+
+<input class="input" id="email" placeholder="E-mail">
+
+<textarea class="textarea" id="resumo" placeholder="Resumo profissional"></textarea>
+
+<textarea class="textarea" id="experiencia" placeholder="Experiência"></textarea>
+
+<textarea class="textarea" id="habilidades" placeholder="Habilidades"></textarea>
+
+<textarea class="textarea" id="formacao" placeholder="Formação"></textarea>
+
+<button class="generate-btn" onclick="melhorarResumo()">
+✨ Melhorar com IA
+</button>
+
+<button class="generate-btn" onclick="gerarCurriculoPDF()">
+GERAR CURRÍCULO
+</button>
+
+</div>
+
+<!-- PDF -->
+
+<div id="pdfScreen" class="screen glass hidden">
+
+<button onclick="voltar()" class="back-btn">
+← Voltar
+</button>
+
+<input class="input" id="pdfTitulo" placeholder="Título PDF">
+
+<textarea class="textarea" id="pdfTexto" placeholder="Digite o conteúdo"></textarea>
+
+<button class="generate-btn" onclick="gerarPDFTexto()">
+GERAR PDF
+</button>
+
+<div class="divider"></div>
+
+<input class="input" id="fotoTitulo" placeholder="Título PDF Imagem">
+
+<input class="input" type="file" id="fotoPDF" accept="image/*">
+
+<img id="previewImagem" class="preview">
+
+<button class="generate-btn" onclick="gerarPDFFoto()">
+GERAR PDF COM FOTO
+</button>
+
+</div>
+
+<!-- WORD -->
+
+<div id="wordScreen" class="screen glass hidden">
+
+<button onclick="voltar()" class="back-btn">
+← Voltar
+</button>
+
+<input class="input" id="wordTitulo" placeholder="Nome arquivo">
+
+<textarea class="textarea" id="wordTexto" placeholder="Texto"></textarea>
+
+<button class="generate-btn" onclick="baixarWord()">
+BAIXAR DOC
+</button>
+
+</div>
+
+<!-- TXT -->
+
+<div id="txtScreen" class="screen glass hidden">
+
+<button onclick="voltar()" class="back-btn">
+← Voltar
+</button>
+
+<textarea class="textarea" id="txtTexto" placeholder="Texto"></textarea>
+
+<button class="generate-btn" onclick="baixarTXT()">
+BAIXAR TXT
+</button>
+
+</div>
+
+<!-- LINKEDIN -->
+
+<div id="linkedinScreen" class="screen glass hidden">
+
+<button onclick="voltar()" class="back-btn">
+← Voltar
+</button>
+
+<textarea class="textarea" id="linkedinTexto" placeholder="Fale sobre você"></textarea>
+
+<button class="generate-btn" onclick="gerarLinkedin()">
+GERAR LINKEDIN
+</button>
+
+</div>
+
+<!-- NOTAS -->
+
+<div id="notasScreen" class="screen glass hidden">
+
+<button onclick="voltar()" class="back-btn">
+← Voltar
+</button>
+
+<textarea class="textarea" id="notaTexto" placeholder="Digite suas notas"></textarea>
+
+<button class="generate-btn" onclick="salvarNota()">
+SALVAR NOTA
+</button>
+
+<button class="generate-btn" onclick="baixarNotaPDF()">
+BAIXAR PDF
+</button>
+
+</div>
+
+<!-- FAVORITOS -->
+
+<div id="favoritosScreen" class="screen glass hidden">
+
+<button onclick="voltar()" class="back-btn">
+← Voltar
+</button>
+
+<h2>
+Favoritos
+</h2>
+
+</div>
+
+<!-- PERFIL -->
+
+<div id="perfilScreen" class="screen glass hidden">
+
+<button onclick="voltar()" class="back-btn">
+← Voltar
+</button>
+
+<center>
+
+<img id="perfilFoto"
+style="
+width:90px;
+height:90px;
+border-radius:50%;
+margin-bottom:15px;
+border:4px solid #6d5dff;
+">
+
+<h2 id="perfilNome"></h2>
+
+<button onclick="sairConta()" class="generate-btn">
+SAIR DA CONTA
+</button>
+
+</center>
+
+</div>
+
+</div>
+
+<!-- MENU -->
+
+<div class="bottom-nav glass">
+
+<div class="nav-item" onclick="voltar()">
+<i class="fas fa-house"></i>
+<span>Início</span>
+</div>
+
+<div class="nav-item" onclick="abrirTela('pdfScreen')">
+<i class="fas fa-file"></i>
+<span>Docs</span>
+</div>
+
+<div class="nav-item" onclick="abrirTela('linkedinScreen')">
+<i class="fas fa-robot"></i>
+<span>IA</span>
+</div>
+
+<div class="nav-item" onclick="abrirTela('favoritosScreen')">
+<i class="fas fa-star"></i>
+<span>Favoritos</span>
+</div>
+
+<div class="nav-item" onclick="abrirTela('perfilScreen')">
+<i class="fas fa-user"></i>
+<span>Conta</span>
+</div>
+
+</div>
+
+<script>
+
+function abrirTela(id){
+
+document.querySelectorAll('.screen').forEach(s=>{
+s.classList.add('hidden');
+});
+
+document.getElementById('mainGrid').classList.add('hidden');
+
+document.getElementById(id).classList.remove('hidden');
+
+window.scrollTo({
+top:0,
+behavior:'smooth'
+});
+
+}
+
+function voltar(){
+
+document.querySelectorAll('.screen').forEach(s=>{
+s.classList.add('hidden');
+});
+
+document.getElementById('mainGrid').classList.remove('hidden');
+
+}
+
+document.getElementById('fotoPDF').addEventListener('change',function(e){
+
+const file=e.target.files[0];
+
+if(!file)return;
+
+const reader=new FileReader();
+
+reader.onload=function(ev){
+
+const img=document.getElementById('previewImagem');
+
+img.src=ev.target.result;
+
+img.style.display='block';
+
+}
+
+reader.readAsDataURL(file);
+
+});
+
+async function melhorarResumo(){
+
+const campo=document.getElementById('resumo');
+
+const original=campo.value;
+
+campo.value='IA melhorando...';
+
+try{
+
+const r=await fetch(
+'https://text.pollinations.ai/openai/' +
+encodeURIComponent(
+'Melhore esse resumo profissional: '+original
+)
+);
+
+campo.value=await r.text();
+
+}catch(e){
+
+campo.value=original;
+
+alert('Erro IA');
+
+}
+
+}
+
+function gerarCurriculoPDF(){
+
+const { jsPDF } = window.jspdf;
+
+const doc=new jsPDF();
+
+doc.text(
+document.getElementById('nome').value,
+20,
+20
+);
+
+doc.text(
+document.getElementById('cargo').value,
+20,
+30
+);
+
+doc.text(
+doc.splitTextToSize(
+document.getElementById('resumo').value,
+170
+),
+20,
+50
+);
+
+doc.save('curriculo.pdf');
+
+}
+
+function gerarPDFTexto(){
+
+const { jsPDF } = window.jspdf;
+
+const doc=new jsPDF();
+
+doc.text(
+document.getElementById('pdfTitulo').value,
+20,
+20
+);
+
+doc.text(
+doc.splitTextToSize(
+document.getElementById('pdfTexto').value,
+170
+),
+20,
+40
+);
+
+doc.save('arquivo.pdf');
+
+}
+
+function gerarPDFFoto(){
+
+const { jsPDF } = window.jspdf;
+
+const doc = new jsPDF('p','mm','a4');
+
+const foto=document.getElementById('fotoPDF').files[0];
+
+if(!foto){
+
+alert('Selecione uma imagem');
+
+return;
+
+}
+
+const reader=new FileReader();
+
+reader.onload=function(e){
+
+const img=new Image();
+
+img.src=e.target.result;
+
+img.onload=function(){
+
+const pageWidth=210;
+const pageHeight=297;
+
+const margin=8;
+
+const usableWidth=pageWidth-(margin*2);
+const usableHeight=pageHeight-(margin*2);
+
+let imgWidth=img.width;
+let imgHeight=img.height;
+
+const ratio=Math.min(
+usableWidth/imgWidth,
+usableHeight/imgHeight
+);
+
+imgWidth*=ratio;
+imgHeight*=ratio;
+
+const x=(pageWidth-imgWidth)/2;
+const y=(pageHeight-imgHeight)/2;
+
+doc.addImage(
+e.target.result,
+'JPEG',
+x,
+y,
+imgWidth,
+imgHeight
+);
+
+doc.save('imagem.pdf');
+
+}
+
+}
+
+reader.readAsDataURL(foto);
+
+}
+
+function baixarWord(){
+
+const texto=document.getElementById('wordTexto').value;
+
+const blob=new Blob([texto],{
+type:'application/msword'
+});
+
+const link=document.createElement('a');
+
+link.href=URL.createObjectURL(blob);
+
+link.download='arquivo.doc';
+
+link.click();
+
+}
+
+function baixarTXT(){
+
+const texto=document.getElementById('txtTexto').value;
+
+const blob=new Blob([texto],{
+type:'text/plain'
+});
+
+const link=document.createElement('a');
+
+link.href=URL.createObjectURL(blob);
+
+link.download='arquivo.txt';
+
+link.click();
+
+}
+
+async function gerarLinkedin(){
+
+const campo=document.getElementById('linkedinTexto');
+
+const original=campo.value;
+
+campo.value='IA escrevendo...';
+
+try{
+
+const r=await fetch(
+'https://text.pollinations.ai/openai/' +
+encodeURIComponent(
+'Crie uma bio profissional LinkedIn: '+original
+)
+);
+
+campo.value=await r.text();
+
+}catch(e){
+
+campo.value=original;
+
+alert('Erro IA');
+
+}
+
+}
+
+function gerarAssinatura(){
+
+const nome=prompt('Digite seu nome');
+
+if(!nome)return;
+
+alert('Assinatura criada para '+nome);
+
+}
+
+function converterTXTparaPDF(){
+
+const texto=prompt('Digite o texto');
+
+if(!texto)return;
+
+const { jsPDF } = window.jspdf;
+
+const doc=new jsPDF();
+
+doc.text(
+doc.splitTextToSize(texto,170),
+20,
+30
+);
+
+doc.save('convertido.pdf');
+
+}
+
+function salvarNota(){
+
+const texto=document.getElementById('notaTexto').value;
+
+localStorage.setItem('elite_nota',texto);
+
+alert('Nota salva');
+
+}
+
+window.onload=function(){
+
+const nota=localStorage.getItem('elite_nota');
+
+if(nota){
+
+document.getElementById('notaTexto').value=nota;
+
+}
+
+}
+
+function baixarNotaPDF(){
+
+const { jsPDF } = window.jspdf;
+
+const doc=new jsPDF();
+
+doc.text(
+doc.splitTextToSize(
+document.getElementById('notaTexto').value,
+170
+),
+20,
+30
+);
+
+doc.save('notas.pdf');
+
+}
+
+</script>
+
+<script type="module">
+
+import {
+initializeApp
+} from 'https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js';
+
+import {
+getAuth,
+GoogleAuthProvider,
+signInWithRedirect,
+getRedirectResult,
+onAuthStateChanged,
+signOut
+} from 'https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js';
+
+const firebaseConfig={
+
+apiKey:'AIzaSyDFPrrCSowCUo3QJ6T280zja2Wqutlccvo',
+authDomain:'elite-docsai.firebaseapp.com',
+projectId:'elite-docsai',
+storageBucket:'elite-docsai.firebasestorage.app',
+messagingSenderId:'1048692395624',
+appId:'1:1048692395624:web:74fb23e57580b9203ab5dd'
+
+};
+
+const app=initializeApp(firebaseConfig);
+
+const auth=getAuth(app);
+
+const provider=new GoogleAuthProvider();
+
+window.fazerLogin=async function(){
+
+await signInWithRedirect(auth,provider);
+
+}
+
+getRedirectResult(auth)
+.then((result)=>{
+
+if(result?.user){
+
+mostrarApp(result.user);
+
+}
+
+});
+
+function mostrarApp(user){
+
+document.getElementById('loginScreen').classList.add('hidden');
+
+document.getElementById('appScreen').classList.remove('hidden');
+
+document.getElementById('userName').innerText=user.displayName;
+
+document.getElementById('perfilNome').innerText=user.displayName;
+
+if(user.photoURL){
+
+document.getElementById('userPhoto').src=user.photoURL;
+
+document.getElementById('perfilFoto').src=user.photoURL;
+
+}
+
+}
+
+onAuthStateChanged(auth,(user)=>{
+
+if(user){
+
+mostrarApp(user);
+
+}else{
+
+document.getElementById('loginScreen').classList.remove('hidden');
+
+document.getElementById('appScreen').classList.add('hidden');
+
+}
+
+});
+
+window.sairConta=async function(){
+
+await signOut(auth);
+
+location.reload();
+
+}
+
+</script>
+
+</body>
+</html>
