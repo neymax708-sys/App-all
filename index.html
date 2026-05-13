@@ -6,11 +6,8 @@
 <title>Elite Docs AI</title>
 
 <link rel="icon" href="logo.png">
-
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700;800&display=swap" rel="stylesheet">
-
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
 
 <style>
@@ -23,18 +20,23 @@ box-sizing:border-box;
 
 body{
 font-family:'Inter',sans-serif;
-background:#050510;
+background:linear-gradient(-45deg,#050510,#120f2f,#1f145c,#5b4bff);
+background-size:400% 400%;
+animation:bg 12s ease infinite;
 color:white;
 padding:12px;
 min-height:100vh;
-background-image:
-radial-gradient(circle at top,
-rgba(91,75,255,.25),
-transparent 35%);
+overflow-x:hidden;
+}
+
+@keyframes bg{
+0%{background-position:0% 50%;}
+50%{background-position:100% 50%;}
+100%{background-position:0% 50%;}
 }
 
 .container{
-max-width:700px;
+max-width:760px;
 margin:auto;
 }
 
@@ -44,84 +46,89 @@ display:none !important;
 
 .hero{
 text-align:center;
-padding:25px 10px;
+padding:30px 15px;
+background:rgba(255,255,255,.05);
+border:1px solid rgba(255,255,255,.08);
+border-radius:30px;
+backdrop-filter:blur(14px);
+margin-bottom:20px;
 }
 
 .logo-app{
 width:110px;
 height:110px;
-border-radius:24px;
+border-radius:28px;
 margin-bottom:15px;
-box-shadow:0 0 25px rgba(91,75,255,.4);
+box-shadow:0 0 35px rgba(91,75,255,.5);
 }
 
 .grid{
 display:grid;
 grid-template-columns:repeat(3,1fr);
 gap:12px;
-margin-top:25px;
+margin-top:20px;
 }
 
 .card{
-background:rgba(255,255,255,.05);
+background:rgba(255,255,255,.08);
 border:1px solid rgba(255,255,255,.08);
-padding:22px 10px;
-border-radius:24px;
+padding:24px 10px;
+border-radius:28px;
 display:flex;
 flex-direction:column;
 align-items:center;
 cursor:pointer;
-transition:.25s;
-backdrop-filter:blur(10px);
-}
-
-.card:active{
-transform:scale(.95);
+transition:.3s;
+backdrop-filter:blur(14px);
 }
 
 .card i{
-font-size:30px;
-margin-bottom:10px;
+font-size:34px;
+margin-bottom:12px;
 }
 
 .card span{
 font-size:13px;
-font-weight:700;
+font-weight:800;
+}
+
+.card:hover{
+transform:translateY(-6px);
 }
 
 .screen{
 margin-top:15px;
-background:rgba(255,255,255,.04);
+background:rgba(255,255,255,.05);
 border:1px solid rgba(255,255,255,.08);
 padding:20px;
-border-radius:24px;
+border-radius:28px;
 }
 
-.input,.textarea,select{
+.input,.textarea{
 width:100%;
-padding:15px;
-margin-bottom:12px;
-border-radius:14px;
+padding:16px;
+margin-bottom:14px;
+border-radius:18px;
 border:1px solid rgba(255,255,255,.08);
-background:rgba(255,255,255,.05);
+background:rgba(255,255,255,.06);
 color:white;
 outline:none;
 font-size:14px;
 }
 
 .textarea{
-min-height:160px;
+min-height:140px;
 resize:none;
 }
 
 .generate-btn{
 width:100%;
-padding:15px;
+padding:16px;
 border:none;
-border-radius:14px;
-background:linear-gradient(135deg,#5b4bff,#4338ca);
+border-radius:18px;
+background:linear-gradient(135deg,#5b4bff,#7c6cff);
 color:white;
-font-weight:700;
+font-weight:800;
 cursor:pointer;
 margin-top:5px;
 }
@@ -129,11 +136,31 @@ margin-top:5px;
 .back-btn{
 background:none;
 border:none;
-color:#7c6cff;
+color:#c2bcff;
 font-size:15px;
 font-weight:bold;
 margin-bottom:15px;
 cursor:pointer;
+}
+
+.login-box{
+display:flex;
+flex-direction:column;
+justify-content:center;
+align-items:center;
+height:100vh;
+text-align:center;
+}
+
+.login-btn{
+padding:16px 24px;
+border:none;
+border-radius:16px;
+background:white;
+color:#111;
+font-weight:800;
+cursor:pointer;
+font-size:15px;
 }
 
 .user-info-bar{
@@ -152,40 +179,18 @@ border:3px solid #5b4bff;
 object-fit:cover;
 }
 
-.login-box{
-display:flex;
-flex-direction:column;
-justify-content:center;
-align-items:center;
-height:100vh;
-text-align:center;
-}
-
-.login-btn{
-padding:16px 24px;
-border:none;
-border-radius:14px;
-background:white;
-color:#111;
-font-weight:700;
-cursor:pointer;
-font-size:15px;
-}
-
-.preview{
-background:white;
-color:black;
-padding:20px;
-border-radius:18px;
-margin-top:15px;
+.dashboard{
+padding:22px;
+border-radius:28px;
+background:rgba(255,255,255,.05);
+border:1px solid rgba(255,255,255,.08);
+margin-bottom:20px;
 }
 
 </style>
 </head>
 
 <body>
-
-<!-- LOGIN -->
 
 <div id="loginScreen">
 
@@ -207,10 +212,7 @@ Entrar com Google
 </button>
 
 </div>
-
 </div>
-
-<!-- APP -->
 
 <div class="container" id="appScreen" style="display:none;">
 
@@ -225,39 +227,38 @@ Entrar com Google
 <img id="userPhoto">
 
 <div>
-
 <div id="userName" style="font-weight:700;"></div>
 
-<button onclick="sairConta()"
-style="
-background:none;
-border:none;
-color:#ff4d4d;
-cursor:pointer;
-font-size:13px;
-font-weight:bold;
-">
+<button onclick="sairConta()" style="background:none;border:none;color:#ff4d4d;cursor:pointer;font-size:13px;font-weight:bold;">
 Sair
 </button>
 
 </div>
-
+</div>
 </div>
 
+<div class="dashboard">
+<h2>Bem-vindo 👋</h2>
+<p style="color:#aaa;margin-top:5px;">
+Crie documentos profissionais com IA.
+</p>
 </div>
-
-<!-- MENU -->
 
 <div class="grid" id="mainGrid">
 
 <div class="card" onclick="abrirTela('curriculoScreen')">
-<i class="fas fa-user-tie" style="color:#5b4bff"></i>
+<i class="fas fa-user-tie" style="color:#7c6cff"></i>
 <span>Currículo</span>
 </div>
 
 <div class="card" onclick="abrirTela('pdfScreen')">
 <i class="fas fa-file-pdf" style="color:#ef4444"></i>
 <span>PDF</span>
+</div>
+
+<div class="card" onclick="abrirTela('pdfFotoScreen')">
+<i class="fas fa-image" style="color:#10b981"></i>
+<span>PDF Foto</span>
 </div>
 
 <div class="card" onclick="abrirTela('wordScreen')">
@@ -272,12 +273,7 @@ Sair
 
 <div class="card" onclick="abrirTela('linkedinScreen')">
 <i class="fab fa-linkedin" style="color:#0a66c2"></i>
-<span>LinkedIn</span>
-</div>
-
-<div class="card" onclick="abrirTela('assinaturaScreen')">
-<i class="fas fa-signature" style="color:#06b6d4"></i>
-<span>Assinatura</span>
+<span>LinkedIn IA</span>
 </div>
 
 </div>
@@ -291,24 +287,37 @@ Sair
 </button>
 
 <h2 style="margin-bottom:20px;">
-Criar Currículo
+Currículo Premium
 </h2>
 
 <input class="input" id="nome" placeholder="Nome completo">
 
-<input class="input" id="cargo" placeholder="Cargo pretendido">
+<input class="input" id="cargo" placeholder="Cargo">
+
+<input class="input" id="cidade" placeholder="Cidade">
 
 <input class="input" id="whatsapp" placeholder="WhatsApp">
 
 <input class="input" id="email" placeholder="E-mail">
 
-<textarea class="textarea"
-id="resumo"
-placeholder="Resumo profissional"></textarea>
+<input class="input" id="linkedin" placeholder="LinkedIn">
 
-<button class="generate-btn"
-onclick="gerarCurriculo()">
-GERAR CURRÍCULO
+<input class="input" type="file" id="fotoPerfil" accept="image/*">
+
+<textarea class="textarea" id="resumo" placeholder="Resumo profissional"></textarea>
+
+<textarea class="textarea" id="habilidades" placeholder="Habilidades"></textarea>
+
+<textarea class="textarea" id="experiencia" placeholder="Experiência"></textarea>
+
+<textarea class="textarea" id="formacao" placeholder="Formação"></textarea>
+
+<button class="generate-btn" onclick="melhorarResumo()">
+✨ Melhorar com IA
+</button>
+
+<button class="generate-btn" onclick="gerarCurriculoPDF()">
+GERAR CURRÍCULO PDF
 </button>
 
 </div>
@@ -321,69 +330,41 @@ GERAR CURRÍCULO
 ← Voltar
 </button>
 
-<h2 style="margin-bottom:20px;">
+<h2 style="margin-bottom:15px;">
 Criador PDF
 </h2>
 
-<div style="
-display:grid;
-grid-template-columns:1fr 1fr;
-gap:10px;
-margin-bottom:15px;
-">
+<input class="input" id="pdfTitulo" placeholder="Título">
 
-<button class="generate-btn"
-onclick="mostrarPDFTexto()">
-PDF TEXTO
-</button>
+<textarea class="textarea" id="pdfTexto" placeholder="Digite o conteúdo"></textarea>
 
-<button class="generate-btn"
-style="background:linear-gradient(135deg,#06b6d4,#2563eb);"
-onclick="mostrarPDFFoto()">
-PDF FOTO
+<button class="generate-btn" onclick="gerarPDFTexto()">
+BAIXAR PDF
 </button>
 
 </div>
 
-<!-- TEXTO -->
+<!-- PDF FOTO -->
 
-<div id="pdfTextoArea">
+<div id="pdfFotoScreen" class="screen hidden">
 
-<input class="input"
-id="pdfTitulo"
-placeholder="Título">
-
-<textarea class="textarea"
-id="pdfTexto"
-placeholder="Digite o conteúdo"></textarea>
-
-<button class="generate-btn"
-onclick="abrirConfigPDF('texto')">
-GERAR PDF
+<button onclick="voltar()" class="back-btn">
+← Voltar
 </button>
 
-</div>
+<h2 style="margin-bottom:15px;">
+PDF com Foto
+</h2>
 
-<!-- FOTO -->
+<input class="input" id="fotoTitulo" placeholder="Título">
 
-<div id="pdfFotoArea" class="hidden">
+<input class="input" type="file" id="fotoPDF" accept="image/*">
 
-<input class="input"
-id="pdfFotoTitulo"
-placeholder="Nome do PDF">
+<textarea class="textarea" id="fotoTexto" placeholder="Texto do PDF"></textarea>
 
-<input class="input"
-type="file"
-id="pdfImagem"
-accept="image/*">
-
-<button class="generate-btn"
-style="background:linear-gradient(135deg,#06b6d4,#2563eb);"
-onclick="abrirConfigPDF('foto')">
+<button class="generate-btn" onclick="gerarPDFFoto()">
 GERAR PDF COM FOTO
 </button>
-
-</div>
 
 </div>
 
@@ -395,12 +376,15 @@ GERAR PDF COM FOTO
 ← Voltar
 </button>
 
-<input class="input"
-id="wordTexto"
-placeholder="Texto Word">
+<h2 style="margin-bottom:15px;">
+Arquivo Word
+</h2>
 
-<button class="generate-btn"
-onclick="baixarWord()">
+<input class="input" id="wordTitulo" placeholder="Nome do arquivo">
+
+<textarea class="textarea" id="wordTexto" placeholder="Digite o texto"></textarea>
+
+<button class="generate-btn" onclick="baixarWord()">
 BAIXAR DOC
 </button>
 
@@ -414,12 +398,13 @@ BAIXAR DOC
 ← Voltar
 </button>
 
-<textarea class="textarea"
-id="txtTexto"
-placeholder="Digite seu texto"></textarea>
+<h2 style="margin-bottom:15px;">
+Arquivo TXT
+</h2>
 
-<button class="generate-btn"
-onclick="baixarTXT()">
+<textarea class="textarea" id="txtTexto" placeholder="Digite qualquer texto"></textarea>
+
+<button class="generate-btn" onclick="baixarTXT()">
 BAIXAR TXT
 </button>
 
@@ -433,166 +418,19 @@ BAIXAR TXT
 ← Voltar
 </button>
 
-<textarea class="textarea"
-id="linkedinTexto"
-placeholder="Fale sobre você"></textarea>
+<h2 style="margin-bottom:15px;">
+LinkedIn IA
+</h2>
 
-<button class="generate-btn"
-onclick="gerarLinkedin()">
+<textarea class="textarea" id="linkedinTexto" placeholder="Fale sobre você"></textarea>
+
+<button class="generate-btn" onclick="gerarLinkedin()">
 GERAR TEXTO
 </button>
 
 </div>
 
-<!-- ASSINATURA -->
-
-<div id="assinaturaScreen" class="screen hidden">
-
-<button onclick="voltar()" class="back-btn">
-← Voltar
-</button>
-
-<input class="input"
-id="assinaturaNome"
-placeholder="Seu nome">
-
-<div id="assinaturaPreview"
-class="preview"
-style="
-font-family:cursive;
-font-size:35px;
-text-align:center;
-">
-Sua Assinatura
 </div>
-
-<button class="generate-btn"
-onclick="gerarAssinatura()">
-GERAR ASSINATURA
-</button>
-
-</div>
-
-</div>
-
-<!-- MODAL PDF -->
-
-<div id="configPDFModal"
-class="hidden"
-style="
-position:fixed;
-top:0;
-left:0;
-width:100%;
-height:100%;
-background:rgba(0,0,0,.75);
-display:flex;
-justify-content:center;
-align-items:flex-end;
-z-index:999;
-">
-
-<div style="
-background:white;
-width:100%;
-max-width:700px;
-border-radius:30px 30px 0 0;
-padding:25px;
-color:#111;
-">
-
-<div style="
-display:flex;
-justify-content:space-between;
-align-items:center;
-margin-bottom:20px;
-">
-
-<h1>
-Converter para PDF
-</h1>
-
-<button onclick="fecharConfigPDF()"
-style="
-background:none;
-border:none;
-font-size:35px;
-cursor:pointer;
-">
-×
-</button>
-
-</div>
-
-<input id="nomePDFFinal"
-placeholder="Nome PDF"
-style="
-width:100%;
-padding:15px;
-border-radius:14px;
-border:1px solid #ddd;
-margin-bottom:15px;
-">
-
-<select id="tamanhoPDF">
-
-<option value="a4">A4</option>
-
-<option value="letter">Letter</option>
-
-</select>
-
-<select id="orientacaoPDF">
-
-<option value="portrait">Retrato</option>
-
-<option value="landscape">Paisagem</option>
-
-</select>
-
-<div style="
-display:flex;
-gap:10px;
-margin-top:20px;
-">
-
-<button onclick="fecharConfigPDF()"
-style="
-flex:1;
-padding:15px;
-border-radius:14px;
-border:2px solid #5b4bff;
-background:white;
-color:#5b4bff;
-font-weight:700;
-">
-
-PRÉVIA
-
-</button>
-
-<button onclick="confirmarGeracaoPDF()"
-style="
-flex:1;
-padding:15px;
-border:none;
-border-radius:14px;
-background:linear-gradient(135deg,#5b4bff,#4338ca);
-color:white;
-font-weight:700;
-">
-
-CONVERTER
-
-</button>
-
-</div>
-
-</div>
-
-</div>
-
-<!-- SCRIPTS -->
 
 <script>
 
@@ -607,79 +445,167 @@ document.querySelectorAll('.screen').forEach(s=>s.classList.add('hidden'));
 document.getElementById('mainGrid').classList.remove('hidden');
 }
 
-function gerarCurriculo(){
+async function melhorarResumo(){
+
+const campo=document.getElementById('resumo');
+const original=campo.value;
+
+campo.value='IA melhorando...';
+
+try{
+
+const r=await fetch(
+'https://text.pollinations.ai/openai/' +
+encodeURIComponent(
+'Melhore esse resumo profissional: ' + original
+)
+);
+
+campo.value=await r.text();
+
+}catch(e){
+
+campo.value=original;
+alert('Erro IA');
+
+}
+
+}
+
+function gerarCurriculoPDF(){
 
 const { jsPDF } = window.jspdf;
 
 const doc = new jsPDF();
 
-const nome =
-document.getElementById("nome").value;
-
-const cargo =
-document.getElementById("cargo").value;
-
-const whats =
-document.getElementById("whatsapp").value;
-
-const email =
-document.getElementById("email").value;
-
-const resumo =
-document.getElementById("resumo").value;
+const nome=document.getElementById('nome').value;
+const cargo=document.getElementById('cargo').value;
+const resumo=document.getElementById('resumo').value;
 
 doc.setFillColor(91,75,255);
-
-doc.rect(0,0,210,45,'F');
+doc.rect(0,0,60,297,'F');
 
 doc.setTextColor(255,255,255);
 
-doc.setFontSize(24);
+doc.setFontSize(22);
 
-doc.text(nome,20,22);
-
-doc.setFontSize(14);
-
-doc.text(cargo,20,35);
-
-doc.setTextColor(100);
-
-doc.setFontSize(10);
-
-doc.text(`${whats} | ${email}`,20,55);
-
-doc.line(20,60,190,60);
-
-doc.setTextColor(0);
+doc.text(nome.toUpperCase(),10,30);
 
 doc.setFontSize(12);
 
-const linhas =
-doc.splitTextToSize(resumo,170);
+doc.text(cargo,10,40);
 
-doc.text(linhas,20,80);
+doc.setTextColor(0,0,0);
 
-doc.save("curriculo.pdf");
+doc.setFontSize(14);
+
+doc.text('Resumo',70,25);
+
+doc.setFontSize(11);
+
+doc.text(
+doc.splitTextToSize(resumo,120),
+70,
+35
+);
+
+doc.save('curriculo_elite.pdf');
+
+}
+
+function gerarPDFTexto(){
+
+const { jsPDF } = window.jspdf;
+
+const doc = new jsPDF();
+
+doc.setFontSize(20);
+
+doc.text(
+document.getElementById('pdfTitulo').value,
+20,
+20
+);
+
+doc.setFontSize(12);
+
+doc.text(
+doc.splitTextToSize(
+document.getElementById('pdfTexto').value,
+170
+),
+20,
+40
+);
+
+doc.save('arquivo.pdf');
+
+}
+
+function gerarPDFFoto(){
+
+const { jsPDF } = window.jspdf;
+
+const doc = new jsPDF();
+
+const foto=document.getElementById('fotoPDF').files[0];
+
+if(!foto){
+alert('Selecione uma foto');
+return;
+}
+
+const reader=new FileReader();
+
+reader.readAsDataURL(foto);
+
+reader.onload=function(e){
+
+doc.setFontSize(20);
+
+doc.text(
+document.getElementById('fotoTitulo').value,
+20,
+20
+);
+
+doc.addImage(
+e.target.result,
+'JPEG',
+20,
+35,
+70,
+70
+);
+
+doc.text(
+doc.splitTextToSize(
+document.getElementById('fotoTexto').value,
+160
+),
+20,
+120
+);
+
+doc.save('pdf_com_foto.pdf');
+
+}
 
 }
 
 function baixarWord(){
 
-const texto =
-document.getElementById("wordTexto").value;
+const texto=document.getElementById('wordTexto').value;
 
-const blob =
-new Blob([texto],
-{type:"application/msword"});
+const blob=new Blob([texto],{
+type:'application/msword'
+});
 
-const link =
-document.createElement("a");
+const link=document.createElement('a');
 
-link.href =
-URL.createObjectURL(blob);
+link.href=URL.createObjectURL(blob);
 
-link.download =
-"arquivo.doc";
+link.download='arquivo.doc';
 
 link.click();
 
@@ -687,21 +613,17 @@ link.click();
 
 function baixarTXT(){
 
-const texto =
-document.getElementById("txtTexto").value;
+const texto=document.getElementById('txtTexto').value;
 
-const blob =
-new Blob([texto],
-{type:"text/plain"});
+const blob=new Blob([texto],{
+type:'text/plain'
+});
 
-const link =
-document.createElement("a");
+const link=document.createElement('a');
 
-link.href =
-URL.createObjectURL(blob);
+link.href=URL.createObjectURL(blob);
 
-link.download =
-"arquivo.txt";
+link.download='arquivo.txt';
 
 link.click();
 
@@ -709,171 +631,39 @@ link.click();
 
 async function gerarLinkedin(){
 
-const campo =
-document.getElementById("linkedinTexto");
+const campo=document.getElementById('linkedinTexto');
 
-const texto =
-campo.value;
+const original=campo.value;
 
-campo.value =
-"IA escrevendo...";
+campo.value='IA escrevendo...';
 
 try{
 
-const r =
-await fetch(
-"https://text.pollinations.ai/" +
+const r=await fetch(
+'https://text.pollinations.ai/openai/' +
 encodeURIComponent(
-"Crie um texto profissional para LinkedIn: " + texto
+'Crie um texto profissional para LinkedIn: ' + original
 )
 );
 
-campo.value =
-await r.text();
+campo.value=await r.text();
 
 }catch(e){
 
-campo.value =
-"Erro IA";
+campo.value=original;
+alert('Erro IA');
 
 }
-
-}
-
-function gerarAssinatura(){
-
-const nome =
-document.getElementById("assinaturaNome").value;
-
-document.getElementById("assinaturaPreview").innerText =
-nome;
-
-}
-
-let tipoPDFAtual = "texto";
-
-function mostrarPDFTexto(){
-document.getElementById("pdfTextoArea").classList.remove("hidden");
-document.getElementById("pdfFotoArea").classList.add("hidden");
-}
-
-function mostrarPDFFoto(){
-document.getElementById("pdfTextoArea").classList.add("hidden");
-document.getElementById("pdfFotoArea").classList.remove("hidden");
-}
-
-function abrirConfigPDF(tipo){
-tipoPDFAtual = tipo;
-document.getElementById("configPDFModal").classList.remove("hidden");
-}
-
-function fecharConfigPDF(){
-document.getElementById("configPDFModal").classList.add("hidden");
-}
-
-async function confirmarGeracaoPDF(){
-
-const { jsPDF } = window.jspdf;
-
-const orientacao =
-document.getElementById("orientacaoPDF").value;
-
-const formato =
-document.getElementById("tamanhoPDF").value;
-
-const nome =
-document.getElementById("nomePDFFinal").value || "EliteDocsPDF";
-
-const doc = new jsPDF({
-orientation: orientacao,
-format: formato
-});
-
-if(tipoPDFAtual === "texto"){
-
-const titulo =
-document.getElementById("pdfTitulo").value;
-
-const texto =
-document.getElementById("pdfTexto").value;
-
-doc.setFillColor(91,75,255);
-doc.rect(0,0,220,35,'F');
-
-doc.setTextColor(255,255,255);
-doc.setFontSize(24);
-doc.text(titulo || "Documento",20,22);
-
-doc.setTextColor(0,0,0);
-doc.setFontSize(13);
-
-const linhas =
-doc.splitTextToSize(texto,170);
-
-doc.text(linhas,20,55);
-
-doc.save(nome + ".pdf");
-
-}
-
-if(tipoPDFAtual === "foto"){
-
-const file =
-document.getElementById("pdfImagem").files[0];
-
-if(!file){
-alert("Escolha uma imagem");
-return;
-}
-
-const reader = new FileReader();
-
-reader.readAsDataURL(file);
-
-reader.onload = function(e){
-
-const img = new Image();
-
-img.src = e.target.result;
-
-img.onload = function(){
-
-const largura =
-doc.internal.pageSize.getWidth();
-
-const altura =
-doc.internal.pageSize.getHeight();
-
-doc.addImage(
-img,
-'JPEG',
-0,
-0,
-largura,
-altura
-);
-
-doc.save(nome + ".pdf");
-
-}
-
-}
-
-}
-
-fecharConfigPDF();
 
 }
 
 </script>
 
-<!-- FIREBASE -->
-
 <script type="module">
 
 import {
 initializeApp
-} from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
+} from 'https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js';
 
 import {
 getAuth,
@@ -882,37 +672,28 @@ signInWithRedirect,
 getRedirectResult,
 onAuthStateChanged,
 signOut
-} from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
+} from 'https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js';
 
-const firebaseConfig = {
+const firebaseConfig={
 
-apiKey:"AIzaSyDFPrrCSowCUo3QJ6T280zja2Wqutlccvo",
-
-authDomain:"elite-docsai.firebaseapp.com",
-
-projectId:"elite-docsai",
-
-storageBucket:"elite-docsai.firebasestorage.app",
-
-messagingSenderId:"1048692395624",
-
-appId:"1:1048692395624:web:74fb23e57580b9203ab5dd"
+apiKey:'SUA_API_KEY',
+authDomain:'elite-docsai.firebaseapp.com',
+projectId:'elite-docsai',
+storageBucket:'elite-docsai.firebasestorage.app',
+messagingSenderId:'1048692395624',
+appId:'1:1048692395624:web:74fb23e57580b9203ab5dd'
 
 };
 
-const app =
-initializeApp(firebaseConfig);
+const app=initializeApp(firebaseConfig);
 
-const auth =
-getAuth(app);
+const auth=getAuth(app);
 
-const provider =
-new GoogleAuthProvider();
+const provider=new GoogleAuthProvider();
 
-window.fazerLogin =
-async function(){
+window.fazerLogin=async function(){
 
-await signInWithRedirect(auth, provider);
+await signInWithRedirect(auth,provider);
 
 }
 
@@ -925,23 +706,24 @@ mostrarApp(result.user);
 
 }
 
+})
+.catch((e)=>{
+
+console.log(e);
+
 });
 
 function mostrarApp(user){
 
-document.getElementById("loginScreen").style.display =
-"none";
+document.getElementById('loginScreen').style.display='none';
 
-document.getElementById("appScreen").style.display =
-"block";
+document.getElementById('appScreen').style.display='block';
 
-document.getElementById("userName").innerText =
-user.displayName;
+document.getElementById('userName').innerText=user.displayName;
 
 if(user.photoURL){
 
-document.getElementById("userPhoto").src =
-user.photoURL;
+document.getElementById('userPhoto').src=user.photoURL;
 
 }
 
@@ -955,18 +737,15 @@ mostrarApp(user);
 
 }else{
 
-document.getElementById("loginScreen").style.display =
-"block";
+document.getElementById('loginScreen').style.display='block';
 
-document.getElementById("appScreen").style.display =
-"none";
+document.getElementById('appScreen').style.display='none';
 
 }
 
 });
 
-window.sairConta =
-async function(){
+window.sairConta=async function(){
 
 await signOut(auth);
 
