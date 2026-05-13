@@ -3,11 +3,15 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
 <title>Elite Docs AI</title>
 
 <link rel="icon" href="logo.png">
+
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700;800&display=swap" rel="stylesheet">
+
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
 
 <style>
@@ -192,6 +196,8 @@ margin-bottom:20px;
 
 <body>
 
+<!-- LOGIN -->
+
 <div id="loginScreen">
 
 <div class="login-box">
@@ -212,7 +218,10 @@ Entrar com Google
 </button>
 
 </div>
+
 </div>
+
+<!-- APP -->
 
 <div class="container" id="appScreen" style="display:none;">
 
@@ -227,6 +236,7 @@ Entrar com Google
 <img id="userPhoto">
 
 <div>
+
 <div id="userName" style="font-weight:700;"></div>
 
 <button onclick="sairConta()" style="background:none;border:none;color:#ff4d4d;cursor:pointer;font-size:13px;font-weight:bold;">
@@ -238,11 +248,16 @@ Sair
 </div>
 
 <div class="dashboard">
-<h2>Bem-vindo 👋</h2>
+
+<h2>Dashboard Premium</h2>
+
 <p style="color:#aaa;margin-top:5px;">
-Crie documentos profissionais com IA.
+Gerador inteligente de documentos com IA.
 </p>
+
 </div>
+
+<!-- MENU -->
 
 <div class="grid" id="mainGrid">
 
@@ -287,7 +302,7 @@ Crie documentos profissionais com IA.
 </button>
 
 <h2 style="margin-bottom:20px;">
-Currículo Premium
+Currículo Profissional
 </h2>
 
 <input class="input" id="nome" placeholder="Nome completo">
@@ -300,15 +315,13 @@ Currículo Premium
 
 <input class="input" id="email" placeholder="E-mail">
 
-<input class="input" id="linkedin" placeholder="LinkedIn">
-
 <input class="input" type="file" id="fotoPerfil" accept="image/*">
 
 <textarea class="textarea" id="resumo" placeholder="Resumo profissional"></textarea>
 
-<textarea class="textarea" id="habilidades" placeholder="Habilidades"></textarea>
-
 <textarea class="textarea" id="experiencia" placeholder="Experiência"></textarea>
+
+<textarea class="textarea" id="habilidades" placeholder="Habilidades"></textarea>
 
 <textarea class="textarea" id="formacao" placeholder="Formação"></textarea>
 
@@ -317,7 +330,7 @@ Currículo Premium
 </button>
 
 <button class="generate-btn" onclick="gerarCurriculoPDF()">
-GERAR CURRÍCULO PDF
+GERAR PDF PROFISSIONAL
 </button>
 
 </div>
@@ -435,19 +448,27 @@ GERAR TEXTO
 <script>
 
 function abrirTela(id){
+
 document.getElementById('mainGrid').classList.add('hidden');
+
 document.querySelectorAll('.screen').forEach(s=>s.classList.add('hidden'));
+
 document.getElementById(id).classList.remove('hidden');
+
 }
 
 function voltar(){
+
 document.querySelectorAll('.screen').forEach(s=>s.classList.add('hidden'));
+
 document.getElementById('mainGrid').classList.remove('hidden');
+
 }
 
 async function melhorarResumo(){
 
 const campo=document.getElementById('resumo');
+
 const original=campo.value;
 
 campo.value='IA melhorando...';
@@ -466,6 +487,7 @@ campo.value=await r.text();
 }catch(e){
 
 campo.value=original;
+
 alert('Erro IA');
 
 }
@@ -486,19 +508,15 @@ doc.setFillColor(91,75,255);
 doc.rect(0,0,60,297,'F');
 
 doc.setTextColor(255,255,255);
-
 doc.setFontSize(22);
-
 doc.text(nome.toUpperCase(),10,30);
 
 doc.setFontSize(12);
-
-doc.text(cargo,10,40);
+doc.text(cargo,10,42);
 
 doc.setTextColor(0,0,0);
 
-doc.setFontSize(14);
-
+doc.setFontSize(16);
 doc.text('Resumo',70,25);
 
 doc.setFontSize(11);
@@ -551,8 +569,11 @@ const doc = new jsPDF();
 const foto=document.getElementById('fotoPDF').files[0];
 
 if(!foto){
+
 alert('Selecione uma foto');
+
 return;
+
 }
 
 const reader=new FileReader();
@@ -651,6 +672,7 @@ campo.value=await r.text();
 }catch(e){
 
 campo.value=original;
+
 alert('Erro IA');
 
 }
@@ -676,7 +698,7 @@ signOut
 
 const firebaseConfig={
 
-apiKey:'SUA_API_KEY',
+apiKey:'AIzaSyDFPrrCSowCUo3QJ6T280zja2Wqutlccvo',
 authDomain:'elite-docsai.firebaseapp.com',
 projectId:'elite-docsai',
 storageBucket:'elite-docsai.firebasestorage.app',
