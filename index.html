@@ -3,19 +3,13 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
 <title>Elite Docs AI</title>
-
 <link rel="icon" href="logo.png">
-
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700;800&display=swap" rel="stylesheet">
-
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
 
 <style>
-
 *{
 margin:0;
 padding:0;
@@ -198,674 +192,264 @@ border-radius:18px;
 margin-top:15px;
 }
 
+.section-label {
+font-size: 11px;
+color: #7c6cff;
+font-weight: 800;
+text-transform: uppercase;
+margin-bottom: 8px;
+display: block;
+}
 </style>
 </head>
 
 <body>
 
-<!-- LOGIN -->
-
 <div id="loginScreen">
-
 <div class="login-box">
-
-<img src="logo.png"
-style="width:120px;margin-bottom:20px;">
-
-<h1 style="margin-bottom:10px;">
-Elite Docs AI
-</h1>
-
-<p style="margin-bottom:30px;color:#aaa;">
-Entre com sua conta Google
-</p>
-
+<img src="logo.png" style="width:120px;margin-bottom:20px;">
+<h1 style="margin-bottom:10px;">Elite Docs AI</h1>
+<p style="margin-bottom:30px;color:#aaa;">Entre com sua conta Google</p>
 <button onclick="fazerLogin()" class="login-btn">
-
-<i class="fab fa-google"></i>
-Entrar com Google
-
+<i class="fab fa-google"></i> Entrar com Google
 </button>
-
+</div>
 </div>
 
-</div>
-
-<!-- APP -->
-
-<div class="container"
-id="appScreen"
-style="display:none;">
-
+<div class="container" id="appScreen" style="display:none;">
 <div class="hero">
-
-<img src="logo.png"
-class="logo-app">
-
+<img src="logo.png" class="logo-app">
 <h1>Elite Docs AI</h1>
-
 <div class="user-info-bar">
-
 <img id="userPhoto">
-
 <div>
-
-<div id="userName"
-style="font-weight:700;"></div>
-
-<button onclick="sairConta()"
-style="
-background:none;
-border:none;
-color:#ff4d4d;
-cursor:pointer;
-font-size:13px;
-font-weight:bold;
-">
-Sair
-</button>
-
+<div id="userName" style="font-weight:700;"></div>
+<button onclick="sairConta()" style="background:none;border:none;color:#ff4d4d;cursor:pointer;font-size:13px;font-weight:bold;">Sair</button>
+</div>
+</div>
 </div>
 
-</div>
-
-</div>
-
-<!-- GRID -->
-
-<div class="grid"
-id="mainGrid">
-
-<div class="card"
-onclick="abrirTela('curriculoScreen')">
-
-<i class="fas fa-user-tie"
-style="color:#5b4bff"></i>
-
+<div class="grid" id="mainGrid">
+<div class="card" onclick="abrirTela('curriculoScreen')">
+<i class="fas fa-user-tie" style="color:#5b4bff"></i>
 <span>Currículo</span>
-
 </div>
-
-<div class="card"
-onclick="abrirTela('pdfScreen')">
-
-<i class="fas fa-file-pdf"
-style="color:#ef4444"></i>
-
+<div class="card" onclick="abrirTela('pdfScreen')">
+<i class="fas fa-file-pdf" style="color:#ef4444"></i>
 <span>PDF</span>
-
 </div>
-
-<div class="card"
-onclick="abrirTela('wordScreen')">
-
-<i class="fas fa-file-word"
-style="color:#2b579a"></i>
-
+<div class="card" onclick="abrirTela('wordScreen')">
+<i class="fas fa-file-word" style="color:#2b579a"></i>
 <span>Word</span>
-
 </div>
-
-<div class="card"
-onclick="abrirTela('txtScreen')">
-
-<i class="fas fa-file-lines"
-style="color:#aaa"></i>
-
+<div class="card" onclick="abrirTela('txtScreen')">
+<i class="fas fa-file-lines" style="color:#aaa"></i>
 <span>TXT</span>
-
 </div>
-
-<div class="card"
-onclick="abrirTela('linkedinScreen')">
-
-<i class="fab fa-linkedin"
-style="color:#0a66c2"></i>
-
+<div class="card" onclick="abrirTela('linkedinScreen')">
+<i class="fab fa-linkedin" style="color:#0a66c2"></i>
 <span>LinkedIn</span>
-
 </div>
-
-<div class="card"
-onclick="abrirTela('assinaturaScreen')">
-
-<i class="fas fa-signature"
-style="color:#06b6d4"></i>
-
+<div class="card" onclick="abrirTela('assinaturaScreen')">
+<i class="fas fa-signature" style="color:#06b6d4"></i>
 <span>Assinatura</span>
+</div>
+</div>
 
+<div id="curriculoScreen" class="screen hidden">
+<button onclick="voltar()" class="back-btn">← Voltar</button>
+<h2 style="margin-bottom:20px;">Criar Currículo</h2>
+
+<span class="section-label">Identificação</span>
+<input class="input" id="nome" placeholder="Nome completo">
+<input class="input" id="cargo" placeholder="Cargo pretendido">
+
+<span class="section-label">Contato</span>
+<div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px;">
+<input class="input" id="whatsapp" placeholder="WhatsApp">
+<input class="input" id="email" placeholder="E-mail">
+</div>
+
+<span class="section-label">Resumo e Experiência</span>
+<textarea class="textarea" id="resumo" placeholder="Descreva seu resumo profissional, experiências anteriores e formação acadêmica..."></textarea>
+
+<button class="generate-btn" onclick="gerarPDF()">GERAR PDF PROFISSIONAL</button>
+</div>
+
+<div id="pdfScreen" class="screen hidden">
+<button onclick="voltar()" class="back-btn">← Voltar</button>
+<h2 style="margin-bottom:15px;">Criador PDF</h2>
+<input class="input" id="pdfTitulo" placeholder="Título">
+<textarea class="textarea" id="pdfTexto" placeholder="Digite o conteúdo"></textarea>
+<button class="generate-btn" onclick="gerarPDFTexto()">BAIXAR PDF</button>
+</div>
+
+<div id="wordScreen" class="screen hidden">
+<button onclick="voltar()" class="back-btn">← Voltar</button>
+<h2 style="margin-bottom:15px;">Arquivo Word</h2>
+<input class="input" id="wordTitulo" placeholder="Nome do arquivo">
+<textarea class="textarea" id="wordTexto" placeholder="Digite o texto"></textarea>
+<button class="generate-btn" onclick="baixarWord()">BAIXAR DOC</button>
+</div>
+
+<div id="txtScreen" class="screen hidden">
+<button onclick="voltar()" class="back-btn">← Voltar</button>
+<h2 style="margin-bottom:15px;">Arquivo TXT</h2>
+<textarea class="textarea" id="txtTexto" placeholder="Digite qualquer texto"></textarea>
+<button class="generate-btn" onclick="baixarTXT()">BAIXAR TXT</button>
+</div>
+
+<div id="linkedinScreen" class="screen hidden">
+<button onclick="voltar()" class="back-btn">← Voltar</button>
+<h2 style="margin-bottom:15px;">LinkedIn IA</h2>
+<textarea class="textarea" id="linkedinTexto" placeholder="Fale sobre você"></textarea>
+<button class="generate-btn" onclick="gerarLinkedin()">GERAR TEXTO</button>
+</div>
+
+<div id="assinaturaScreen" class="screen hidden">
+<button onclick="voltar()" class="back-btn">← Voltar</button>
+<h2 style="margin-bottom:15px;">Assinatura</h2>
+<input class="input" id="assinaturaNome" placeholder="Digite seu nome">
+<div id="assinaturaPreview" class="preview" style="font-family:cursive;font-size:35px;text-align:center;">Sua Assinatura</div>
+<button class="generate-btn" onclick="gerarAssinatura()">GERAR ASSINATURA</button>
 </div>
 
 </div>
-
-<!-- CURRICULO -->
-
-<div id="curriculoScreen"
-class="screen hidden">
-
-<button onclick="voltar()"
-class="back-btn">
-
-← Voltar
-
-</button>
-
-<h2 style="margin-bottom:15px;">
-Criar Currículo
-</h2>
-
-<input class="input"
-id="nome"
-placeholder="Nome completo">
-
-<input class="input"
-id="cargo"
-placeholder="Cargo">
-
-<textarea class="textarea"
-id="resumo"
-placeholder="Resumo profissional"></textarea>
-
-<button class="generate-btn"
-onclick="gerarPDF()">
-
-GERAR PDF
-
-</button>
-
-</div>
-
-<!-- PDF -->
-
-<div id="pdfScreen"
-class="screen hidden">
-
-<button onclick="voltar()"
-class="back-btn">
-
-← Voltar
-
-</button>
-
-<h2 style="margin-bottom:15px;">
-Criador PDF
-</h2>
-
-<input class="input"
-id="pdfTitulo"
-placeholder="Título">
-
-<textarea class="textarea"
-id="pdfTexto"
-placeholder="Digite o conteúdo"></textarea>
-
-<button class="generate-btn"
-onclick="gerarPDFTexto()">
-
-BAIXAR PDF
-
-</button>
-
-</div>
-
-<!-- WORD -->
-
-<div id="wordScreen"
-class="screen hidden">
-
-<button onclick="voltar()"
-class="back-btn">
-
-← Voltar
-
-</button>
-
-<h2 style="margin-bottom:15px;">
-Arquivo Word
-</h2>
-
-<input class="input"
-id="wordTitulo"
-placeholder="Nome do arquivo">
-
-<textarea class="textarea"
-id="wordTexto"
-placeholder="Digite o texto"></textarea>
-
-<button class="generate-btn"
-onclick="baixarWord()">
-
-BAIXAR DOC
-
-</button>
-
-</div>
-
-<!-- TXT -->
-
-<div id="txtScreen"
-class="screen hidden">
-
-<button onclick="voltar()"
-class="back-btn">
-
-← Voltar
-
-</button>
-
-<h2 style="margin-bottom:15px;">
-Arquivo TXT
-</h2>
-
-<textarea class="textarea"
-id="txtTexto"
-placeholder="Digite qualquer texto"></textarea>
-
-<button class="generate-btn"
-onclick="baixarTXT()">
-
-BAIXAR TXT
-
-</button>
-
-</div>
-
-<!-- LINKEDIN -->
-
-<div id="linkedinScreen"
-class="screen hidden">
-
-<button onclick="voltar()"
-class="back-btn">
-
-← Voltar
-
-</button>
-
-<h2 style="margin-bottom:15px;">
-LinkedIn IA
-</h2>
-
-<textarea class="textarea"
-id="linkedinTexto"
-placeholder="Fale sobre você"></textarea>
-
-<button class="generate-btn"
-onclick="gerarLinkedin()">
-
-GERAR TEXTO
-
-</button>
-
-</div>
-
-<!-- ASSINATURA -->
-
-<div id="assinaturaScreen"
-class="screen hidden">
-
-<button onclick="voltar()"
-class="back-btn">
-
-← Voltar
-
-</button>
-
-<h2 style="margin-bottom:15px;">
-Assinatura
-</h2>
-
-<input class="input"
-id="assinaturaNome"
-placeholder="Digite seu nome">
-
-<div id="assinaturaPreview"
-class="preview"
-style="
-font-family:cursive;
-font-size:35px;
-text-align:center;
-">
-
-Sua Assinatura
-
-</div>
-
-<button class="generate-btn"
-onclick="gerarAssinatura()">
-
-GERAR ASSINATURA
-
-</button>
-
-</div>
-
-</div>
-
-<!-- JS -->
 
 <script>
-
 function abrirTela(id){
-
-document.getElementById(
-'mainGrid'
-).classList.add('hidden');
-
-document.querySelectorAll(
-'.screen'
-).forEach(s=>s.classList.add('hidden'));
-
-document.getElementById(id)
-.classList.remove('hidden');
-
+document.getElementById('mainGrid').classList.add('hidden');
+document.querySelectorAll('.screen').forEach(s=>s.classList.add('hidden'));
+document.getElementById(id).classList.remove('hidden');
 }
 
 function voltar(){
-
-document.querySelectorAll(
-'.screen'
-).forEach(s=>s.classList.add('hidden'));
-
-document.getElementById(
-'mainGrid'
-).classList.remove('hidden');
-
+document.querySelectorAll('.screen').forEach(s=>s.classList.add('hidden'));
+document.getElementById('mainGrid').classList.remove('hidden');
 }
 
+// Geração de Currículo Melhorada
 function gerarPDF(){
-
 const { jsPDF } = window.jspdf;
-
 const doc = new jsPDF();
+const nome = document.getElementById("nome").value || "NOME";
+const cargo = document.getElementById("cargo").value || "CARGO";
+const whats = document.getElementById("whatsapp").value || "";
+const email = document.getElementById("email").value || "";
+const resumo = document.getElementById("resumo").value || "";
 
-const nome =
-document.getElementById("nome").value;
-
-const cargo =
-document.getElementById("cargo").value;
-
-const resumo =
-document.getElementById("resumo").value;
-
+// Cabeçalho Estilizado
+doc.setFillColor(91, 75, 255);
+doc.rect(0, 0, 210, 40, 'F');
+doc.setTextColor(255, 255, 255);
 doc.setFontSize(22);
+doc.setFont("helvetica", "bold");
+doc.text(nome.toUpperCase(), 20, 22);
+doc.setFontSize(14);
+doc.setFont("helvetica", "normal");
+doc.text(cargo, 20, 32);
 
-doc.text(nome,20,20);
+// Contato
+doc.setTextColor(100, 100, 100);
+doc.setFontSize(10);
+doc.text(`WhatsApp: ${whats}  |  E-mail: ${email}`, 20, 50);
+doc.setDrawColor(200, 200, 200);
+doc.line(20, 55, 190, 55);
 
-doc.setFontSize(15);
-
-doc.text(cargo,20,35);
-
+// Conteúdo
+doc.setTextColor(0, 0, 0);
 doc.setFontSize(12);
+const textoLimpo = doc.splitTextToSize(resumo, 170);
+doc.text(textoLimpo, 20, 70);
 
-doc.text(
-doc.splitTextToSize(resumo,170),
-20,
-55
-);
-
-doc.save("curriculo.pdf");
-
+doc.save("curriculo_elite.pdf");
 }
 
 function gerarPDFTexto(){
-
 const { jsPDF } = window.jspdf;
-
 const doc = new jsPDF();
-
-const titulo =
-document.getElementById("pdfTitulo").value;
-
-const texto =
-document.getElementById("pdfTexto").value;
-
+const titulo = document.getElementById("pdfTitulo").value;
+const texto = document.getElementById("pdfTexto").value;
 doc.setFontSize(20);
-
 doc.text(titulo,20,20);
-
 doc.setFontSize(12);
-
-doc.text(
-doc.splitTextToSize(texto,170),
-20,
-40
-);
-
+doc.text(doc.splitTextToSize(texto,170),20,40);
 doc.save("arquivo.pdf");
-
 }
 
 function baixarWord(){
-
-const texto =
-document.getElementById(
-"wordTexto"
-).value;
-
-const blob = new Blob(
-[texto],
-{
-type:"application/msword"
-}
-);
-
-const link =
-document.createElement("a");
-
-link.href =
-URL.createObjectURL(blob);
-
+const texto = document.getElementById("wordTexto").value;
+const blob = new Blob([texto],{type:"application/msword"});
+const link = document.createElement("a");
+link.href = URL.createObjectURL(blob);
 link.download = "arquivo.doc";
-
 link.click();
-
 }
 
 function baixarTXT(){
-
-const texto =
-document.getElementById(
-"txtTexto"
-).value;
-
-const blob = new Blob(
-[texto],
-{
-type:"text/plain"
-}
-);
-
-const link =
-document.createElement("a");
-
-link.href =
-URL.createObjectURL(blob);
-
+const texto = document.getElementById("txtTexto").value;
+const blob = new Blob([texto],{type:"text/plain"});
+const link = document.createElement("a");
+link.href = URL.createObjectURL(blob);
 link.download = "arquivo.txt";
-
 link.click();
-
 }
 
 async function gerarLinkedin(){
-
-const campo =
-document.getElementById(
-"linkedinTexto"
-);
-
+const campo = document.getElementById("linkedinTexto");
 const texto = campo.value;
-
 campo.value = "IA escrevendo...";
-
 try{
-
-const r = await fetch(
-
-"https://text.pollinations.ai/" +
-
-encodeURIComponent(
-
-"Crie um texto profissional para LinkedIn: " + texto
-
-)
-
-);
-
+const r = await fetch("https://text.pollinations.ai/" + encodeURIComponent("Crie um texto profissional para LinkedIn: " + texto));
 campo.value = await r.text();
-
 }catch(e){
-
 campo.value = "Erro na IA";
-
 }
-
 }
 
 function gerarAssinatura(){
-
-const nome =
-document.getElementById(
-"assinaturaNome"
-).value;
-
-document.getElementById(
-"assinaturaPreview"
-).innerText = nome;
-
+const nome = document.getElementById("assinaturaNome").value;
+document.getElementById("assinaturaPreview").innerText = nome;
 }
-
 </script>
 
-<!-- FIREBASE -->
-
 <script type="module">
-
-import {
-initializeApp
-} from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
-
-import {
-getAuth,
-GoogleAuthProvider,
-signInWithRedirect,
-getRedirectResult,
-onAuthStateChanged,
-signOut
-} from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
+import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
+import { getAuth, GoogleAuthProvider, signInWithRedirect, getRedirectResult, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
 
 const firebaseConfig = {
-
-apiKey:
-"AIzaSyDFPrrCSowCUo3QJ6T280zja2Wqutlccvo",
-
-authDomain:
-"elite-docsai.firebaseapp.com",
-
-projectId:
-"elite-docsai",
-
-storageBucket:
-"elite-docsai.firebasestorage.app",
-
-messagingSenderId:
-"1048692395624",
-
-appId:
-"1:1048692395624:web:74fb23e57580b9203ab5dd"
-
+apiKey: "AIzaSyDFPrrCSowCUo3QJ6T280zja2Wqutlccvo",
+authDomain: "elite-docsai.firebaseapp.com",
+projectId: "elite-docsai",
+storageBucket: "elite-docsai.firebasestorage.app",
+messagingSenderId: "1048692395624",
+appId: "1:1048692395624:web:74fb23e57580b9203ab5dd"
 };
 
-const app =
-initializeApp(firebaseConfig);
+const app = initializeApp(firebaseConfig);
+const auth = getAuth(app);
+const provider = new GoogleAuthProvider();
 
-const auth =
-getAuth(app);
+window.fazerLogin = async function(){ await signInWithRedirect(auth, provider); }
 
-const provider =
-new GoogleAuthProvider();
-
-window.fazerLogin =
-async function(){
-
-await signInWithRedirect(
-auth,
-provider
-);
-
-}
-
-getRedirectResult(auth)
-.then((result)=>{
-
-if(result?.user){
-
-mostrarApp(result.user);
-
-}
-
-})
-.catch((e)=>{
-
-console.log(e);
-
-});
+getRedirectResult(auth).then((result)=>{ if(result?.user){ mostrarApp(result.user); } }).catch((e)=>{ console.log(e); });
 
 function mostrarApp(user){
-
-document.getElementById(
-"loginScreen"
-).style.display = "none";
-
-document.getElementById(
-"appScreen"
-).style.display = "block";
-
-document.getElementById(
-"userName"
-).innerText = user.displayName;
-
-if(user.photoURL){
-
-document.getElementById(
-"userPhoto"
-).src = user.photoURL;
-
-}
-
+document.getElementById("loginScreen").style.display = "none";
+document.getElementById("appScreen").style.display = "block";
+document.getElementById("userName").innerText = user.displayName;
+if(user.photoURL){ document.getElementById("userPhoto").src = user.photoURL; }
 }
 
 onAuthStateChanged(auth,(user)=>{
-
-if(user){
-
-mostrarApp(user);
-
-}else{
-
-document.getElementById(
-"loginScreen"
-).style.display = "block";
-
-document.getElementById(
-"appScreen"
-).style.display = "none";
-
+if(user){ mostrarApp(user); }
+else{
+document.getElementById("loginScreen").style.display = "block";
+document.getElementById("appScreen").style.display = "none";
 }
-
 });
 
-window.sairConta =
-async function(){
-
-await signOut(auth);
-
-location.reload();
-
-}
-
+window.sairConta = async function(){ await signOut(auth); location.reload(); }
 </script>
-
 </body>
 </html>
