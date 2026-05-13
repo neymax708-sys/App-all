@@ -1,8 +1,10 @@
 <!DOCTYPE html>
 <html lang="pt-br">
 <head>
-<meta charset="UTF-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
 <title>Elite Docs AI</title>
 
 <link rel="icon" href="logo.png">
@@ -32,7 +34,6 @@ box-sizing:border-box;
 --purple:#8b5cff;
 --pink:#ff4fd8;
 --cyan:#00d9ff;
---glass:rgba(255,255,255,.05);
 }
 
 body{
@@ -45,7 +46,7 @@ linear-gradient(145deg,#050510,#09091c,#111133,#1c1450);
 background-attachment:fixed;
 min-height:100vh;
 overflow-x:hidden;
-color:var(--text);
+color:white;
 padding-bottom:100px;
 }
 
@@ -53,9 +54,8 @@ body::before{
 content:'';
 position:fixed;
 inset:0;
-background:
-url('https://www.transparenttextures.com/patterns/stardust.png');
-opacity:.18;
+background:url('https://www.transparenttextures.com/patterns/stardust.png');
+opacity:.15;
 pointer-events:none;
 }
 
@@ -67,18 +67,6 @@ display:none !important;
 max-width:850px;
 margin:auto;
 padding:18px;
-animation:fade .6s ease;
-}
-
-@keyframes fade{
-from{
-opacity:0;
-transform:translateY(20px);
-}
-to{
-opacity:1;
-transform:translateY(0);
-}
 }
 
 .glass{
@@ -103,43 +91,17 @@ width:100%;
 max-width:430px;
 padding:35px 25px;
 border-radius:35px;
-position:relative;
-overflow:hidden;
-}
-
-.login-card::before{
-content:'';
-position:absolute;
-width:250px;
-height:250px;
-background:radial-gradient(circle,#6d5dff,transparent 70%);
-top:-120px;
-right:-100px;
-opacity:.5;
+text-align:center;
 }
 
 .login-logo{
 width:120px;
 height:120px;
 border-radius:32px;
-object-fit:cover;
 margin-bottom:20px;
 box-shadow:
 0 0 30px #5b8cff,
 0 0 70px #8b5cff;
-animation:pulse 3s infinite;
-}
-
-@keyframes pulse{
-0%{
-transform:scale(1);
-}
-50%{
-transform:scale(1.03);
-}
-100%{
-transform:scale(1);
-}
 }
 
 .login-btn{
@@ -152,13 +114,7 @@ font-size:15px;
 cursor:pointer;
 color:white;
 background:linear-gradient(135deg,#5b8cff,#8b5cff,#ff4fd8);
-box-shadow:
-0 0 25px rgba(91,140,255,.45);
-transition:.3s;
-}
-
-.login-btn:hover{
-transform:translateY(-3px) scale(1.02);
+box-shadow:0 0 25px rgba(91,140,255,.45);
 }
 
 .topbar{
@@ -181,8 +137,6 @@ height:60px;
 border-radius:50%;
 object-fit:cover;
 border:3px solid #6d5dff;
-box-shadow:
-0 0 20px #5b8cff;
 }
 
 .username{
@@ -204,31 +158,12 @@ color:white;
 font-weight:700;
 cursor:pointer;
 background:linear-gradient(135deg,#4f7cff,#8b5cff);
-box-shadow:
-0 0 18px rgba(91,140,255,.5);
 }
 
 .hero{
 padding:24px;
 border-radius:34px;
-position:relative;
-overflow:hidden;
 margin-bottom:22px;
-}
-
-.hero::before{
-content:'';
-position:absolute;
-width:400px;
-height:400px;
-background:radial-gradient(circle,#8b5cff44,transparent 70%);
-right:-120px;
-top:-180px;
-}
-
-.hero-content{
-position:relative;
-z-index:2;
 }
 
 .hero-title{
@@ -285,24 +220,12 @@ color:var(--muted);
 }
 
 .section-title{
-display:flex;
-justify-content:space-between;
-align-items:center;
 margin:24px 0 15px;
 }
 
 .section-title h2{
 font-size:26px;
 font-weight:800;
-}
-
-.section-title button{
-background:rgba(255,255,255,.06);
-border:none;
-padding:10px 14px;
-border-radius:14px;
-color:white;
-cursor:pointer;
 }
 
 .grid{
@@ -312,8 +235,6 @@ gap:16px;
 }
 
 .card{
-position:relative;
-overflow:hidden;
 padding:22px;
 border-radius:28px;
 cursor:pointer;
@@ -324,18 +245,8 @@ flex-direction:column;
 justify-content:space-between;
 }
 
-.card::before{
-content:'';
-position:absolute;
-inset:0;
-background:linear-gradient(135deg,#5b8cff11,#ff4fd811);
-}
-
 .card:hover{
-transform:translateY(-6px) scale(1.02);
-box-shadow:
-0 0 25px rgba(91,140,255,.25),
-0 0 50px rgba(255,79,216,.15);
+transform:translateY(-6px);
 }
 
 .card i{
@@ -374,7 +285,6 @@ background:linear-gradient(135deg,#00d9ff44,#00d9ff11);
 margin-top:10px;
 padding:24px;
 border-radius:32px;
-animation:fade .4s ease;
 }
 
 .back-btn{
@@ -398,14 +308,6 @@ border:1px solid rgba(255,255,255,.08);
 outline:none;
 color:white;
 font-size:14px;
-transition:.3s;
-}
-
-.input:focus,
-.textarea:focus{
-border-color:#8b5cff;
-box-shadow:
-0 0 0 3px rgba(139,92,255,.15);
 }
 
 .textarea{
@@ -424,13 +326,6 @@ font-size:14px;
 margin-top:10px;
 color:white;
 background:linear-gradient(135deg,#4f7cff,#8b5cff,#ff4fd8);
-box-shadow:
-0 0 25px rgba(91,140,255,.25);
-transition:.3s;
-}
-
-.generate-btn:hover{
-transform:translateY(-2px);
 }
 
 .divider{
@@ -444,7 +339,6 @@ width:100%;
 border-radius:24px;
 margin-top:10px;
 display:none;
-border:1px solid rgba(255,255,255,.08);
 }
 
 .bottom-nav{
@@ -469,17 +363,10 @@ align-items:center;
 gap:5px;
 font-size:12px;
 color:#c8c8e8;
-cursor:pointer;
-transition:.3s;
 }
 
 .nav-item i{
 font-size:22px;
-}
-
-.nav-item.active{
-color:white;
-transform:translateY(-2px);
 }
 
 .logout-btn{
@@ -491,16 +378,6 @@ cursor:pointer;
 margin-top:6px;
 }
 
-.loading{
-animation:blink 1s infinite;
-}
-
-@keyframes blink{
-50%{
-opacity:.4;
-}
-}
-
 @media(max-width:700px){
 
 .hero-title{
@@ -509,10 +386,6 @@ font-size:28px;
 
 .grid{
 grid-template-columns:1fr 1fr;
-}
-
-.card{
-min-height:125px;
 }
 
 .stats{
@@ -532,8 +405,6 @@ grid-template-columns:1fr;
 
 <div class="login-card glass">
 
-<center>
-
 <img src="logo.png" class="login-logo">
 
 <h1 style="font-size:36px;font-weight:900;margin-bottom:10px;">
@@ -549,8 +420,6 @@ Crie documentos profissionais com inteligência artificial premium.
 Entrar com Google
 </button>
 
-</center>
-
 </div>
 
 </div>
@@ -558,8 +427,6 @@ Entrar com Google
 <!-- APP -->
 
 <div id="appScreen" class="container hidden">
-
-<!-- TOP -->
 
 <div class="topbar">
 
@@ -584,8 +451,7 @@ Sair da conta
 </div>
 
 <button class="vip-btn">
-<i class="fas fa-crown"></i>
-VIP
+👑 VIP
 </button>
 
 </div>
@@ -593,8 +459,6 @@ VIP
 <!-- HERO -->
 
 <div class="hero glass">
-
-<div class="hero-content">
 
 <div class="hero-banner">
 
@@ -629,8 +493,6 @@ Currículos premium, PDFs, Word, LinkedIn IA e muito mais.
 <div class="stat-card glass">
 <h3>PRO</h3>
 <p>Visual Premium</p>
-</div>
-
 </div>
 
 </div>
@@ -687,27 +549,27 @@ Currículos premium, PDFs, Word, LinkedIn IA e muito mais.
 </div>
 </div>
 
-<div class="card glass pink">
+<div class="card glass pink" onclick="gerarAssinatura()">
 <div>
-<i class="fas fa-wand-magic-sparkles"></i>
-<h3>IA</h3>
-<p>Assistente premium</p>
-</div>
-</div>
-
-<div class="card glass cyan">
-<div>
-<i class="fas fa-pen-nib"></i>
+<i class="fas fa-signature"></i>
 <h3>Assinatura</h3>
-<p>Digital premium</p>
+<p>Gerador assinatura</p>
 </div>
 </div>
 
-<div class="card glass purple">
+<div class="card glass cyan" onclick="converterTXTparaPDF()">
 <div>
 <i class="fas fa-repeat"></i>
 <h3>Conversor</h3>
-<p>Arquivos rápidos</p>
+<p>TXT para PDF</p>
+</div>
+</div>
+
+<div class="card glass purple" onclick="abrirTela('notasScreen')">
+<div>
+<i class="fas fa-note-sticky"></i>
+<h3>Notas</h3>
+<p>Anotações rápidas</p>
 </div>
 </div>
 
@@ -736,8 +598,6 @@ Currículo Premium
 <input class="input" id="whatsapp" placeholder="WhatsApp">
 
 <input class="input" id="email" placeholder="E-mail">
-
-<input class="input" type="file" id="fotoPerfil" accept="image/*">
 
 <textarea class="textarea" id="resumo" placeholder="Resumo profissional"></textarea>
 
@@ -788,8 +648,6 @@ PDF com Imagem
 <input class="input" type="file" id="fotoPDF" accept="image/*">
 
 <img id="previewImagem" class="preview">
-
-<textarea class="textarea" id="fotoTexto" placeholder="Texto adicional"></textarea>
 
 <button class="generate-btn" onclick="gerarPDFFoto()">
 🖼️ GERAR PDF COM FOTO
@@ -859,13 +717,37 @@ GERAR LINKEDIN PROFISSIONAL
 
 </div>
 
+<!-- NOTAS -->
+
+<div id="notasScreen" class="screen glass hidden">
+
+<button onclick="voltar()" class="back-btn">
+← Voltar
+</button>
+
+<h2 style="margin-bottom:18px;">
+Notas Inteligentes
+</h2>
+
+<textarea class="textarea" id="notaTexto" placeholder="Digite suas anotações"></textarea>
+
+<button class="generate-btn" onclick="salvarNota()">
+SALVAR NOTA
+</button>
+
+<button class="generate-btn" onclick="baixarNotaPDF()">
+BAIXAR NOTA PDF
+</button>
+
 </div>
 
-<!-- BOTTOM NAV -->
+</div>
+
+<!-- MENU INFERIOR -->
 
 <div class="bottom-nav glass">
 
-<div class="nav-item active">
+<div class="nav-item">
 <i class="fas fa-house"></i>
 <span>Início</span>
 </div>
@@ -954,15 +836,14 @@ const campo=document.getElementById('resumo');
 
 const original=campo.value;
 
-campo.value='✨ IA melhorando resumo profissional...';
-campo.classList.add('loading');
+campo.value='IA melhorando resumo...';
 
 try{
 
 const r=await fetch(
 'https://text.pollinations.ai/openai/' +
 encodeURIComponent(
-'Melhore esse resumo profissional de currículo deixando premium e elegante: ' + original
+'Melhore esse resumo profissional: ' + original
 )
 );
 
@@ -976,8 +857,6 @@ alert('Erro IA');
 
 }
 
-campo.classList.remove('loading');
-
 }
 
 function gerarCurriculoPDF(){
@@ -988,44 +867,47 @@ const doc = new jsPDF();
 
 const nome=document.getElementById('nome').value;
 const cargo=document.getElementById('cargo').value;
-const cidade=document.getElementById('cidade').value;
-const whatsapp=document.getElementById('whatsapp').value;
-const email=document.getElementById('email').value;
 const resumo=document.getElementById('resumo').value;
 const experiencia=document.getElementById('experiencia').value;
 const habilidades=document.getElementById('habilidades').value;
 const formacao=document.getElementById('formacao').value;
+const cidade=document.getElementById('cidade').value;
+const whatsapp=document.getElementById('whatsapp').value;
+const email=document.getElementById('email').value;
 
-doc.setFillColor(22,24,45);
+doc.setFillColor(20,20,40);
 doc.rect(0,0,65,297,'F');
 
 doc.setFillColor(91,140,255);
 doc.rect(0,0,65,55,'F');
 
 doc.setTextColor(255,255,255);
-doc.setFontSize(24);
-doc.text(nome || 'SEU NOME',10,25);
 
-doc.setFontSize(13);
+doc.setFontSize(24);
+doc.text(nome || 'Seu Nome',10,25);
+
+doc.setFontSize(12);
 doc.text(cargo || 'Seu Cargo',10,38);
 
-doc.setFontSize(11);
+doc.setFontSize(10);
 
 doc.text('CONTATO',10,70);
-doc.text('📍 ' + cidade,10,82);
-doc.text('📞 ' + whatsapp,10,94);
-doc.text('✉ ' + email,10,106);
+doc.text(cidade,10,82);
+doc.text(whatsapp,10,94);
+doc.text(email,10,106);
 
 doc.text('HABILIDADES',10,130);
 
-const habilidadesTexto=doc.splitTextToSize(habilidades,45);
+doc.text(
+doc.splitTextToSize(habilidades,45),
+10,
+142
+);
 
-doc.text(habilidadesTexto,10,142);
-
-doc.setTextColor(20,20,20);
+doc.setTextColor(0,0,0);
 
 doc.setFontSize(18);
-doc.text('Resumo Profissional',75,25);
+doc.text('Resumo',75,25);
 
 doc.setFontSize(11);
 
@@ -1047,17 +929,17 @@ doc.splitTextToSize(experiencia,115),
 );
 
 doc.setFontSize(18);
-doc.text('Formação',75,175);
+doc.text('Formação',75,180);
 
 doc.setFontSize(11);
 
 doc.text(
 doc.splitTextToSize(formacao,115),
 75,
-185
+190
 );
 
-doc.save('curriculo_premium_elite.pdf');
+doc.save('curriculo_premium.pdf');
 
 }
 
@@ -1067,17 +949,17 @@ const { jsPDF } = window.jspdf;
 
 const doc = new jsPDF();
 
-doc.setFillColor(20,20,40);
+doc.setFillColor(15,15,25);
 doc.rect(0,0,210,297,'F');
 
 doc.setTextColor(255,255,255);
 
-doc.setFontSize(24);
+doc.setFontSize(22);
 
 doc.text(
-document.getElementById('pdfTitulo').value || 'PDF Elite',
+document.getElementById('pdfTitulo').value,
 20,
-30
+25
 );
 
 doc.setFontSize(12);
@@ -1088,10 +970,10 @@ document.getElementById('pdfTexto').value,
 170
 ),
 20,
-55
+50
 );
 
-doc.save('arquivo_elite.pdf');
+doc.save('arquivo.pdf');
 
 }
 
@@ -1099,7 +981,7 @@ function gerarPDFFoto(){
 
 const { jsPDF } = window.jspdf;
 
-const doc = new jsPDF();
+const doc = new jsPDF('p','mm','a4');
 
 const foto=document.getElementById('fotoPDF').files[0];
 
@@ -1121,55 +1003,41 @@ img.src=e.target.result;
 
 img.onload=function(){
 
-doc.setFillColor(15,15,25);
-doc.rect(0,0,210,297,'F');
+const pageWidth=210;
+const pageHeight=297;
 
-doc.setTextColor(255,255,255);
+const margin=10;
 
-doc.setFontSize(22);
+const usableWidth=pageWidth-(margin*2);
+const usableHeight=pageHeight-(margin*2);
 
-doc.text(
-document.getElementById('fotoTitulo').value || 'PDF com Imagem',
-20,
-25
+let imgWidth=img.width;
+let imgHeight=img.height;
+
+const ratio=Math.min(
+usableWidth/imgWidth,
+usableHeight/imgHeight
 );
 
-const pageWidth=170;
-const ratio=img.width/img.height;
+imgWidth*=ratio;
+imgHeight*=ratio;
 
-let imgWidth=170;
-let imgHeight=imgWidth/ratio;
+const x=(pageWidth-imgWidth)/2;
+const y=(pageHeight-imgHeight)/2;
 
-if(imgHeight>120){
-
-imgHeight=120;
-imgWidth=imgHeight*ratio;
-
-}
-
-const x=(210-imgWidth)/2;
+doc.setFillColor(8,8,20);
+doc.rect(0,0,pageWidth,pageHeight,'F');
 
 doc.addImage(
 e.target.result,
 'JPEG',
 x,
-40,
+y,
 imgWidth,
 imgHeight
 );
 
-doc.setFontSize(12);
-
-doc.text(
-doc.splitTextToSize(
-document.getElementById('fotoTexto').value,
-170
-),
-20,
-190
-);
-
-doc.save('pdf_imagem_elite.pdf');
+doc.save('imagem_completa.pdf');
 
 }
 
@@ -1191,9 +1059,7 @@ const link=document.createElement('a');
 
 link.href=URL.createObjectURL(blob);
 
-link.download=
-(document.getElementById('wordTitulo').value || 'arquivo')
-+'.doc';
+link.download='arquivo.doc';
 
 link.click();
 
@@ -1223,14 +1089,14 @@ const campo=document.getElementById('linkedinTexto');
 
 const original=campo.value;
 
-campo.value='✨ IA criando LinkedIn profissional...';
+campo.value='IA escrevendo...';
 
 try{
 
 const r=await fetch(
 'https://text.pollinations.ai/openai/' +
 encodeURIComponent(
-'Crie uma bio profissional elegante para LinkedIn baseada nisso: ' + original
+'Crie uma bio profissional para LinkedIn: ' + original
 )
 );
 
@@ -1243,6 +1109,93 @@ campo.value=original;
 alert('Erro IA');
 
 }
+
+}
+
+function gerarAssinatura(){
+
+const nome=prompt('Digite seu nome');
+
+if(!nome)return;
+
+alert('Assinatura criada para '+nome);
+
+}
+
+function converterTXTparaPDF(){
+
+const texto=prompt('Digite o texto');
+
+if(!texto)return;
+
+const { jsPDF } = window.jspdf;
+
+const doc=new jsPDF();
+
+doc.text(
+doc.splitTextToSize(texto,170),
+20,
+30
+);
+
+doc.save('convertido.pdf');
+
+}
+
+function salvarNota(){
+
+const texto=document.getElementById('notaTexto').value;
+
+localStorage.setItem('elite_nota',texto);
+
+alert('Nota salva');
+
+}
+
+window.onload=function(){
+
+const nota=localStorage.getItem('elite_nota');
+
+if(nota){
+
+const campo=document.getElementById('notaTexto');
+
+if(campo){
+
+campo.value=nota;
+
+}
+
+}
+
+}
+
+function baixarNotaPDF(){
+
+const { jsPDF } = window.jspdf;
+
+const doc=new jsPDF();
+
+const texto=document.getElementById('notaTexto').value;
+
+doc.setFillColor(15,15,25);
+doc.rect(0,0,210,297,'F');
+
+doc.setTextColor(255,255,255);
+
+doc.setFontSize(20);
+
+doc.text('Notas',20,25);
+
+doc.setFontSize(12);
+
+doc.text(
+doc.splitTextToSize(texto,170),
+20,
+50
+);
+
+doc.save('notas.pdf');
 
 }
 
