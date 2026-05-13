@@ -1,149 +1,871 @@
 <!DOCTYPE html>
 <html lang="pt-br">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Elite Docs AI</title>
-    <link rel="icon" href="logo.png">
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700;800&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
-    <style>
-        /* ESTILOS ORIGINAIS (SUAS 800 LINHAS) */
-        *{margin:0;padding:0;box-sizing:border-box;}
-        body{font-family:'Inter',sans-serif;background:#050510;color:white;padding:12px;background-image:radial-gradient(circle at top, rgba(91,75,255,.18), transparent 35%);min-height:100vh;}
-        .container{max-width:700px;margin:auto;}
-        .hidden{display:none !important;}
-        .hero{text-align:center;padding:25px 10px;}
-        .logo-app{width:100px;height:100px;border-radius:24px;margin-bottom:10px;}
-        .grid{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-top:20px;}
-        .card{background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.1);padding:18px 5px;border-radius:22px;display:flex;flex-direction:column;align-items:center;cursor:pointer;transition:.2s;backdrop-filter:blur(10px);}
-        .card:active{transform:scale(.92);}
-        .card i{font-size:26px;margin-bottom:8px;}
-        .card span{font-size:11px;font-weight:700;}
-        .screen{margin-top:15px;background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.1);padding:20px;border-radius:24px;}
-        .input, .textarea{width:100%;padding:14px;margin-bottom:10px;border-radius:12px;border:1px solid rgba(255,255,255,0.1);background:rgba(255,255,255,0.05);color:white;outline:none;}
-        .generate-btn{width:100%;padding:15px;border:none;border-radius:12px;background:linear-gradient(135deg,#5b4bff,#4338ca);color:white;font-weight:700;cursor:pointer;}
-        .user-info-bar{display:flex; align-items:center; justify-content:center; gap:10px; margin-top:15px;}
-        .user-info-bar img{width:45px; height:45px; border-radius:50%; border:2px solid #5b4bff; object-fit:cover;}
-    </style>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Elite Docs AI</title>
+
+<link rel="icon" href="logo.png">
+
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700;800&display=swap" rel="stylesheet">
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+
+<style>
+
+*{
+margin:0;
+padding:0;
+box-sizing:border-box;
+}
+
+body{
+font-family:'Inter',sans-serif;
+background:#050510;
+color:white;
+padding:12px;
+min-height:100vh;
+background-image:
+radial-gradient(circle at top,
+rgba(91,75,255,.25),
+transparent 35%);
+}
+
+.container{
+max-width:700px;
+margin:auto;
+}
+
+.hidden{
+display:none !important;
+}
+
+.hero{
+text-align:center;
+padding:25px 10px;
+}
+
+.logo-app{
+width:110px;
+height:110px;
+border-radius:24px;
+margin-bottom:15px;
+box-shadow:0 0 25px rgba(91,75,255,.4);
+}
+
+.grid{
+display:grid;
+grid-template-columns:repeat(3,1fr);
+gap:12px;
+margin-top:25px;
+}
+
+.card{
+background:rgba(255,255,255,.05);
+border:1px solid rgba(255,255,255,.08);
+padding:22px 10px;
+border-radius:24px;
+display:flex;
+flex-direction:column;
+align-items:center;
+cursor:pointer;
+transition:.25s;
+backdrop-filter:blur(10px);
+}
+
+.card:hover{
+transform:translateY(-4px);
+}
+
+.card:active{
+transform:scale(.95);
+}
+
+.card i{
+font-size:30px;
+margin-bottom:10px;
+}
+
+.card span{
+font-size:13px;
+font-weight:700;
+}
+
+.screen{
+margin-top:15px;
+background:rgba(255,255,255,.04);
+border:1px solid rgba(255,255,255,.08);
+padding:20px;
+border-radius:24px;
+animation:aparecer .3s ease;
+}
+
+@keyframes aparecer{
+from{
+opacity:0;
+transform:translateY(20px);
+}
+to{
+opacity:1;
+transform:translateY(0);
+}
+}
+
+.input,.textarea{
+width:100%;
+padding:15px;
+margin-bottom:12px;
+border-radius:14px;
+border:1px solid rgba(255,255,255,.08);
+background:rgba(255,255,255,.05);
+color:white;
+outline:none;
+font-size:14px;
+}
+
+.textarea{
+min-height:160px;
+resize:none;
+}
+
+.generate-btn{
+width:100%;
+padding:15px;
+border:none;
+border-radius:14px;
+background:linear-gradient(135deg,#5b4bff,#4338ca);
+color:white;
+font-weight:700;
+cursor:pointer;
+margin-top:5px;
+box-shadow:0 0 20px rgba(91,75,255,.3);
+}
+
+.back-btn{
+background:none;
+border:none;
+color:#7c6cff;
+font-size:15px;
+font-weight:bold;
+margin-bottom:15px;
+cursor:pointer;
+}
+
+.user-info-bar{
+display:flex;
+justify-content:center;
+align-items:center;
+gap:10px;
+margin-top:15px;
+}
+
+.user-info-bar img{
+width:55px;
+height:55px;
+border-radius:50%;
+border:3px solid #5b4bff;
+object-fit:cover;
+}
+
+.login-box{
+display:flex;
+flex-direction:column;
+justify-content:center;
+align-items:center;
+height:100vh;
+text-align:center;
+}
+
+.login-btn{
+padding:16px 24px;
+border:none;
+border-radius:14px;
+background:white;
+color:#111;
+font-weight:700;
+cursor:pointer;
+font-size:15px;
+}
+
+.preview{
+background:white;
+color:black;
+padding:20px;
+border-radius:18px;
+margin-top:15px;
+}
+
+</style>
 </head>
+
 <body>
 
-    <div id="loginScreen"> 
-        <div style="display:flex; flex-direction:column; justify-content:center; align-items:center; height:100vh; text-align:center;"> 
-            <img src="logo.png" style="width:120px;margin-bottom:20px;"> 
-            <h1 style="margin-bottom:10px;">Elite Docs AI</h1> 
-            <p style="margin-bottom:30px;color:#aaa;">Entre com sua conta Google</p> 
-            <button onclick="fazerLogin()" style="padding:15px 25px; border:none; border-radius:14px; background:#fff; color:#111; font-weight:700; cursor:pointer;">
-                <i class="fab fa-google"></i> Entrar com Google
-            </button> 
-        </div> 
-    </div>
+<!-- LOGIN -->
 
-    <div class="container" id="appScreen" style="display:none;">
-        <div class="hero">
-            <img src="logo.png" class="logo-app">
-            <h1>Elite Docs AI</h1>
+<div id="loginScreen">
 
-            <div class="user-info-bar"> 
-                <img id="userPhoto"> 
-                <div> 
-                    <div id="userName" style="font-weight:700;"></div> 
-                    <button onclick="sairConta()" style="background:none; border:none; color:#ff4d4d; cursor:pointer; font-size:12px; font-weight:bold;">Sair</button> 
-                </div> 
-            </div> 
-        </div>
+<div class="login-box">
 
-        <div class="grid" id="mainGrid">
-            <div class="card" onclick="abrirTela('curriculoScreen')"><i class="fas fa-user-tie" style="color:#5b4bff"></i><span>Currículo</span></div>
-            <div class="card" onclick="abrirTela('pdfScreen')"><i class="fas fa-file-pdf" style="color:#ef4444"></i><span>PDF</span></div>
-            <div class="card" onclick="abrirTela('wordScreen')"><i class="fas fa-file-word" style="color:#2b579a"></i><span>Word</span></div>
-            <div class="card" onclick="abrirTela('txtScreen')"><i class="fas fa-file-lines" style="color:#9ca3af"></i><span>TXT</span></div>
-            <div class="card" onclick="abrirTela('linkedinScreen')"><i class="fab fa-linkedin" style="color:#0a66c2"></i><span>LinkedIn</span></div>
-            <div class="card" onclick="abrirTela('assinaturaScreen')"><i class="fas fa-signature" style="color:#06b6d4"></i><span>Assinatura</span></div>
-        </div>
+<img src="logo.png"
+style="width:120px;margin-bottom:20px;">
 
-        <div id="curriculoScreen" class="screen hidden">
-            <button onclick="voltar()" style="color:#5b4bff; background:none; border:none; margin-bottom:10px; cursor:pointer; font-weight:bold;">← Voltar</button>
-            <input class="input" id="nome" placeholder="Nome Completo">
-            <textarea class="textarea" id="resumo" placeholder="Seu resumo profissional..."></textarea>
-            <button class="generate-btn" onclick="gerarPDF()">GERAR PDF</button>
-        </div>
-        
-        </div>
+<h1 style="margin-bottom:10px;">
+Elite Docs AI
+</h1>
 
-    <script>
-        /* LÓGICA DE NAVEGAÇÃO */
-        function abrirTela(id){
-            document.getElementById('mainGrid').classList.add('hidden');
-            document.querySelectorAll('.screen').forEach(s => s.classList.add('hidden'));
-            document.getElementById(id).classList.remove('hidden');
-        }
-        function voltar(){
-            document.querySelectorAll('.screen').forEach(s => s.classList.add('hidden'));
-            document.getElementById('mainGrid').classList.remove('hidden');
-        }
+<p style="margin-bottom:30px;color:#aaa;">
+Entre com sua conta Google
+</p>
 
-        /* FUNÇÕES DE GERAÇÃO (EXEMPLO) */
-        function gerarPDF(){
-            const { jsPDF } = window.jspdf;
-            const doc = new jsPDF();
-            doc.text(document.getElementById('resumo').value || "Sem conteúdo", 10, 10);
-            doc.save("documento.pdf");
-        }
-    </script>
+<button onclick="fazerLogin()" class="login-btn">
 
-    <script type="module">
-        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js"; 
-        import { getAuth, GoogleAuthProvider, signInWithPopup, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js"; 
+<i class="fab fa-google"></i>
+Entrar com Google
 
-        const firebaseConfig = { 
-            apiKey: "AIzaSyDFPrrCSowCUo3QJ6T280zja2Wqutlccvo", // SUA API KEY ADICIONADA AQUI
-            authDomain: "elite-docsai.firebaseapp.com", 
-            projectId: "elite-docsai", 
-            storageBucket: "elite-docsai.firebasestorage.app", 
-            messagingSenderId: "1048692395624", 
-            appId: "1:1048692395624:web:74fb23e57580b9203ab5dd" 
-        }; 
+</button>
 
-        const app = initializeApp(firebaseConfig); 
-        const auth = getAuth(app); 
-        const provider = new GoogleAuthProvider(); 
+</div>
 
-        // LOGIN POR POPUP (MUITO MAIS RÁPIDO)
-        window.fazerLogin = async function () { 
-            try { 
-                const result = await signInWithPopup(auth, provider); 
-                mostrarApp(result.user); 
-            } catch (e) { 
-                alert("Erro Login: " + e.message); 
-            } 
-        } 
+</div>
 
-        function mostrarApp(user) { 
-            document.getElementById("loginScreen").style.display = "none"; 
-            document.getElementById("appScreen").style.display = "block"; 
-            document.getElementById("userName").innerText = user.displayName; 
-            if(user.photoURL){ 
-                document.getElementById("userPhoto").src = user.photoURL; 
-            } 
-        } 
+<!-- APP -->
 
-        // PERSISTÊNCIA: SE JÁ ESTIVER LOGADO, VAI DIRETO
-        onAuthStateChanged(auth, (user) => { 
-            if (user) { 
-                mostrarApp(user); 
-            } else {
-                document.getElementById("loginScreen").style.display = "flex"; 
-                document.getElementById("appScreen").style.display = "none";
-            }
-        }); 
+<div class="container"
+id="appScreen"
+style="display:none;">
 
-        window.sairConta = async function(){ 
-            await signOut(auth); 
-            location.reload(); 
-        } 
-    </script>
+<div class="hero">
+
+<img src="logo.png"
+class="logo-app">
+
+<h1>Elite Docs AI</h1>
+
+<div class="user-info-bar">
+
+<img id="userPhoto">
+
+<div>
+
+<div id="userName"
+style="font-weight:700;"></div>
+
+<button onclick="sairConta()"
+style="
+background:none;
+border:none;
+color:#ff4d4d;
+cursor:pointer;
+font-size:13px;
+font-weight:bold;
+">
+Sair
+</button>
+
+</div>
+
+</div>
+
+</div>
+
+<!-- GRID -->
+
+<div class="grid"
+id="mainGrid">
+
+<div class="card"
+onclick="abrirTela('curriculoScreen')">
+
+<i class="fas fa-user-tie"
+style="color:#5b4bff"></i>
+
+<span>Currículo</span>
+
+</div>
+
+<div class="card"
+onclick="abrirTela('pdfScreen')">
+
+<i class="fas fa-file-pdf"
+style="color:#ef4444"></i>
+
+<span>PDF</span>
+
+</div>
+
+<div class="card"
+onclick="abrirTela('wordScreen')">
+
+<i class="fas fa-file-word"
+style="color:#2b579a"></i>
+
+<span>Word</span>
+
+</div>
+
+<div class="card"
+onclick="abrirTela('txtScreen')">
+
+<i class="fas fa-file-lines"
+style="color:#aaa"></i>
+
+<span>TXT</span>
+
+</div>
+
+<div class="card"
+onclick="abrirTela('linkedinScreen')">
+
+<i class="fab fa-linkedin"
+style="color:#0a66c2"></i>
+
+<span>LinkedIn</span>
+
+</div>
+
+<div class="card"
+onclick="abrirTela('assinaturaScreen')">
+
+<i class="fas fa-signature"
+style="color:#06b6d4"></i>
+
+<span>Assinatura</span>
+
+</div>
+
+</div>
+
+<!-- CURRICULO -->
+
+<div id="curriculoScreen"
+class="screen hidden">
+
+<button onclick="voltar()"
+class="back-btn">
+
+← Voltar
+
+</button>
+
+<h2 style="margin-bottom:15px;">
+Criar Currículo
+</h2>
+
+<input class="input"
+id="nome"
+placeholder="Nome completo">
+
+<input class="input"
+id="cargo"
+placeholder="Cargo">
+
+<textarea class="textarea"
+id="resumo"
+placeholder="Resumo profissional"></textarea>
+
+<button class="generate-btn"
+onclick="gerarPDF()">
+
+GERAR PDF
+
+</button>
+
+</div>
+
+<!-- PDF -->
+
+<div id="pdfScreen"
+class="screen hidden">
+
+<button onclick="voltar()"
+class="back-btn">
+
+← Voltar
+
+</button>
+
+<h2 style="margin-bottom:15px;">
+Criador PDF
+</h2>
+
+<input class="input"
+id="pdfTitulo"
+placeholder="Título">
+
+<textarea class="textarea"
+id="pdfTexto"
+placeholder="Digite o conteúdo"></textarea>
+
+<button class="generate-btn"
+onclick="gerarPDFTexto()">
+
+BAIXAR PDF
+
+</button>
+
+</div>
+
+<!-- WORD -->
+
+<div id="wordScreen"
+class="screen hidden">
+
+<button onclick="voltar()"
+class="back-btn">
+
+← Voltar
+
+</button>
+
+<h2 style="margin-bottom:15px;">
+Arquivo Word
+</h2>
+
+<input class="input"
+id="wordTitulo"
+placeholder="Nome do arquivo">
+
+<textarea class="textarea"
+id="wordTexto"
+placeholder="Digite o texto"></textarea>
+
+<button class="generate-btn"
+onclick="baixarWord()">
+
+BAIXAR DOC
+
+</button>
+
+</div>
+
+<!-- TXT -->
+
+<div id="txtScreen"
+class="screen hidden">
+
+<button onclick="voltar()"
+class="back-btn">
+
+← Voltar
+
+</button>
+
+<h2 style="margin-bottom:15px;">
+Arquivo TXT
+</h2>
+
+<textarea class="textarea"
+id="txtTexto"
+placeholder="Digite qualquer texto"></textarea>
+
+<button class="generate-btn"
+onclick="baixarTXT()">
+
+BAIXAR TXT
+
+</button>
+
+</div>
+
+<!-- LINKEDIN -->
+
+<div id="linkedinScreen"
+class="screen hidden">
+
+<button onclick="voltar()"
+class="back-btn">
+
+← Voltar
+
+</button>
+
+<h2 style="margin-bottom:15px;">
+LinkedIn IA
+</h2>
+
+<textarea class="textarea"
+id="linkedinTexto"
+placeholder="Fale sobre você"></textarea>
+
+<button class="generate-btn"
+onclick="gerarLinkedin()">
+
+GERAR TEXTO
+
+</button>
+
+</div>
+
+<!-- ASSINATURA -->
+
+<div id="assinaturaScreen"
+class="screen hidden">
+
+<button onclick="voltar()"
+class="back-btn">
+
+← Voltar
+
+</button>
+
+<h2 style="margin-bottom:15px;">
+Assinatura
+</h2>
+
+<input class="input"
+id="assinaturaNome"
+placeholder="Digite seu nome">
+
+<div id="assinaturaPreview"
+class="preview"
+style="
+font-family:cursive;
+font-size:35px;
+text-align:center;
+">
+
+Sua Assinatura
+
+</div>
+
+<button class="generate-btn"
+onclick="gerarAssinatura()">
+
+GERAR ASSINATURA
+
+</button>
+
+</div>
+
+</div>
+
+<!-- JS -->
+
+<script>
+
+function abrirTela(id){
+
+document.getElementById(
+'mainGrid'
+).classList.add('hidden');
+
+document.querySelectorAll(
+'.screen'
+).forEach(s=>s.classList.add('hidden'));
+
+document.getElementById(id)
+.classList.remove('hidden');
+
+}
+
+function voltar(){
+
+document.querySelectorAll(
+'.screen'
+).forEach(s=>s.classList.add('hidden'));
+
+document.getElementById(
+'mainGrid'
+).classList.remove('hidden');
+
+}
+
+function gerarPDF(){
+
+const { jsPDF } = window.jspdf;
+
+const doc = new jsPDF();
+
+const nome =
+document.getElementById("nome").value;
+
+const cargo =
+document.getElementById("cargo").value;
+
+const resumo =
+document.getElementById("resumo").value;
+
+doc.setFontSize(22);
+
+doc.text(nome,20,20);
+
+doc.setFontSize(15);
+
+doc.text(cargo,20,35);
+
+doc.setFontSize(12);
+
+doc.text(
+doc.splitTextToSize(resumo,170),
+20,
+55
+);
+
+doc.save("curriculo.pdf");
+
+}
+
+function gerarPDFTexto(){
+
+const { jsPDF } = window.jspdf;
+
+const doc = new jsPDF();
+
+const titulo =
+document.getElementById("pdfTitulo").value;
+
+const texto =
+document.getElementById("pdfTexto").value;
+
+doc.setFontSize(20);
+
+doc.text(titulo,20,20);
+
+doc.setFontSize(12);
+
+doc.text(
+doc.splitTextToSize(texto,170),
+20,
+40
+);
+
+doc.save("arquivo.pdf");
+
+}
+
+function baixarWord(){
+
+const texto =
+document.getElementById(
+"wordTexto"
+).value;
+
+const blob = new Blob(
+[texto],
+{
+type:"application/msword"
+}
+);
+
+const link =
+document.createElement("a");
+
+link.href =
+URL.createObjectURL(blob);
+
+link.download = "arquivo.doc";
+
+link.click();
+
+}
+
+function baixarTXT(){
+
+const texto =
+document.getElementById(
+"txtTexto"
+).value;
+
+const blob = new Blob(
+[texto],
+{
+type:"text/plain"
+}
+);
+
+const link =
+document.createElement("a");
+
+link.href =
+URL.createObjectURL(blob);
+
+link.download = "arquivo.txt";
+
+link.click();
+
+}
+
+async function gerarLinkedin(){
+
+const campo =
+document.getElementById(
+"linkedinTexto"
+);
+
+const texto = campo.value;
+
+campo.value = "IA escrevendo...";
+
+try{
+
+const r = await fetch(
+
+"https://text.pollinations.ai/" +
+
+encodeURIComponent(
+
+"Crie um texto profissional para LinkedIn: " + texto
+
+)
+
+);
+
+campo.value = await r.text();
+
+}catch(e){
+
+campo.value = "Erro na IA";
+
+}
+
+}
+
+function gerarAssinatura(){
+
+const nome =
+document.getElementById(
+"assinaturaNome"
+).value;
+
+document.getElementById(
+"assinaturaPreview"
+).innerText = nome;
+
+}
+
+</script>
+
+<!-- FIREBASE -->
+
+<script type="module">
+
+import {
+initializeApp
+} from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
+
+import {
+getAuth,
+GoogleAuthProvider,
+signInWithRedirect,
+getRedirectResult,
+onAuthStateChanged,
+signOut
+} from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
+
+const firebaseConfig = {
+
+apiKey:
+"AIzaSyDFPrrCSowCUo3QJ6T280zja2Wqutlccvo",
+
+authDomain:
+"elite-docsai.firebaseapp.com",
+
+projectId:
+"elite-docsai",
+
+storageBucket:
+"elite-docsai.firebasestorage.app",
+
+messagingSenderId:
+"1048692395624",
+
+appId:
+"1:1048692395624:web:74fb23e57580b9203ab5dd"
+
+};
+
+const app =
+initializeApp(firebaseConfig);
+
+const auth =
+getAuth(app);
+
+const provider =
+new GoogleAuthProvider();
+
+window.fazerLogin =
+async function(){
+
+await signInWithRedirect(
+auth,
+provider
+);
+
+}
+
+getRedirectResult(auth)
+.then((result)=>{
+
+if(result?.user){
+
+mostrarApp(result.user);
+
+}
+
+})
+.catch((e)=>{
+
+console.log(e);
+
+});
+
+function mostrarApp(user){
+
+document.getElementById(
+"loginScreen"
+).style.display = "none";
+
+document.getElementById(
+"appScreen"
+).style.display = "block";
+
+document.getElementById(
+"userName"
+).innerText = user.displayName;
+
+if(user.photoURL){
+
+document.getElementById(
+"userPhoto"
+).src = user.photoURL;
+
+}
+
+}
+
+onAuthStateChanged(auth,(user)=>{
+
+if(user){
+
+mostrarApp(user);
+
+}else{
+
+document.getElementById(
+"loginScreen"
+).style.display = "block";
+
+document.getElementById(
+"appScreen"
+).style.display = "none";
+
+}
+
+});
+
+window.sairConta =
+async function(){
+
+await signOut(auth);
+
+location.reload();
+
+}
+
+</script>
+
 </body>
 </html>
