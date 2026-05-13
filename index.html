@@ -1151,6 +1151,26 @@ location.reload();
 }
 
 </script>
+<!-- MONETAG -->
 
+<script>
+if ('serviceWorker' in navigator) {
+
+navigator.serviceWorker.register('./sw.js')
+.then(() => {
+
+console.log('Monetag ativo');
+
+})
+.catch((err) => {
+
+console.log(err);
+
+});
+
+}
+</script>
+
+<script src="https://fpyf8.com/88/tag.min.js" data-zone="11001498" async data-cfasync="false"></script>
 </body>
 </html>
